@@ -21,7 +21,7 @@ package editor.Display.Panes {
         public function InputPane(evaluator: Evaluator) {
             this.evaluator = evaluator;
 
-            inputField.addEventListener(Event.CHANGE, updateEval);
+            inputField.addEventListener(Event.CHANGE, updatePositionInfo);
             inputField.addEventListener(KeyboardEvent.KEY_DOWN, updatePositionInfo);
             inputField.addEventListener(KeyboardEvent.KEY_UP, updatePositionInfo);
             inputField.addEventListener(MouseEvent.CLICK, updatePositionInfo);
@@ -32,6 +32,7 @@ package editor.Display.Panes {
             addEventListener(Event.ADDED_TO_STAGE, init);
             EditorEventDispatcher.instance.addEventListener(EditorEvents.THEME_CHANGE, updateMarkers);
             EditorEventDispatcher.instance.addEventListener(EditorEvents.EVAL_TEXT, updateMarkers);
+            EditorEventDispatcher.instance.addEventListener(EditorEvents.UPDATE_TEXT, updateEval);
         }
 
         private function init(event: Event): void {
