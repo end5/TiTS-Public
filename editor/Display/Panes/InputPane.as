@@ -9,16 +9,18 @@ package editor.Display.Panes {
     import editor.Lang.Errors.LangError;
     import editor.Lang.TextRange;
     import flash.events.*;
-    import flash.text.TextFormat;
 
     public class InputPane extends Box {
         private var inputField: InputField = new InputField();
         private var infoField: StaticField = new StaticField();
-        private var errorFormat: TextFormat = new TextFormat();
-        private var outputFormat: TextFormat = new TextFormat();
         private var evaluator: Evaluator;
+        private var outputMarker: InputFieldMarker;
+        private var errorMarker: InputFieldMarker;
 
         public function InputPane(evaluator: Evaluator) {
+            outputMarker = new InputFieldMarker(this.inputField);
+            errorMarker = new InputFieldMarker(this.inputField);
+
             this.evaluator = evaluator;
 
             inputField.addEventListener(Event.CHANGE, updatePositionInfo);
@@ -30,8 +32,8 @@ package editor.Display.Panes {
             addChild(infoField);
 
             addEventListener(Event.ADDED_TO_STAGE, init);
-            EditorEventDispatcher.instance.addEventListener(EditorEvents.THEME_CHANGE, updateMarkers);
-            EditorEventDispatcher.instance.addEventListener(EditorEvents.EVAL_TEXT, updateMarkers);
+            EditorEventDispatcher.instance.addEventListener(EditorEvents.THEME_CHANGE, resetMarkers);
+            EditorEventDispatcher.instance.addEventListener(EditorEvents.EVAL_TEXT, resetMarkers);
             EditorEventDispatcher.instance.addEventListener(EditorEvents.UPDATE_TEXT, updateEval);
         }
 
@@ -47,6 +49,8 @@ package editor.Display.Panes {
             infoField.nsHeight = 30 - UIInfo.BORDER_SIZE;
 
             displayInfo(0, 0, 0);
+
+            this.stage.addEventListener(Event.ENTER_FRAME, this.updateMarkers);
         }
 
         public function updateEval(event: Event): void {
@@ -77,27 +81,29 @@ package editor.Display.Panes {
                 ' [' + line + ':' + col + '/' + offset + ']';
         }
 
-        private function updateMarkers(event: Event): void {
-            errorFormat.color = ThemeManager.instance.currentTheme.base08;
-            outputFormat.color = ThemeManager.instance.currentTheme.base0B;
-            if (inputField.text.length > 0) {
-                inputField.setTextFormat(inputField.textFormat);
-                for each (var range: TextRange in evaluator.evalRanges()) {
-                    if (range.start.offset !== range.end.offset)
-                    if (range.end.offset > inputField.text.length)
-                        inputField.setTextFormat(outputFormat, range.start.offset, inputField.text.length);
-                    else
-                        inputField.setTextFormat(outputFormat, range.start.offset, range.end.offset);
-                }
+        private function updateMarkers(e: Event): void {
+            this.errorMarker.update();
+            this.outputMarker.update();
+        }
 
-                for each (var error: LangError in evaluator.evalErrors()) {
-                    if (error.range.start.offset !== error.range.end.offset)
-                    if (error.range.end.offset > inputField.text.length)
-                        inputField.setTextFormat(errorFormat, error.range.start.offset, inputField.text.length);
-                    else
-                        inputField.setTextFormat(errorFormat, error.range.start.offset, error.range.end.offset);
-                }
-            }
+        private function resetMarkers(event: Event): void {
+            this.errorMarker.setColor(ThemeManager.instance.currentTheme.base08);
+            this.outputMarker.setColor(ThemeManager.instance.currentTheme.base0B);
+
+            var arr: Vector.<TextRange> = new Vector.<TextRange>();
+            for each (var error: LangError in evaluator.evalErrors())
+                arr.push(error.range);
+
+            this.errorMarker.setRanges(arr);
+
+            arr = new Vector.<TextRange>();
+            for each (var range: TextRange in evaluator.evalRanges())
+                arr.push(range);
+
+            this.outputMarker.setRanges(arr);
+
+            // Reset input field format to normal
+            this.inputField.setTextFormat(this.inputField.textFormat);
         }
     }
 }
