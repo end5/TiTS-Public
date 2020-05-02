@@ -2,7 +2,6 @@ package editor.Display.Panes {
     import editor.Display.Components.Box;
     import editor.Display.Components.StaticField;
     import editor.Display.Events.*;
-    import editor.Display.UIInfo;
     import editor.Evaluator;
     import flash.events.*;
 
@@ -16,7 +15,7 @@ package editor.Display.Panes {
             addChild(codeField);
 
             addEventListener(Event.ADDED_TO_STAGE, init);
-            EditorEventDispatcher.instance.addEventListener(EditorEvents.EVAL_TEXT, updateCode);
+            EditorEventDispatcher.instance.addEventListener(EditorEvents.EVAL_FINISHED, updateCode);
         }
 
         private function init(event: Event): void {

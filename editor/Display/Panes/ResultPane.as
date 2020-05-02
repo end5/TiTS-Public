@@ -19,7 +19,7 @@ package editor.Display.Panes {
             addChild(errorField);
 
             addEventListener(Event.ADDED_TO_STAGE, init);
-            EditorEventDispatcher.instance.addEventListener(EditorEvents.EVAL_TEXT, updateResults);
+            EditorEventDispatcher.instance.addEventListener(EditorEvents.EVAL_FINISHED, updateResults);
         }
 
         private function init(event: Event): void {

@@ -78,7 +78,7 @@ package editor.Display.Panes {
         }
 
         public function evaluateText(event: Event): void {
-            EditorEventDispatcher.instance.dispatchEvent(new Event(EditorEvents.UPDATE_TEXT));
+            EditorEventDispatcher.instance.dispatchEvent(new Event(EditorEvents.EVAL_START));
         }
 
         private function switchPane(event: Event): void {

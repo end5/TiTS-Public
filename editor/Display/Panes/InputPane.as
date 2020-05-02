@@ -16,6 +16,7 @@ package editor.Display.Panes {
         private var evaluator: Evaluator;
         private var outputMarker: InputFieldMarker;
         private var errorMarker: InputFieldMarker;
+        private var evalInputText: Boolean = false;
 
         public function InputPane(evaluator: Evaluator) {
             outputMarker = new InputFieldMarker(this.inputField);
@@ -23,18 +24,10 @@ package editor.Display.Panes {
 
             this.evaluator = evaluator;
 
-            inputField.addEventListener(Event.CHANGE, updatePositionInfo);
-            inputField.addEventListener(KeyboardEvent.KEY_DOWN, updatePositionInfo);
-            inputField.addEventListener(KeyboardEvent.KEY_UP, updatePositionInfo);
-            inputField.addEventListener(MouseEvent.CLICK, updatePositionInfo);
-
             addChild(inputField);
             addChild(infoField);
 
             addEventListener(Event.ADDED_TO_STAGE, init);
-            EditorEventDispatcher.instance.addEventListener(EditorEvents.THEME_CHANGE, resetMarkers);
-            EditorEventDispatcher.instance.addEventListener(EditorEvents.EVAL_TEXT, resetMarkers);
-            EditorEventDispatcher.instance.addEventListener(EditorEvents.UPDATE_TEXT, updateEval);
         }
 
         private function init(event: Event): void {
@@ -50,12 +43,20 @@ package editor.Display.Panes {
 
             displayInfo(0, 0, 0);
 
-            this.stage.addEventListener(Event.ENTER_FRAME, this.updateMarkers);
-        }
+            // Keyboard events update position info
+            inputField.addEventListener(KeyboardEvent.KEY_DOWN, updatePositionInfo);
+            inputField.addEventListener(KeyboardEvent.KEY_UP, updatePositionInfo);
+            inputField.addEventListener(MouseEvent.CLICK, updatePositionInfo);
 
-        public function updateEval(event: Event): void {
-            evaluator.eval(inputField.getText());
-            EditorEventDispatcher.instance.dispatchEvent(new Event(EditorEvents.EVAL_TEXT));
+            // Display needs updating
+            EditorEventDispatcher.instance.addEventListener(EditorEvents.THEME_CHANGE, resetMarkers);
+
+            // Defer evaluating new text until frame update
+            EditorEventDispatcher.instance.addEventListener(EditorEvents.EVAL_START, markForEval);
+            // inputField.addEventListener(Event.CHANGE, markForEval);
+
+            // Evaluate text and update display
+            stage.addEventListener(Event.ENTER_FRAME, update);
         }
 
         private function updatePositionInfo(event: Event): void {
@@ -81,29 +82,42 @@ package editor.Display.Panes {
                 ' [' + line + ':' + col + '/' + offset + ']';
         }
 
-        private function updateMarkers(e: Event): void {
-            this.errorMarker.update();
-            this.outputMarker.update();
+        private function markForEval(e: Event): void {
+            evalInputText = true;
+        }
+
+        private function update(e: Event): void {
+            if (evalInputText) {
+                evalInputText = false;
+                evaluator.eval(inputField.getText());
+                resetMarkers(e);
+                EditorEventDispatcher.instance.dispatchEvent(new Event(EditorEvents.EVAL_FINISHED));
+            }
+            else {
+                // Update visuals when we are not evaluating
+                errorMarker.update();
+                outputMarker.update();
+            }
         }
 
         private function resetMarkers(event: Event): void {
-            this.errorMarker.setColor(ThemeManager.instance.currentTheme.base08);
-            this.outputMarker.setColor(ThemeManager.instance.currentTheme.base0B);
+            errorMarker.setColor(ThemeManager.instance.currentTheme.base08);
+            outputMarker.setColor(ThemeManager.instance.currentTheme.base0B);
 
             var arr: Vector.<TextRange> = new Vector.<TextRange>();
             for each (var error: LangError in evaluator.evalErrors())
                 arr.push(error.range);
 
-            this.errorMarker.setRanges(arr);
+            errorMarker.setRanges(arr);
 
             arr = new Vector.<TextRange>();
             for each (var range: TextRange in evaluator.evalRanges())
                 arr.push(range);
 
-            this.outputMarker.setRanges(arr);
+            outputMarker.setRanges(arr);
 
             // Reset input field format to normal
-            this.inputField.setTextFormat(this.inputField.textFormat);
+            inputField.setTextFormat(inputField.textFormat);
         }
     }
 }

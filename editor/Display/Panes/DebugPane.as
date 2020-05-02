@@ -19,7 +19,7 @@ package editor.Display.Panes {
             addChild(debugField);
 
             addEventListener(Event.ADDED_TO_STAGE, init);
-            EditorEventDispatcher.instance.addEventListener(EditorEvents.EVAL_TEXT, updateDebug);
+            EditorEventDispatcher.instance.addEventListener(EditorEvents.EVAL_FINISHED, updateDebug);
         }
 
         private function init(event: Event): void {
@@ -28,7 +28,7 @@ package editor.Display.Panes {
             debugField.nsWidth = nsWidth;
             debugField.nsHeight = nsHeight;
 
-            this.stage.addEventListener(Event.ENTER_FRAME, this.renderText);
+            stage.addEventListener(Event.ENTER_FRAME, renderText);
         }
 
         private function renderText(e: Event): void {
