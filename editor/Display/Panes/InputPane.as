@@ -47,7 +47,10 @@ package editor.Display.Panes {
 
             // Defer evaluating new text until frame update
             EditorEventDispatcher.instance.addEventListener(EditorEvents.EVAL_START, markForEval);
-            // inputField.addEventListener(Event.CHANGE, markForEval);
+            inputField.addEventListener(Event.CHANGE, markForEval);
+
+            // Listen for auto eval toggle event
+            EditorEventDispatcher.instance.addEventListener(EditorEvents.TOGGLE_AUTO_EVAL, toggleAutoEval);
 
             // Evaluate text and update display
             stage.addEventListener(Event.ENTER_FRAME, update);
@@ -77,11 +80,20 @@ package editor.Display.Panes {
         }
 
         private var evalInputText: Boolean = false;
+        private var autoEval: Boolean = false;
+
+        private function toggleAutoEval(e: Event): void {
+            autoEval = !autoEval;
+        }
+
         private function markForEval(e: Event): void {
-            evalInputText = true;
+            if ((autoEval && e.type === Event.CHANGE) || e.type === EditorEvents.EVAL_START)
+                evalInputText = true;
         }
 
         private static const RENDERS_PER_FRAME: int = 10;
+        private static const FRAME_DELAY: int = 12;
+        private var delayCounter: int = 0;
         private var outputRangeIdx: int = 0;
         private var errorRangeIdx: int = 0;
         private var outputFormat: TextFormat = new TextFormat();
@@ -93,6 +105,10 @@ package editor.Display.Panes {
                 evaluator.eval(inputField.getText());
                 resetMarkers(e);
                 EditorEventDispatcher.instance.dispatchEvent(new Event(EditorEvents.EVAL_FINISHED));
+            }
+            else if (autoEval && delayCounter < FRAME_DELAY) {
+                // Wait "FRAME_DELAY" amount of frames before highlighting the text
+                delayCounter++;
             }
             else if (inputField.getText().length > 0) {
                 // Update highlighting when we are not evaluating
@@ -107,8 +123,8 @@ package editor.Display.Panes {
                             if (outputRanges[outputRangeIdx].end.offset !== outputRanges[outputRangeIdx + 1].start.offset) {
                                 counter++;
                                 break;
-            }
-        }
+                            }
+                        }
 
                         if (startPos !== outputRanges[outputRangeIdx].end.offset) {
                             inputField.setTextFormat(outputFormat, startPos, outputRanges[outputRangeIdx].end.offset);
@@ -149,6 +165,7 @@ package editor.Display.Panes {
             outputRangeIdx = 0;
             errorRangeIdx = 0;
 
+            delayCounter = 0;
 
             // Reset input field format to normal
             inputField.setTextFormat(inputField.textFormat);

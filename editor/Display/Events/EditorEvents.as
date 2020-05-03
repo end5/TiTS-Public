@@ -3,5 +3,6 @@ package editor.Display.Events {
         public static const THEME_CHANGE: String = 'themeChange';
         public static const EVAL_START: String = 'evalStart';
         public static const EVAL_FINISHED: String = 'evalFinish';
+        public static const TOGGLE_AUTO_EVAL: String = 'toggleAutoEval';
     }
 }
