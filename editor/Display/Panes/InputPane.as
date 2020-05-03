@@ -7,21 +7,15 @@ package editor.Display.Panes {
     import editor.Display.UIInfo;
     import editor.Evaluator;
     import editor.Lang.Errors.LangError;
-    import editor.Lang.TextRange;
     import flash.events.*;
+    import flash.text.TextFormat;
 
     public class InputPane extends Box {
         private var inputField: InputField = new InputField();
         private var infoField: StaticField = new StaticField();
         private var evaluator: Evaluator;
-        private var outputMarker: InputFieldMarker;
-        private var errorMarker: InputFieldMarker;
-        private var evalInputText: Boolean = false;
 
         public function InputPane(evaluator: Evaluator) {
-            outputMarker = new InputFieldMarker(this.inputField);
-            errorMarker = new InputFieldMarker(this.inputField);
-
             this.evaluator = evaluator;
 
             addChild(inputField);
@@ -82,9 +76,16 @@ package editor.Display.Panes {
                 ' [' + line + ':' + col + '/' + offset + ']';
         }
 
+        private var evalInputText: Boolean = false;
         private function markForEval(e: Event): void {
             evalInputText = true;
         }
+
+        private static const RENDERS_PER_FRAME: int = 10;
+        private var outputRangeIdx: int = 0;
+        private var errorRangeIdx: int = 0;
+        private var outputFormat: TextFormat = new TextFormat();
+        private var errorFormat: TextFormat = new TextFormat();
 
         private function update(e: Event): void {
             if (evalInputText) {
@@ -93,28 +94,61 @@ package editor.Display.Panes {
                 resetMarkers(e);
                 EditorEventDispatcher.instance.dispatchEvent(new Event(EditorEvents.EVAL_FINISHED));
             }
-            else {
-                // Update visuals when we are not evaluating
-                errorMarker.update();
-                outputMarker.update();
+            else if (inputField.getText().length > 0) {
+                // Update highlighting when we are not evaluating
+                var outputRanges: Array = evaluator.evalRanges();
+                if (outputRangeIdx < outputRanges.length) {
+                    var counter: int = 0;
+
+                    while (counter < RENDERS_PER_FRAME && outputRangeIdx < outputRanges.length) {
+                        var startPos: int = outputRanges[outputRangeIdx].start.offset;
+
+                        for (; outputRangeIdx + 1 < outputRanges.length; outputRangeIdx++) {
+                            if (outputRanges[outputRangeIdx].end.offset !== outputRanges[outputRangeIdx + 1].start.offset) {
+                                counter++;
+                                break;
+            }
+        }
+
+                        if (startPos !== outputRanges[outputRangeIdx].end.offset) {
+                            inputField.setTextFormat(outputFormat, startPos, outputRanges[outputRangeIdx].end.offset);
+                        }
+
+                        outputRangeIdx++;
+                    }
+                }
+
+                var errorRanges: Vector.<LangError> = evaluator.evalErrors();
+                if (errorRangeIdx < errorRanges.length) {
+                    counter = 0;
+
+                    while (counter < RENDERS_PER_FRAME && errorRangeIdx < errorRanges.length) {
+                        startPos = errorRanges[errorRangeIdx].range.start.offset;
+
+                        for (; errorRangeIdx + 1 < errorRanges.length; errorRangeIdx++) {
+                            if (errorRanges[errorRangeIdx].range.end.offset !== errorRanges[errorRangeIdx + 1].range.start.offset) {
+                                counter++;
+                                break;
+                            }
+                        }
+
+                        if (startPos !== errorRanges[errorRangeIdx].range.end.offset) {
+                            inputField.setTextFormat(errorFormat, startPos, errorRanges[errorRangeIdx].range.end.offset);
+                        }
+
+                        errorRangeIdx++;
+                    }
+                }
             }
         }
 
         private function resetMarkers(event: Event): void {
-            errorMarker.setColor(ThemeManager.instance.currentTheme.base08);
-            outputMarker.setColor(ThemeManager.instance.currentTheme.base0B);
+            errorFormat.color = ThemeManager.instance.currentTheme.base08;
+            outputFormat.color = ThemeManager.instance.currentTheme.base0B;
 
-            var arr: Vector.<TextRange> = new Vector.<TextRange>();
-            for each (var error: LangError in evaluator.evalErrors())
-                arr.push(error.range);
+            outputRangeIdx = 0;
+            errorRangeIdx = 0;
 
-            errorMarker.setRanges(arr);
-
-            arr = new Vector.<TextRange>();
-            for each (var range: TextRange in evaluator.evalRanges())
-                arr.push(range);
-
-            outputMarker.setRanges(arr);
 
             // Reset input field format to normal
             inputField.setTextFormat(inputField.textFormat);
