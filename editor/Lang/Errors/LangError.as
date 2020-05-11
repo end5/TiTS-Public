@@ -5,7 +5,7 @@ package editor.Lang.Errors {
         public var msg: String;
         public var range: TextRange;
 
-        public function LangError(msg: String, range: TextRange) {
+        public function LangError(range: TextRange, msg: String) {
             this.msg = msg;
             this.range = range;
         }

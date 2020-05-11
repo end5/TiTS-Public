@@ -1,4 +1,5 @@
-package editor.Lang.Nodes {
+package editor.Lang.Parse {
+
     import editor.Lang.TextRange;
 
     /**
@@ -22,7 +23,7 @@ package editor.Lang.Nodes {
         }
 
         public function toString(): String {
-            return 'Node|type: ' + this.type + ' range: ' + this.range + ' value: [' + this.value + ']';
+            return 'Node|type: ' + NodeType.Names[this.type] + ' range: ' + this.range + ' value: [' + this.value + ']';
         }
     }
 }

@@ -1,5 +1,5 @@
 package editor.Lang.Interpret {
-    internal class Product {
+    public class Product {
         /**
          * TextRange or Array of TextRange
          */

@@ -1,12 +1,21 @@
 package editor.Lang.Interpret {
-    import editor.Lang.Nodes.*;
-    import editor.Lang.Errors.*;
-    import editor.Lang.TextRange;
-    
+
+    import editor.Lang.Errors.LangError;
+    import editor.Lang.Parse.Node;
+    import editor.Lang.Parse.NodeType;
+    import editor.Parsers.Query.CodeMap.ToCode;
+
     public class Codifier {
         private const escapePairs: Array = [[/\n/g, '\\n'], [/'/g, '\\\''], [/"/g, '\\"']];
-        private var errors: Vector.<LangError>;
-        private var globals: Object;
+        public var errors: Vector.<LangError>;
+        public var result: String;
+        private var oldCodeMap: Object;
+        private var newCodeMap: Object;
+
+        public function Codifier(oldCodeMap: Object, newCodeMap: Object) {
+            this.oldCodeMap = oldCodeMap;
+            this.newCodeMap = newCodeMap;
+        }
 
         /**
          * Escapes newline and quotes
@@ -22,48 +31,25 @@ package editor.Lang.Interpret {
         }
 
         /**
-         * For mapping children
-         */
-        private function processChildren(node: Node, idx: Number, arr: Array): * {
-            return this.processNode(node);
-        }
-
-        /**
-         * Creates error for range with msg
-         * @param range
-         * @param msg
-         */
-        private function createError(range: TextRange, msg: String): void {
-            this.errors.push(new LangError(msg, range));
-        }
-
-        /**
          * Interprets a tree of Nodes
          * All errors will be caught and placed into the result
          * @param node The root node
          * @param globals The memory/object to access
          * @return
          */
-        public function interpret(node: Node, globals: Object): InterpretResult {
+        public function interpret(node: Node): void {
             this.errors = new Vector.<LangError>();
-            this.globals = globals;
-            var output: *;
+            var output: String;
             try {
                 output = this.processNode(node);
             }
             catch (err: Error) {
-                this.createError(node.range, err + '\n' + err.getStackTrace());
-                return new InterpretResult(
-                    '""',
-                    [node.range],
-                    this.errors
-                );
+                errors.push(new LangError(node.range, err + '\n' + err.getStackTrace()));
+                this.result = '';
+                return;
             }
-            return new InterpretResult(
-                output,
-                [],
-                this.errors
-            );
+
+            this.result = output;
         }
 
         /**
@@ -71,116 +57,139 @@ package editor.Lang.Interpret {
          * @param node Node
          * @return
          */
-        private function processNode(node: *): * /* String or Array */ {
-            switch (node.type) {
-                case NodeType.Identity: return this.codifyIdentityNode(node);
-                case NodeType.String: return this.codifyStringNode(node);
-                case NodeType.Number: return this.codifyNumberNode(node);
-                case NodeType.Concat: return this.codifyConcatNode(node);
-                case NodeType.Eval: return this.codifyEvalNode(node);
-                case NodeType.Retrieve: return this.codifyRetrieveNode(node);
-                case NodeType.Args: return this.codifyArgsNode(node);
-                case NodeType.Results: return this.codifyResultsNode(node);
-            }
-            throw new Error('NodeType ' + node.type + ' does not exist');
-        }
+        private function processNode(root: Node): String {
+            const search: Vector.<Node> = new Vector.<Node>();
+            search.push(root);
 
-        private function codifyStringNode(node: StringNode): String {
-            return '"' + escape(node.value) + '"';
-        }
+            const discovered: Vector.<Node> = new Vector.<Node>();
+            const products: Array = [];
+            products.push([]);
+            products.push([]);
 
-        private function codifyNumberNode(node: NumberNode): String {
-            return node.value + '';
-        }
+            var node: Node;
+            var discoverNode: Node;
+            var parent: Array;
+            var childProducts: Array;
 
-        private function codifyIdentityNode(node: IdentityNode): String {
-            return node.value + '';
-        }
+            while (search.length > 0) {
 
-        private function codifyConcatNode(node: ConcatNode): String {
-            var products: * = node.children.map(this.processChildren);
+                node = search[search.length - 1];
+                discoverNode = (discovered.length > 0 ? discovered[discovered.length - 1] : null);
 
-            var codeStr: String = '';
-            for each (var product: * in products) {
-                if (codeStr.charAt(codeStr.length - 1) === '"' && product.charAt(0) === '"') {
-                    codeStr = codeStr.slice(0, codeStr.length - 1) + product.slice(1);
+                if (node !== discoverNode) {
+                    if (node.children && node.children.length > 0) {
+                        discovered.push(node);
+                        products.push([]);
+
+                        for (var idx: int = node.children.length - 1; idx >= 0; --idx) {
+                            search.push(node.children[idx]);
+                        }
+
+                        continue;
+                    }
+                    else {
+                        childProducts = [];
+                    }
                 }
                 else {
-                    if (codeStr.length > 0)
-                        codeStr += ' + ';
-                    codeStr += product;
-                }
-            }
-
-            return codeStr;
-        }
-
-        private function codifyRetrieveNode(node: RetrieveNode): Array {
-            return node.children.map(this.processChildren);
-        }
-
-        private function codifyArgsNode(node: ArgsNode): Array {
-            return node.children.map(this.processChildren);
-        }
-
-        private function codifyResultsNode(node: ResultsNode): Array {
-            return node.children.map(this.processChildren);
-        }
-
-        private function codifyEvalNode(node: EvalNode): String {
-            // Error checking
-            var errorStart: int = this.errors.length;
-            if (node.children.length !== 3) {
-                this.createError(node.range, 'incorrect amount of children for EvalNode');
-            }
-            else if (node.children[0].type !== NodeType.Retrieve) {
-                this.createError(node.range, 'EvalNode children[0] was not a RetrieveNode');
-            }
-            else if (node.children[1].type !== NodeType.Args) {
-                this.createError(node.range, 'EvalNode children[1] was not a ArgsNode');
-            }
-            else if (node.children[2].type !== NodeType.Results) {
-                this.createError(node.range, 'EvalNode children[2] was not a ResultsNode');
-            }
-            
-            if (errorStart !== this.errors.length)
-                return '""';
-
-            const retrieve: Array = this.codifyRetrieveNode(node.children[0]);
-            const args: Array = this.codifyArgsNode(node.children[1]);
-            const results: Array = this.codifyResultsNode(node.children[2]);
-
-            var obj: * = this.globals;
-            var name: String = '';
-
-            var identity: String;
-
-            for (var idx: int = 0; idx < retrieve.length; idx++) {
-                identity = retrieve[idx];
-
-                // Error check
-                if (obj == null || typeof obj !== 'object' || !(identity in obj)) {
-                    // Do not need to report error here
-                    // This check already exists in the Interpreter
-                    return '""';
+                    discovered.pop();
+                    childProducts = products.pop();
                 }
 
-                obj = obj[identity];
-                if (name.length > 0) {
-                    name += '.';
+                search.pop();
+                parent = products[products.length - 1];
+                switch (node.type) {
+                    case NodeType.Identity:
+                    case NodeType.Number: {
+                        parent.push(node.value + '');
+                        break;
+                    }
+                    case NodeType.String: {
+                        parent.push('"' + escape(node.value) + '"');
+                        break;
+                    }
+                    case NodeType.Text: {
+                        if (node.value)
+                            parent.push('output("' + escape(node.value) + '");');
+                        else
+                            parent.push('');
+                        break;
+                    }
+                    case NodeType.Concat: {
+                        var codeStr: String = '';
+                        for each (var product: String in childProducts) {
+                            if (codeStr.length > 0)
+                                codeStr += '\n';
+                            codeStr += product;
+                        }
+                        parent.push(codeStr);
+                        break;
+                    }
+                    case NodeType.Retrieve:
+                    case NodeType.Args: {
+                        parent.push(childProducts);
+                        break;
+                    }
+                    case NodeType.Results: {
+                        var resultStrs: Array = [];
+                        for each (product in childProducts) {
+                            resultStrs.push(ToCode.indentText(product));
+                        }
+                        parent.push(resultStrs);
+                        break;
+                    }
+                    case NodeType.Eval: {
+                        const retrieve: Array = childProducts[0];
+                        const args: Array = childProducts[1];
+                        const results: Array = childProducts[2];
+
+                        var obj: * = !node.value ? this.oldCodeMap : this.newCodeMap;
+                        var name: String = '';
+
+                        var identity: String;
+                        var lowerCaseIdentity: String;
+                        var failedToFindCodeFunc: Boolean = false;
+
+                        for (idx = 0; idx < retrieve.length; idx++) {
+                            identity = retrieve[idx];
+
+                            // Determine if capitalization is needed
+                            if (idx === retrieve.length - 1) {
+                                lowerCaseIdentity = identity.charAt(0).toLocaleLowerCase() + identity.substring(1);
+                                if (obj != null && !(identity in obj) && lowerCaseIdentity in obj) {
+                                    identity = lowerCaseIdentity;
+                                }
+                            }
+
+                            // Error check
+                            if (obj == null || typeof obj !== 'object' || !(identity in obj)) {
+                                // Do not need to report error here
+                                // This check already exists in the Interpreter
+                                parent.push('""');
+                                failedToFindCodeFunc = true;
+                                break;
+                            }
+
+                            obj = obj[identity];
+                        }
+
+                        if (!failedToFindCodeFunc) {
+                            if (typeof obj !== 'function') {
+                                this.errors.push(new LangError(
+                                    node.range,
+                                    'Cannot generate code for "' + identity + '"'
+                                ));
+                                parent.push('""');
+                                break;
+                            }
+
+                            parent.push(obj(retrieve.join('.'), args, results));
+                        }
+                        break;
+                    }
                 }
-                name += identity;
             }
-
-            if (typeof obj !== 'function') {
-                this.createError(
-                    node.range,
-                    'cannot generate code for "' + identity + '"'
-                );
-                return '""';
-            }
-
-            return obj(name, args, results);
+            return parent[0];
         }
     }
 }

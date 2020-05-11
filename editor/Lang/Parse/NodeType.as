@@ -1,4 +1,4 @@
-package editor.Lang.Nodes {
+package editor.Lang.Parse {
     public class NodeType {
         public static var Identity: int = 0;
         public static var String: int = 1;
@@ -8,6 +8,8 @@ package editor.Lang.Nodes {
         public static var Retrieve: int = 5;
         public static var Args: int = 6;
         public static var Results: int = 7;
+        public static var Text: int = 8;
+        public static var Select: int = 9;
         
         public static var Names: Array = [
             'Identifier',
@@ -17,7 +19,9 @@ package editor.Lang.Nodes {
             'Eval',
             'Retrieve',
             'Args',
-            'Results'
+            'Results',
+            'Text',
+            'Select'
         ];
     }
 }
