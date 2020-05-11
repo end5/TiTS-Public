@@ -35,10 +35,10 @@ package editor.Display.Panes {
         }
 
         public function updateResults(event: Event): void {
-            outputField.htmlText = evaluator.evalText();
+            outputField.htmlText = evaluator.outputText();
 
             var errorText: String = '';
-            for each (var error: LangError in evaluator.evalErrors()) {
+            for each (var error: LangError in evaluator.outputErrors()) {
                 errorText += error + '\n';
             }
             errorField.htmlText = errorText;

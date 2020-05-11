@@ -12,15 +12,18 @@ package editor.Display.Panes {
         private var themeButton: Button = new Button('Change Theme');
         private var autoEvalButton: Button = new Button('Auto-Evaluate: Off');
         private var autoEval: Boolean = false;
+        private var debugButton: Button = new Button('Debug: Off');
 
         public function SettingsPane(evaluator: Evaluator) {
             this.evaluator = evaluator;
 
             themeButton.addEventListener(MouseEvent.CLICK, dispatchThemeChange);
             autoEvalButton.addEventListener(MouseEvent.CLICK, dispatchToggleAutoEval);
+            debugButton.addEventListener(MouseEvent.CLICK, dispatchToggleDebug);
 
             addChild(themeButton);
             addChild(autoEvalButton);
+            addChild(debugButton);
             addEventListener(Event.ADDED_TO_STAGE, init);
         }
 
@@ -34,6 +37,11 @@ package editor.Display.Panes {
             autoEvalButton.y = themeButton.y + themeButton.nsHeight + UIInfo.BORDER_SIZE;
             autoEvalButton.nsWidth = nsWidth;
             autoEvalButton.nsHeight = 50;
+
+            debugButton.x = 0;
+            debugButton.y = autoEvalButton.y + autoEvalButton.nsHeight + UIInfo.BORDER_SIZE;
+            debugButton.nsWidth = nsWidth;
+            debugButton.nsHeight = 50;
         }
 
         private function dispatchThemeChange(event: Event): void {
@@ -45,6 +53,11 @@ package editor.Display.Panes {
             autoEval = !autoEval;
             autoEvalButton.text = 'Auto-Evaluate: ' + (autoEval ? 'On' : 'Off');
             EditorEventDispatcher.instance.dispatchEvent(new Event(EditorEvents.TOGGLE_AUTO_EVAL));
+        }
+
+        private function dispatchToggleDebug(event: Event): void {
+            evaluator.debugActive = !evaluator.debugActive;
+            debugButton.text = 'Debug: ' + (evaluator.debugActive ? 'On' : 'Off');
         }
 
         public function show(): void {

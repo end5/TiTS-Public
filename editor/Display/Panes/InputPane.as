@@ -79,7 +79,10 @@ package editor.Display.Panes {
                 ' [' + line + ':' + col + '/' + offset + ']';
         }
 
-        private var evalInputText: Boolean = false;
+        private static const UPDATE_IDLE: int = 0;
+        private static const UPDATE_EVALUATION_START: int = 1;
+        private static const UPDATE_EVALUATION_FINISHED: int = 2;
+        private var updateState: int = UPDATE_IDLE;
         private var autoEval: Boolean = false;
 
         private function toggleAutoEval(e: Event): void {
@@ -88,7 +91,7 @@ package editor.Display.Panes {
 
         private function markForEval(e: Event): void {
             if ((autoEval && e.type === Event.CHANGE) || e.type === EditorEvents.EVAL_START)
-                evalInputText = true;
+                updateState = UPDATE_EVALUATION_START;
         }
 
         private static const RENDERS_PER_FRAME: int = 10;
@@ -100,20 +103,26 @@ package editor.Display.Panes {
         private var errorFormat: TextFormat = new TextFormat();
 
         private function update(e: Event): void {
-            if (evalInputText) {
-                evalInputText = false;
+            if (updateState === UPDATE_EVALUATION_START) {
                 evaluator.eval(inputField.getText());
                 resetMarkers(e);
                 EditorEventDispatcher.instance.dispatchEvent(new Event(EditorEvents.EVAL_FINISHED));
+                updateState = UPDATE_EVALUATION_FINISHED;
             }
-            else if (autoEval && delayCounter < FRAME_DELAY) {
-                // Wait "FRAME_DELAY" amount of frames before highlighting the text
-                delayCounter++;
-            }
-            else if (inputField.getText().length > 0) {
-                // Update highlighting when we are not evaluating
-                var outputRanges: Array = evaluator.evalRanges();
-                if (outputRangeIdx < outputRanges.length) {
+            else if (updateState === UPDATE_EVALUATION_FINISHED) {
+                if (autoEval && delayCounter < FRAME_DELAY) {
+                    // Wait "FRAME_DELAY" amount of frames before highlighting the text
+                    delayCounter++;
+                }
+                else {
+                    // Update highlighting when we are not evaluating
+
+                    var outputRanges: Array = evaluator.outputRanges();
+                    if (outputRanges == null || outputRangeIdx >= outputRanges.length) {
+                        updateState = UPDATE_IDLE;
+                        return;
+                    }
+
                     var counter: int = 0;
 
                     while (counter < RENDERS_PER_FRAME && outputRangeIdx < outputRanges.length) {
@@ -132,27 +141,27 @@ package editor.Display.Panes {
 
                         outputRangeIdx++;
                     }
-                }
 
-                var errorRanges: Vector.<LangError> = evaluator.evalErrors();
-                if (errorRangeIdx < errorRanges.length) {
-                    counter = 0;
+                    var errorRanges: Vector.<LangError> = evaluator.outputErrors();
+                    if (errorRanges && errorRangeIdx < errorRanges.length) {
+                        counter = 0;
 
-                    while (counter < RENDERS_PER_FRAME && errorRangeIdx < errorRanges.length) {
-                        startPos = errorRanges[errorRangeIdx].range.start.offset;
+                        while (counter < RENDERS_PER_FRAME && errorRangeIdx < errorRanges.length) {
+                            startPos = errorRanges[errorRangeIdx].range.start.offset;
 
-                        for (; errorRangeIdx + 1 < errorRanges.length; errorRangeIdx++) {
-                            if (errorRanges[errorRangeIdx].range.end.offset !== errorRanges[errorRangeIdx + 1].range.start.offset) {
-                                counter++;
-                                break;
+                            for (; errorRangeIdx + 1 < errorRanges.length; errorRangeIdx++) {
+                                if (errorRanges[errorRangeIdx].range.end.offset !== errorRanges[errorRangeIdx + 1].range.start.offset) {
+                                    counter++;
+                                    break;
+                                }
                             }
-                        }
 
-                        if (startPos !== errorRanges[errorRangeIdx].range.end.offset) {
-                            inputField.setTextFormat(errorFormat, startPos, errorRanges[errorRangeIdx].range.end.offset);
-                        }
+                            if (startPos !== errorRanges[errorRangeIdx].range.end.offset) {
+                                inputField.setTextFormat(errorFormat, startPos, errorRanges[errorRangeIdx].range.end.offset);
+                            }
 
-                        errorRangeIdx++;
+                            errorRangeIdx++;
+                        }
                     }
                 }
             }

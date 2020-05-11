@@ -15,7 +15,7 @@ package editor.Display.Panes {
             addChild(codeField);
 
             addEventListener(Event.ADDED_TO_STAGE, init);
-            EditorEventDispatcher.instance.addEventListener(EditorEvents.EVAL_FINISHED, updateCode);
+
         }
 
         private function init(event: Event): void {
@@ -23,10 +23,25 @@ package editor.Display.Panes {
             codeField.y = 0;
             codeField.nsWidth = nsWidth;
             codeField.nsHeight = nsHeight;
+
+            // Defer evaluating new text until frame update
+            EditorEventDispatcher.instance.addEventListener(EditorEvents.EVAL_FINISHED, markFrameUpdate);
+
+            // Evaluate text and update display
+            stage.addEventListener(Event.ENTER_FRAME, frameUpdate);
         }
 
-        public function updateCode(event: Event): void {
-            codeField.text = evaluator.evalCode();
+        private var updateOutput: Boolean = false;
+
+        private function markFrameUpdate(e: Event): void {
+            updateOutput = true;
+        }
+
+        private function frameUpdate(event: Event): void {
+            if (updateOutput) {
+                updateOutput = false;
+                codeField.text = evaluator.outputCode();
+            }
         }
     }
 }
