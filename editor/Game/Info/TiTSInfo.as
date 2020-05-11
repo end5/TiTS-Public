@@ -29,26 +29,29 @@ package editor.Game.Info {
             }
         }
 
-        public const i: Object = {
-            includeResults: true,
-            func: Validators.oneResult
-        }
-        public const b: Object = {
-            includeResults: true,
-            func: Validators.oneResult
-        }
-        public const cap: Object = {
-            includeResults: true,
-            func: Validators.oneResult
-        }
-        public const rand: Object = {
-            includeResults: true,
-            func: Validators.hasOneOptionalNumberArgManyResults
+        private function oneArg(args: Array, results: int): String {
+            var err: String = Validators.minLength(args.length, 0, Validators.ARGS);
+            if (!err) err = Validators.maxLength(args.length, 1, Validators.RESS);
+            if (!err) err = Validators.maxLength(results, 0, Validators.RESS);
+            return err;
         }
 
-        public function flagIs(args: Array, results: Array): String {
-            if (args.length === 0) return 'needs a flag';
-            return Validators.range(args.slice(1), results);
+        public const i: Function = oneArg;
+        public const b: Function = oneArg;
+        public const cap: Function = oneArg;
+
+        private function hasAtLeastOneArg(args: Array, results: int): String {
+            var err: String = Validators.minLength(args.length, 1, Validators.ARGS);
+            if (!err) err = Validators.maxLength(results, 0, Validators.RESS);
+            return err;
+        }
+
+        public const rand: Function = hasAtLeastOneArg;
+
+        public function flagIs(args: Array, results: int): String {
+            var err: String = Validators.minLength(args.length, 1, Validators.ARGS);
+            if (!err) err = Validators.checkRange(args.length - 1, results);
+            return err;
         }
 
         public function get target(): CreatureInfo {

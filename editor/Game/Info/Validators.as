@@ -1,53 +1,38 @@
 package editor.Game.Info {
     public class Validators {
-        public static function hasOneOptionalNumberArgUpToTwoResults(args: Array, results: Array): String {
-            if (args.length > 1) return "has " + (args.length - 1) + " extraneous arguments";
-            if (args.length == 1 && typeof args[0] !== 'number') return "needs one number argument";
-            if (results.length > 2) return "has " + (results.length - 2) + " extraneous results";
+        public static const ARGS: String = 'argument';
+        public static const RESS: String = 'result';
+
+        public static function minLength(len: int, required: int, arrType: String): String {
+            if (len < required) return 'needs at least ' + required + ' ' + arrType + (required > 1 ? 's' : '');
             return null;
         }
 
-        public static function range(args: Array, results: Array): String {
-            if (args.length === 0) return 'needs at least one argument';
-            if (results.length === 0) return 'needs at least one result';
-            if (results.length > args.length + 1) return 'has ' + (results.length - (args.length + 1)) + ' extraneous results';
+        public static function maxLength(len: int, required: int, arrType: String): String {
+            if (len > required) return 'has ' + (len - required) + ' extraneous ' + arrType + (required > 1 ? 's' : '');
             return null;
         }
 
-        public static function hasAtLeastOneStringArgUpToTwoResults(args: Array, results: Array): String {
-            if (args.length === 0) return "needs one argument";
-            if (typeof args[0] !== 'string') return "needs one text argument";
-            if (results.length > 2) return "has " + (results.length - 2) + " extraneous results";
+        /**
+         * If arr[idx] exists, compare its type to type
+         */
+        public static function checkTypeAt(arr: Array, idx: int, type: String, arrType: String): String {
+            if (arr.length > idx && typeof arr[idx] !== type) return arrType + ' ' + idx + ' needs to be a ' + type;
             return null;
         }
 
-        public static function hasOneOptionalNumberArgNoResults(args: Array, results: Array): String {
-            if (args.length > 1) return "has " + (args.length - 1) + " extraneous arguments";
-            if (args.length === 1 && typeof args[0] !== 'number') return "first argument is need to be a number";
-            if (results.length > 0) return "has " + (results.length) + " extraneous results";
-            return null;
+        /**
+         * Args >= 1, Results >= 1, Results <= Args + 1
+         */
+        public static function checkRange(argsLen: int, resultsLen: int): String {
+            var err: String = minLength(argsLen, 1, ARGS);
+            if (!err) err = minLength(resultsLen, 1, RESS);
+            if (!err) err = maxLength(resultsLen, argsLen + 1, RESS);
+            return err;
         }
 
-        public static function hasOneNumberArgNoResults(args: Array, results: Array): String {
-            if (args.length === 0) return "needs one argument";
-            if (args.length > 1) return "has " + (args.length - 1) + " extraneous arguments";
-            if (args.length === 1 && typeof args[0] !== 'number') return "first argument is need to be a number";
-            if (results.length > 0) return "has " + (results.length) + " extraneous results";
-            return null;
-        }
-
-        public static function oneResult(args: Array, results: Array): String {
-            if (results.length > 1) return "has " + (results.length - 1) + " extraneous results";
-            if (results.length === 0) return "needs one result";
-            if (args.length > 0) return "has " + (args.length) + " extraneous arguments";
-            return null;
-        }
-
-        public static function hasOneOptionalNumberArgManyResults(args: Array, results: Array): String {
-            if (args.length > 1) return "has " + (args.length - 1) + " extraneous arguments";
-            if (args.length == 1 && typeof args[0] !== 'number') return "needs one number argument";
-            if (results.length == 0) return "needs one result";
-            return null;
+        public static function range(args: Array, results: int): String {
+            return checkRange(args.length, results);
         }
     }
 }

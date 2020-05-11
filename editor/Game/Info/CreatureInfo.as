@@ -3,127 +3,134 @@ package editor.Game.Info {
 
     public class CreatureInfo {
         // Old parsers
-        public const base: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cockBase: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const sheath: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const sheathDescript: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const sheathOrBase: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const knot: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const knotOrBase: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const knots: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const sheathOrKnot: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const knotOrSheath: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const knotBallsHilt: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cockLength: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cocklength: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cocksIsAre: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const dicksIsAre: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cocksLightIsAre: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const dicksLightIsAre: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cockComplex: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cockNounComplex: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cockLight: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cockSimple: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cockNounSimple: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cockShort: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cockNoun: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const dicksNounIsAre: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cocksNounIsAre: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cockSkin: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const dickSkin: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cockColor: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const dickColor: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const vaginaColor: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cuntColor: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const pussyColor: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cockHead: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cockhead: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cockHeadNoun: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cockHeads: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cockheads: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cockDescript: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cock: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cockOrStrapon: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cockOrHardlight: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cockOrStraponNoun: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cockOrHardlightNoun: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cockOrStraponFull: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cockOrHardlightFull: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cockOrStraponHead: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const nippleNoun: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const nipplesNoun: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const nippleNounSimple: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const nipplesNounSimple: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const nipple: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const nippleDescript: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const lipple: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const nipples: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const nipplesDescript: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const lipples: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const milkyNipple: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const milkyNipples: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const nippleHarden: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const nipplesHarden: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const nippleHardening: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const nipplesHardening: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const areola: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const areolaDescript: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const areolae: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const areolaeDescript: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const erectCock: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const flaccidCock: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const chestSimple: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const chestNoun: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const breastsNoun: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const breastNoun: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const breast: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const breastNounChaste: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const breastChaste: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const breastNounDry: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const breastDry: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cupSize: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const breastCup: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const breastCupSize: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const breastDescript: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const breasts: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const boobs: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const tits: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cockClit: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const vagina: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const pussy: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cunt: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const vaginaNounComplex: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const pussyNounComplex: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const vaginaSimple: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const pussySimple: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cuntSimple: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const vaginaNounSimple: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const vaginaNoun: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const pussyNoun: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cuntNoun: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const vagOrAss: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const vagOrAsshole: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const vaginaOrAss: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const vaginaOrAsshole: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const pussyOrAss: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const pussyOrAsshole: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const vagOrAssNoun: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const vagOrAssSimple: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const womb: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const uterus: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const clit: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const clitoris: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const clitNoun: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const clitorisNoun: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const oneClitPerVagina: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const clits: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const clitsNoun: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const clitsIsAre: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cockShape: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cockshape: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cockType: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const cocktype: Function = Validators.hasOneOptionalNumberArgNoResults;
-        public const accurateCockName: Function = Validators.hasOneOptionalNumberArgNoResults;
+        private function hasOneOptionalNumberArgNoResults(args: Array, results: int): String {
+            var err: String = Validators.maxLength(args.length, 1, Validators.ARGS);
+            if (!err) err = Validators.checkTypeAt(args, 0, 'number', Validators.ARGS);
+            if (!err) err = Validators.maxLength(results, 0, Validators.RESS);
+            return err;
+        }
+
+        public const base: Function = hasOneOptionalNumberArgNoResults;
+        public const cockBase: Function = hasOneOptionalNumberArgNoResults;
+        public const sheath: Function = hasOneOptionalNumberArgNoResults;
+        public const sheathDescript: Function = hasOneOptionalNumberArgNoResults;
+        public const sheathOrBase: Function = hasOneOptionalNumberArgNoResults;
+        public const knot: Function = hasOneOptionalNumberArgNoResults;
+        public const knotOrBase: Function = hasOneOptionalNumberArgNoResults;
+        public const knots: Function = hasOneOptionalNumberArgNoResults;
+        public const sheathOrKnot: Function = hasOneOptionalNumberArgNoResults;
+        public const knotOrSheath: Function = hasOneOptionalNumberArgNoResults;
+        public const knotBallsHilt: Function = hasOneOptionalNumberArgNoResults;
+        public const cockLength: Function = hasOneOptionalNumberArgNoResults;
+        public const cocklength: Function = hasOneOptionalNumberArgNoResults;
+        public const cocksIsAre: Function = hasOneOptionalNumberArgNoResults;
+        public const dicksIsAre: Function = hasOneOptionalNumberArgNoResults;
+        public const cocksLightIsAre: Function = hasOneOptionalNumberArgNoResults;
+        public const dicksLightIsAre: Function = hasOneOptionalNumberArgNoResults;
+        public const cockComplex: Function = hasOneOptionalNumberArgNoResults;
+        public const cockNounComplex: Function = hasOneOptionalNumberArgNoResults;
+        public const cockLight: Function = hasOneOptionalNumberArgNoResults;
+        public const cockSimple: Function = hasOneOptionalNumberArgNoResults;
+        public const cockNounSimple: Function = hasOneOptionalNumberArgNoResults;
+        public const cockShort: Function = hasOneOptionalNumberArgNoResults;
+        public const cockNoun: Function = hasOneOptionalNumberArgNoResults;
+        public const dicksNounIsAre: Function = hasOneOptionalNumberArgNoResults;
+        public const cocksNounIsAre: Function = hasOneOptionalNumberArgNoResults;
+        public const cockSkin: Function = hasOneOptionalNumberArgNoResults;
+        public const dickSkin: Function = hasOneOptionalNumberArgNoResults;
+        public const cockColor: Function = hasOneOptionalNumberArgNoResults;
+        public const dickColor: Function = hasOneOptionalNumberArgNoResults;
+        public const vaginaColor: Function = hasOneOptionalNumberArgNoResults;
+        public const cuntColor: Function = hasOneOptionalNumberArgNoResults;
+        public const pussyColor: Function = hasOneOptionalNumberArgNoResults;
+        public const cockHead: Function = hasOneOptionalNumberArgNoResults;
+        public const cockhead: Function = hasOneOptionalNumberArgNoResults;
+        public const cockHeadNoun: Function = hasOneOptionalNumberArgNoResults;
+        public const cockHeads: Function = hasOneOptionalNumberArgNoResults;
+        public const cockheads: Function = hasOneOptionalNumberArgNoResults;
+        public const cockDescript: Function = hasOneOptionalNumberArgNoResults;
+        public const cock: Function = hasOneOptionalNumberArgNoResults;
+        public const cockOrStrapon: Function = hasOneOptionalNumberArgNoResults;
+        public const cockOrHardlight: Function = hasOneOptionalNumberArgNoResults;
+        public const cockOrStraponNoun: Function = hasOneOptionalNumberArgNoResults;
+        public const cockOrHardlightNoun: Function = hasOneOptionalNumberArgNoResults;
+        public const cockOrStraponFull: Function = hasOneOptionalNumberArgNoResults;
+        public const cockOrHardlightFull: Function = hasOneOptionalNumberArgNoResults;
+        public const cockOrStraponHead: Function = hasOneOptionalNumberArgNoResults;
+        public const nippleNoun: Function = hasOneOptionalNumberArgNoResults;
+        public const nipplesNoun: Function = hasOneOptionalNumberArgNoResults;
+        public const nippleNounSimple: Function = hasOneOptionalNumberArgNoResults;
+        public const nipplesNounSimple: Function = hasOneOptionalNumberArgNoResults;
+        public const nipple: Function = hasOneOptionalNumberArgNoResults;
+        public const nippleDescript: Function = hasOneOptionalNumberArgNoResults;
+        public const lipple: Function = hasOneOptionalNumberArgNoResults;
+        public const nipples: Function = hasOneOptionalNumberArgNoResults;
+        public const nipplesDescript: Function = hasOneOptionalNumberArgNoResults;
+        public const lipples: Function = hasOneOptionalNumberArgNoResults;
+        public const milkyNipple: Function = hasOneOptionalNumberArgNoResults;
+        public const milkyNipples: Function = hasOneOptionalNumberArgNoResults;
+        public const nippleHarden: Function = hasOneOptionalNumberArgNoResults;
+        public const nipplesHarden: Function = hasOneOptionalNumberArgNoResults;
+        public const nippleHardening: Function = hasOneOptionalNumberArgNoResults;
+        public const nipplesHardening: Function = hasOneOptionalNumberArgNoResults;
+        public const areola: Function = hasOneOptionalNumberArgNoResults;
+        public const areolaDescript: Function = hasOneOptionalNumberArgNoResults;
+        public const areolae: Function = hasOneOptionalNumberArgNoResults;
+        public const areolaeDescript: Function = hasOneOptionalNumberArgNoResults;
+        public const erectCock: Function = hasOneOptionalNumberArgNoResults;
+        public const flaccidCock: Function = hasOneOptionalNumberArgNoResults;
+        public const chestSimple: Function = hasOneOptionalNumberArgNoResults;
+        public const chestNoun: Function = hasOneOptionalNumberArgNoResults;
+        public const breastsNoun: Function = hasOneOptionalNumberArgNoResults;
+        public const breastNoun: Function = hasOneOptionalNumberArgNoResults;
+        public const breast: Function = hasOneOptionalNumberArgNoResults;
+        public const breastNounChaste: Function = hasOneOptionalNumberArgNoResults;
+        public const breastChaste: Function = hasOneOptionalNumberArgNoResults;
+        public const breastNounDry: Function = hasOneOptionalNumberArgNoResults;
+        public const breastDry: Function = hasOneOptionalNumberArgNoResults;
+        public const cupSize: Function = hasOneOptionalNumberArgNoResults;
+        public const breastCup: Function = hasOneOptionalNumberArgNoResults;
+        public const breastCupSize: Function = hasOneOptionalNumberArgNoResults;
+        public const breastDescript: Function = hasOneOptionalNumberArgNoResults;
+        public const breasts: Function = hasOneOptionalNumberArgNoResults;
+        public const boobs: Function = hasOneOptionalNumberArgNoResults;
+        public const tits: Function = hasOneOptionalNumberArgNoResults;
+        public const cockClit: Function = hasOneOptionalNumberArgNoResults;
+        public const vagina: Function = hasOneOptionalNumberArgNoResults;
+        public const pussy: Function = hasOneOptionalNumberArgNoResults;
+        public const cunt: Function = hasOneOptionalNumberArgNoResults;
+        public const vaginaNounComplex: Function = hasOneOptionalNumberArgNoResults;
+        public const pussyNounComplex: Function = hasOneOptionalNumberArgNoResults;
+        public const vaginaSimple: Function = hasOneOptionalNumberArgNoResults;
+        public const pussySimple: Function = hasOneOptionalNumberArgNoResults;
+        public const cuntSimple: Function = hasOneOptionalNumberArgNoResults;
+        public const vaginaNounSimple: Function = hasOneOptionalNumberArgNoResults;
+        public const vaginaNoun: Function = hasOneOptionalNumberArgNoResults;
+        public const pussyNoun: Function = hasOneOptionalNumberArgNoResults;
+        public const cuntNoun: Function = hasOneOptionalNumberArgNoResults;
+        public const vagOrAss: Function = hasOneOptionalNumberArgNoResults;
+        public const vagOrAsshole: Function = hasOneOptionalNumberArgNoResults;
+        public const vaginaOrAss: Function = hasOneOptionalNumberArgNoResults;
+        public const vaginaOrAsshole: Function = hasOneOptionalNumberArgNoResults;
+        public const pussyOrAss: Function = hasOneOptionalNumberArgNoResults;
+        public const pussyOrAsshole: Function = hasOneOptionalNumberArgNoResults;
+        public const vagOrAssNoun: Function = hasOneOptionalNumberArgNoResults;
+        public const vagOrAssSimple: Function = hasOneOptionalNumberArgNoResults;
+        public const womb: Function = hasOneOptionalNumberArgNoResults;
+        public const uterus: Function = hasOneOptionalNumberArgNoResults;
+        public const clit: Function = hasOneOptionalNumberArgNoResults;
+        public const clitoris: Function = hasOneOptionalNumberArgNoResults;
+        public const clitNoun: Function = hasOneOptionalNumberArgNoResults;
+        public const clitorisNoun: Function = hasOneOptionalNumberArgNoResults;
+        public const oneClitPerVagina: Function = hasOneOptionalNumberArgNoResults;
+        public const clits: Function = hasOneOptionalNumberArgNoResults;
+        public const clitsNoun: Function = hasOneOptionalNumberArgNoResults;
+        public const clitsIsAre: Function = hasOneOptionalNumberArgNoResults;
+        public const cockShape: Function = hasOneOptionalNumberArgNoResults;
+        public const cockshape: Function = hasOneOptionalNumberArgNoResults;
+        public const cockType: Function = hasOneOptionalNumberArgNoResults;
+        public const cocktype: Function = hasOneOptionalNumberArgNoResults;
+        public const accurateCockName: Function = hasOneOptionalNumberArgNoResults;
 
         // New parsers
         // Lookup
@@ -148,6 +155,18 @@ package editor.Game.Info {
             return null;
         }
 
+        private function hasAtLeastOneStringArgUpToTwoResults(args: Array, results: int): String {
+            var err: String = Validators.minLength(args.length, 1, Validators.ARGS);
+            if (!err) err = Validators.checkTypeAt(args, 0, 'string', Validators.ARGS);
+            if (!err) err = Validators.maxLength(results, 2, Validators.RESS);
+            return null;
+        }
+
+        private function hasOneIndexArgAtLeastOneOtherArg(args: Array): String {
+            var err: String = Validators.minLength(args.length, 2, Validators.ARGS);
+            if (!err) err = Validators.checkTypeAt(args, 0, 'number', Validators.ARGS);
+            return null;
+        }
 
         // Physical Appearance
         //Femininity
@@ -174,145 +193,145 @@ package editor.Game.Info {
 
         // Body Parts
         // Skin
-        public function skinTypeIs(args: Array, results: Array): String {
+        public function skinTypeIs(args: Array, results: int): String {
             var err: String = Validators.range(args, results);
             if (!err) err = this.nameInGroup('SKIN_TYPE_NAMES', args);
             return err;
         }
 
         // Eyes
-        public function eyeTypeIs(args: Array, results: Array): String {
+        public function eyeTypeIs(args: Array, results: int): String {
             var err: String = Validators.range(args, results);
             if (!err) err = this.nameToIndexInGroup('TYPE_NAMES', 'VALID_EYE_TYPES', args);
             return err;
         }
 
         // Hair
-        public function hairTypeIs(args: Array, results: Array): String {
+        public function hairTypeIs(args: Array, results: int): String {
             var err: String = Validators.range(args, results);
             if (!err) err = this.nameInGroup('HAIR_TYPE_NAMES', args);
             return err;
         }
 
         // Beard
-        public function beardTypeIs(args: Array, results: Array): String {
+        public function beardTypeIs(args: Array, results: int): String {
             var err: String = Validators.range(args, results);
             if (!err) err = this.nameInGroup('HAIR_TYPE_NAMES', args);
             return err;
         }
 
         // Face
-        public function faceTypeIs(args: Array, results: Array): String {
+        public function faceTypeIs(args: Array, results: int): String {
             var err: String = Validators.range(args, results);
             if (!err) err = this.nameToIndexInGroup('TYPE_NAMES', 'VALID_FACE_TYPES', args);
             return err;
         }
 
-        public function hasFaceFlag(args: Array, results: Array): String {
+        public function hasFaceFlag(args: Array, results: int): String {
             var err: String = Validators.range(args, results);
             if (!err) err = this.nameToIndexInGroup('FLAG_NAMES', 'VALID_FACE_FLAGS', args);
             return err;
         }
 
-        public function hasFaceFlags(args: Array, results: Array): String {
-            var err: String = Validators.hasAtLeastOneStringArgUpToTwoResults(args, results);
+        public function hasFaceFlags(args: Array, results: int): String {
+            var err: String = hasAtLeastOneStringArgUpToTwoResults(args, results);
             if (!err) err = this.nameToIndexInGroup('FLAG_NAMES', 'VALID_FACE_FLAGS', args);
             return err;
         }
 
         // Tongue
-        public function tongueTypeIs(args: Array, results: Array): String {
+        public function tongueTypeIs(args: Array, results: int): String {
             var err: String = Validators.range(args, results);
             if (!err) err = this.nameToIndexInGroup('TYPE_NAMES', 'VALID_TONGUE_TYPES', args);
             return err;
         }
 
-        public function hasTongueFlag(args: Array, results: Array): String {
+        public function hasTongueFlag(args: Array, results: int): String {
             var err: String = Validators.range(args, results);
             if (!err) err = this.nameToIndexInGroup('FLAG_NAMES', 'VALID_TONGUE_FLAGS', args);
             return err;
         }
 
-        public function hasTongueFlags(args: Array, results: Array): String {
-            var err: String = Validators.hasAtLeastOneStringArgUpToTwoResults(args, results);
+        public function hasTongueFlags(args: Array, results: int): String {
+            var err: String = hasAtLeastOneStringArgUpToTwoResults(args, results);
             if (!err) err = this.nameToIndexInGroup('FLAG_NAMES', 'VALID_TONGUE_FLAGS', args);
             return err;
         }
 
         // Ear
-        public function earTypeIs(args: Array, results: Array): String {
+        public function earTypeIs(args: Array, results: int): String {
             var err: String = Validators.range(args, results);
             if (!err) err = this.nameToIndexInGroup('TYPE_NAMES', 'VALID_EAR_TYPES', args);
             return err;
         }
 
-        public function hasEarFlag(args: Array, results: Array): String {
+        public function hasEarFlag(args: Array, results: int): String {
             var err: String = Validators.range(args, results);
             if (!err) err = this.nameToIndexInGroup('FLAG_NAMES', 'VALID_EAR_FLAGS', args);
             return err;
         }
 
-        public function hasEarFlags(args: Array, results: Array): String {
-            var err: String = Validators.hasAtLeastOneStringArgUpToTwoResults(args, results);
+        public function hasEarFlags(args: Array, results: int): String {
+            var err: String = hasAtLeastOneStringArgUpToTwoResults(args, results);
             if (!err) err = this.nameToIndexInGroup('FLAG_NAMES', 'VALID_EAR_FLAGS', args);
             return err;
         }
 
         // Antennae
-        public function antennaeTypeIs(args: Array, results: Array): String {
+        public function antennaeTypeIs(args: Array, results: int): String {
             var err: String = Validators.range(args, results);
             if (!err) err = this.nameToIndexInGroup('TYPE_NAMES', 'VALID_ANTENNAE_TYPES', args);
             return err;
         }
 
         // Horn
-        public function hornTypeIs(args: Array, results: Array): String {
+        public function hornTypeIs(args: Array, results: int): String {
             var err: String = Validators.range(args, results);
             if (!err) err = this.nameToIndexInGroup('TYPE_NAMES', 'VALID_HORN_TYPES', args);
             return err;
         }
 
         // Arm
-        public function armTypeIs(args: Array, results: Array): String {
+        public function armTypeIs(args: Array, results: int): String {
             var err: String = Validators.range(args, results);
             if (!err) err = this.nameToIndexInGroup('TYPE_NAMES', 'VALID_ARM_TYPES', args);
             return err;
         }
 
-        public function hasArmFlag(args: Array, results: Array): String {
+        public function hasArmFlag(args: Array, results: int): String {
             var err: String = Validators.range(args, results);
             if (!err) err = this.nameToIndexInGroup('FLAG_NAMES', 'VALID_ARM_FLAGS', args);
             return err;
         }
 
-        public function hasArmFlags(args: Array, results: Array): String {
-            var err: String = Validators.hasAtLeastOneStringArgUpToTwoResults(args, results);
+        public function hasArmFlags(args: Array, results: int): String {
+            var err: String = hasAtLeastOneStringArgUpToTwoResults(args, results);
             if (!err) err = this.nameToIndexInGroup('FLAG_NAMES', 'VALID_ARM_FLAGS', args);
             return err;
         }
 
         // Wing
-        public function wingTypeIs(args: Array, results: Array): String {
+        public function wingTypeIs(args: Array, results: int): String {
             var err: String = Validators.range(args, results);
             if (!err) err = this.nameToIndexInGroup('TYPE_NAMES', 'VALID_WING_TYPES', args);
             return err;
         }
 
         // Leg
-        public function legTypeIs(args: Array, results: Array): String {
+        public function legTypeIs(args: Array, results: int): String {
             var err: String = Validators.range(args, results);
             if (!err) err = this.nameToIndexInGroup('TYPE_NAMES', 'VALID_LEG_TYPES', args);
             return err;
         }
 
-        public function hasLegFlag(args: Array, results: Array): String {
+        public function hasLegFlag(args: Array, results: int): String {
             var err: String = Validators.range(args, results);
             if (!err) err = this.nameToIndexInGroup('FLAG_NAMES', 'VALID_LEG_FLAGS', args);
             return err;
         }
 
-        public function hasLegFlags(args: Array, results: Array): String {
-            var err: String = Validators.hasAtLeastOneStringArgUpToTwoResults(args, results);
+        public function hasLegFlags(args: Array, results: int): String {
+            var err: String = hasAtLeastOneStringArgUpToTwoResults(args, results);
             if (!err) err = this.nameToIndexInGroup('FLAG_NAMES', 'VALID_LEG_FLAGS', args);
             return err;
         }
@@ -320,7 +339,7 @@ package editor.Game.Info {
         // Lowerbody
 
         // Tail
-        public function tailTypeIs(args: Array, results: Array): String {
+        public function tailTypeIs(args: Array, results: int): String {
             var err: String = Validators.range(args, results);
             if (!err) err = this.nameToIndexInGroup('TYPE_NAMES', 'VALID_TAIL_TYPES', args);
             return err;
@@ -330,20 +349,20 @@ package editor.Game.Info {
 
         public const tailCountRange: Function = Validators.range;
 
-        public function hasTailFlag(args: Array, results: Array): String {
+        public function hasTailFlag(args: Array, results: int): String {
             var err: String = Validators.range(args, results);
             if (!err) err = this.nameToIndexInGroup('FLAG_NAMES', 'VALID_TAIL_FLAGS', args);
             return err;
         }
 
-        public function hasTailFlags(args: Array, results: Array): String {
-            var err: String = Validators.hasAtLeastOneStringArgUpToTwoResults(args, results);
+        public function hasTailFlags(args: Array, results: int): String {
+            var err: String = hasAtLeastOneStringArgUpToTwoResults(args, results);
             if (!err) err = this.nameToIndexInGroup('FLAG_NAMES', 'VALID_TAIL_FLAGS', args);
             return err;
         }
 
         // Cock
-        public function hasACockWithType(args: Array, results: Array): String {
+        public function hasCockType(args: Array, results: int): String {
             var err: String = Validators.range(args, results);
             if (!err) err = this.nameToIndexInGroup('TYPE_NAMES', 'VALID_COCK_TYPES', args);
             return err;
@@ -351,21 +370,26 @@ package editor.Game.Info {
 
         public const cockCountIs: Function = Validators.range;
 
-        public function cockTypeIs(args: Array, results: Array): String {
-            if (args.length < 2) return 'needs at least ' + (2 - args.length) + ' arguments';
-            if (typeof args[0] !== 'number') return 'expected first argument to be a number';
-            var actualArgs: Array = args.slice(1);
-            var err: String = Validators.range(actualArgs, results);
-            if (!err) err = this.nameToIndexInGroup('TYPE_NAMES', 'VALID_COCK_TYPES', actualArgs);
+        public function cockTypeIs(args: Array, results: int): String {
+            var err: String = hasOneIndexArgAtLeastOneOtherArg(args);
+            if (!err) err = Validators.checkRange(args.length - 1, results);
+            if (!err) err = this.nameToIndexInGroup('TYPE_NAMES', 'VALID_COCK_TYPES', args.slice(1));
             return err;
         }
 
-        public const cockThatFits: Function = Validators.hasOneNumberArgNoResults;
+        public function cockThatFits(args: Array, results: int): String {
+            var err: String = Validators.minLength(args.length, 1, Validators.ARGS);
+            if (!err) err = Validators.maxLength(args.length, 1, Validators.ARGS);
+            if (!err) err = Validators.checkTypeAt(args, 0, 'number', Validators.ARGS);
+            if (!err) err = Validators.maxLength(results, 0, Validators.RESS);
+            return err;
+        }
 
         // Balls
         public const ballCountIs: Function = Validators.range;
 
         public const ballSizeIs: Function = Validators.range;
+        public const ballSizeRange: Function = Validators.range;
 
         // Breasts
         public const breastCountIs: Function = Validators.range;
@@ -379,19 +403,23 @@ package editor.Game.Info {
             return false;
         }
 
-        private function breastCupSizeIs(args: Array, results: Array): String {
-            if (typeof args[0] !== 'number') return 'first argument is not a number';
-            for (var idx: int = 1; idx < args.length; idx++)
-                if (!this.inBreastCupList(args[idx]))
-                    return '"' + args[idx] + '" is not a breast cup';
-            return Validators.range(args.slice(1), results);
+        public function breastCupSizeIs(args: Array, results: int): String {
+            var err: String = Validators.checkTypeAt(args, 0, 'number', Validators.ARGS);
+            if (!err)
+                for (var idx: int = 1; idx < args.length; idx++)
+                    if (!this.inBreastCupList(args[idx])) {
+                        err = '"' + args[idx] + '" is not a breast cup';
+                        break;
+                    }
+            if (!err) err = Validators.checkRange(args.length - 1, results);
+            return err;
         }
 
         // Vagina
 
         // Fluids
         // Milk
-        public function milkTypeIs(args: Array, results: Array): String {
+        public function milkTypeIs(args: Array, results: int): String {
             var err: String = Validators.range(args, results);
             if (!err) err = this.nameToIndexInGroup('FLUID_TYPE_NAMES', 'VALID_MILK_TYPES', args);
             return err;
@@ -400,7 +428,7 @@ package editor.Game.Info {
         public const milkQRange: Function = Validators.range;
 
         // Cum
-        public function cumTypeIs(args: Array, results: Array): String {
+        public function cumTypeIs(args: Array, results: int): String {
             var err: String = Validators.range(args, results);
             if (!err) err = this.nameToIndexInGroup('FLUID_TYPE_NAMES', 'VALID_CUM_TYPES', args);
             return err;
@@ -409,7 +437,7 @@ package editor.Game.Info {
         public const cumQRange: Function = Validators.range;
 
         // Girl Cum
-        public function girlCumTypeIs(args: Array, results: Array): String {
+        public function girlCumTypeIs(args: Array, results: int): String {
             var err: String = Validators.range(args, results);
             if (!err) err = this.nameToIndexInGroup('FLUID_TYPE_NAMES', 'VALID_GIRLCUM_TYPES', args);
             return err;
@@ -469,11 +497,18 @@ package editor.Game.Info {
 
         // Items
         // Piercing
-        public const hasNipplePiercing: Function = Validators.hasOneOptionalNumberArgUpToTwoResults;
-        public const hasCockPiercing: Function = Validators.hasOneOptionalNumberArgUpToTwoResults;
-        public const hasPiercedVaginas: Function = Validators.hasOneOptionalNumberArgUpToTwoResults;
-        public const hasClitPiercing: Function = Validators.hasOneOptionalNumberArgUpToTwoResults;
-        public const hasCocksock: Function = Validators.hasOneOptionalNumberArgUpToTwoResults;
+        private function hasOneOptionalNumberArgUpToTwoResults(args: Array, results: int): String {
+            var err: String = Validators.maxLength(args.length, 1, Validators.ARGS);
+            if (!err) err = Validators.checkTypeAt(args, 0, 'number', Validators.ARGS);
+            if (!err) err = Validators.maxLength(results, 2, Validators.RESS);
+            return null;
+        }
+
+        public const hasNipplePiercing: Function = hasOneOptionalNumberArgUpToTwoResults;
+        public const hasCockPiercing: Function = hasOneOptionalNumberArgUpToTwoResults;
+        public const hasPiercedVaginas: Function = hasOneOptionalNumberArgUpToTwoResults;
+        public const hasClitPiercing: Function = hasOneOptionalNumberArgUpToTwoResults;
+        public const hasCocksock: Function = hasOneOptionalNumberArgUpToTwoResults;
 
         // Keyitem
         public const hasKeyItem: Function = Validators.range;

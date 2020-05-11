@@ -1,89 +1,97 @@
 package editor.Game.CodeMap {
     public class ToCode {
+        public static const INDENT: String = '    ';
+
+        public static function indentText(text: String): String {
+            var newText: String = '' + INDENT;
+            var start: int = 0;
+            var pos: int = text.indexOf('\n');
+            while (~pos && pos < text.length) {
+                newText += text.substring(start, pos) + '\n' + INDENT;
+                start = ++pos;
+                pos = text.indexOf('\n', start);
+            }
+            return newText + text.substring(start);
+        }
+
         public static function oldParser(identifier: String, args: Array, results: Array): String {
-            var text: String = '"[' + identifier;
+            var text: String = 'output("[' + identifier;
             if (args.length > 0)
                 text += ' ' + args.join(' ')
-            text += ']"';
+            text += ']");';
             return text;
         }
 
+        private static function rangeCondition(idx: int, identifier: String, args: Array, results: Array): String {
+            return args[idx] + ' <= ' + identifier + (idx < args.length - 1 ? ' && ' + identifier + ' < ' + args[idx + 1] : '');
+        }
+
+        private static function equalsCondition(idx: int, identifier: String, args: Array, results: Array): String {
+            return identifier + ' == ' + args[idx];
+        }
+
+        private static function callCondition(idx: int, identifier: String, args: Array, results: Array): String {
+            return identifier + '( ' + args[idx] + ')';
+        }
+
         public static function range(identifier: String, args: Array, results: Array): String {
-            var code: String = "";
-            for (var idx: int = 0; idx < args.length; idx++) {
-                code += '(' + args[idx] + ' <= ' + identifier;
-                if (idx + 1 < args.length) {
-                    code += ' && ' + identifier + ' < ' + args[idx + 1];
-                }
-                code += ' ? ';
-                if (idx < results.length)
-                    code += results[idx];
-                else
-                    code += '""';
-                code += ' : ';
-                if (idx + 1 === args.length) {
-                    if (idx + 1 <= results.length)
-                        code += results[idx + 1];
-                    else
-                        code += '""';
-                }
-            }
-            for (idx = 0; idx < args.length; idx++)
-                code += ')';
-            return code;
+            return chain(rangeCondition, identifier, args, results);
         }
 
         public static function equals(identifier: String, args: Array, results: Array): String {
-            var code: String = "";
-            for (var idx: int = 0; idx < args.length; idx++) {
-                code += '(' + identifier + ' == ' + args[idx] +  ' ? ';
-                if (idx < results.length)
-                    code += results[idx];
-                else
-                    code += '""';
-                code += ' : ';
-            }
-
-            if (args.length + 1 == results.length)
-                code += results[idx];
-            else
-                code += '""';
-
-            for (idx = 0; idx < args.length; idx++)
-                code += ')';
-            return code;
+            return chain(equalsCondition, identifier, args, results);
         }
 
         public static function callRange(identifier: String, args: Array, results: Array): String {
+            return chain(callCondition, identifier, args, results);
+        }
+
+        private static function chain(conditionFunc: Function, identifier: String, args: Array, results: Array): String {
             var code: String = "";
-            // Remove "()" from the end
-            if (identifier.charAt(identifier.length - 1) == ')')
-                identifier = identifier.slice(0, identifier.length - 2);
+            var argsLen: int = args.length;
+            var counter: int = 0;
+            var stored: String = '';
+            var condition: String;
 
-            for (var idx: int = 0; idx < args.length; idx++) {
-                code += '(' + identifier + '(' + args[idx] +  ') ? ';
-                if (idx < results.length)
-                    code += results[idx];
-                else
-                    code += '""';
-                code += ' : ';
+            for (var idx: int = 0; idx < results.length; idx++) {
+                condition = conditionFunc(idx, identifier, args, results);
+
+                // Skip empty results
+                if (!results[idx]) {
+                    if (stored) stored += ' || ';
+                    stored += condition;
+                    continue;
+                }
+
+                // Every condition after the first
+                if (counter > 0) {
+                    code += '\nelse ';
+                }
+
+                // Arg with result
+                if (idx < argsLen) {
+                    code += 'if (' + condition + ') ';
+                }
+                // No args with results, not ! args with else-result
+                else if (counter === 0 || stored) {
+                    code += 'if (!(' + stored + ')) ';
+                }
+
+                code += '{\n' +  results[idx] +'\n}';
+                counter++;
             }
-
-            if (args.length + 1 == results.length)
-                code += results[idx];
-            else
-                code += '""';
-
-            for (idx = 0; idx < args.length; idx++)
-                code += ')';
             return code;
         }
 
         public static function boolean(identifier: String, results: Array): String {
-            if (results.length === 1)
-                return '(' + identifier + ' ? ' + results[0] + ' : "")';
-            else
-                return '(' + identifier + ' ? ' + results[0] + ' : ' + results[1] + ')';
+            if ((results.length === 1 && results[0]) || (results.length > 1 && !results[1]))
+                return 'if (' + identifier + ') {\n' +  results[0] +'\n}';
+            else if (results.length > 1)
+                if (!results[0])
+                    return 'if (!' + identifier + ') {\n' +  results[1] +'\n}';
+                else if (results[1])
+                    return 'if (' + identifier + ') {\n' +  results[0] +'\n}\nelse {\n' +  results[1] +'\n}';
+            return '';
         }
 
         public static function funcCall(identifier: String, args: Array): String {

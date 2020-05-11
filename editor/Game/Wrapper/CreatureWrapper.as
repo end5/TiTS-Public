@@ -1956,27 +1956,27 @@ package editor.Game.Wrapper {
         }
 
         // Lowerbody
-        public function isBiped(): Boolean {
+        public function get isBiped(): Boolean {
             return this.owner.isBiped();
         }
 
-        public function isNaga(): Boolean {
+        public function get isNaga(): Boolean {
             return this.owner.isNaga();
         }
 
-        public function isTaur(): Boolean {
+        public function get isTaur(): Boolean {
             return this.owner.isTaur();
         }
 
-        public function isCentaur(): Boolean {
+        public function get isCentaur(): Boolean {
             return this.owner.isCentaur();
         }
 
-        public function isDrider(): Boolean {
+        public function get isDrider(): Boolean {
             return this.owner.isDrider();
         }
 
-        public function isGoo(): Boolean {
+        public function get isGoo(): Boolean {
             return this.owner.isGoo();
         }
 
@@ -1990,7 +1990,7 @@ package editor.Game.Wrapper {
         }
 
         public function tailCountRange(... args): int {
-            return Eval.equals(this.owner.tailCount, args);
+            return Eval.range(this.owner.tailCount, args);
         }
 
         public function hasTailFlag(... args): int {
@@ -2002,11 +2002,11 @@ package editor.Game.Wrapper {
         }
 
         // Cock
-        public function hasCock(): Boolean {
+        public function get hasCock(): Boolean {
             return this.owner.hasCock();
         }
 
-        public function hasCocks(): Boolean {
+        public function get hasCocks(): Boolean {
             return this.owner.hasCocks();
         }
 
@@ -2082,7 +2082,7 @@ package editor.Game.Wrapper {
         }
 
         // Vagina
-        public function hasVagina(): Boolean {
+        public function get hasVagina(): Boolean {
             return this.owner.hasVagina();
         }
 
@@ -2115,82 +2115,82 @@ package editor.Game.Wrapper {
         }
 
         // Personality
-        public function isNice(): Boolean {
+        public function get isNice(): Boolean {
             return this.owner.isNice();
         }
 
-        public function isMisch(): Boolean {
+        public function get isMisch(): Boolean {
             return this.owner.isMisch();
         }
 
-        public function isAss(): Boolean {
+        public function get isAss(): Boolean {
             return this.owner.isAss();
         }
 
         // Exposure
-        public function isExposed(): Boolean {
+        public function get isExposed(): Boolean {
             return this.owner.isExposed();
         }
 
-        public function isChestExposed(): Boolean {
+        public function get isChestExposed(): Boolean {
             return this.owner.isChestExposed();
         }
 
-        public function isCrotchExposed(): Boolean {
+        public function get isCrotchExposed(): Boolean {
             return this.owner.isCrotchExposed();
         }
 
-        public function isAssExposed(): Boolean {
+        public function get isAssExposed(): Boolean {
             return this.owner.isAssExposed();
         }
 
         // Sex
-        public function isSexless(): Boolean {
+        public function get isSexless(): Boolean {
             return this.owner.isSexless();
         }
 
-        public function isMale(): Boolean {
+        public function get isMale(): Boolean {
             return this.owner.isMale();
         }
 
-        public function isFemale(): Boolean {
+        public function get isFemale(): Boolean {
             return this.owner.isFemale();
         }
 
         // Sex Appearance
-        public function isMasculine(): Boolean {
+        public function get isMasculine(): Boolean {
             return this.owner.isMasculine();
         }
 
-        public function isFeminine(): Boolean {
+        public function get isFeminine(): Boolean {
             return this.owner.isFeminine();
         }
 
-        public function isMan(): Boolean {
+        public function get isMan(): Boolean {
             return this.owner.isMan();
         }
 
-        public function isWoman(): Boolean {
+        public function get isWoman(): Boolean {
             return this.owner.isWoman();
         }
 
-        public function isFemboy(): Boolean {
+        public function get isFemboy(): Boolean {
             return this.owner.isFemboy();
         }
 
-        public function isShemale(): Boolean {
+        public function get isShemale(): Boolean {
             return this.owner.isShemale();
         }
 
-        public function isCuntboy(): Boolean {
+        public function get isCuntboy(): Boolean {
             return this.owner.isCuntboy();
         }
 
-        public function isFemmyMale(): Boolean {
+        public function get isFemmyMale(): Boolean {
             return this.owner.isFemmyMale();
         }
 
-        public function isManlyFemale(): Boolean {
+        public function get isManlyFemale(): Boolean {
             return this.owner.isManlyFemale();
         }
 
@@ -2269,16 +2269,16 @@ package editor.Game.Wrapper {
 
         // Effects
         // Heat
-        public function inHeat(): Boolean {
+        public function get inHeat(): Boolean {
             return this.owner.inHeat();
         }
 
-        public function inDeepHeat(): Boolean {
+        public function get inDeepHeat(): Boolean {
             return this.owner.inDeepHeat();
         }
 
         // Rut
-        public function inRut(): Boolean {
+        public function get inRut(): Boolean {
             return this.owner.inRut();
         }
 
@@ -2292,44 +2292,44 @@ package editor.Game.Wrapper {
         }
 
         // Treated
-        public function isTreated(): Boolean {
+        public function get isTreated(): Boolean {
             return this.owner.isTreated();
         }
 
-        public function isTreatedFemale(): Boolean {
+        public function get isTreatedFemale(): Boolean {
             return this.owner.isTreatedFemale();
         }
 
-        public function isTreatedMale(): Boolean {
+        public function get isTreatedMale(): Boolean {
             return this.owner.isTreatedMale();
         }
 
-        public function isTreatedCow(): Boolean {
+        public function get isTreatedCow(): Boolean {
             return this.owner.isTreatedCow();
         }
 
-        public function isTreatedBull(): Boolean {
+        public function get isTreatedBull(): Boolean {
             return this.owner.isTreatedBull();
         }
 
-        public function isAmazon(): Boolean {
+        public function get isAmazon(): Boolean {
             return this.owner.isAmazon();
         }
 
-        public function isCumCow(): Boolean {
+        public function get isCumCow(): Boolean {
             return this.owner.isCumCow();
         }
 
-        public function isCumSlut(): Boolean {
+        public function get isCumSlut(): Boolean {
             return this.owner.isCumSlut();
         }
 
-        public function isFauxCow(): Boolean {
+        public function get isFauxCow(): Boolean {
             return this.owner.isFauxCow();
         }
 
         // Pheromones
-        public function hasPheromones(): Boolean {
+        public function get hasPheromones(): Boolean {
             return this.owner.hasPheromones();
         }
 
@@ -2351,25 +2351,25 @@ package editor.Game.Wrapper {
 
         // Items
         // Piercing
-        public function hasPiercing(): Boolean {
+        public function get hasPiercing(): Boolean {
             return this.owner.hasPiercing();
         }
-        public function hasEarPiercing(): Boolean {
+        public function get hasEarPiercing(): Boolean {
             return this.owner.hasEarPiercing();
         }
-        public function hasEyebrowPiercing(): Boolean {
+        public function get hasEyebrowPiercing(): Boolean {
             return this.owner.hasEyebrowPiercing();
         }
-        public function hasNosePiercing(): Boolean {
+        public function get hasNosePiercing(): Boolean {
             return this.owner.hasNosePiercing();
         }
-        public function hasLipPiercing(): Boolean {
+        public function get hasLipPiercing(): Boolean {
             return this.owner.hasLipPiercing();
         }
-        public function hasTonguePiercing(): Boolean {
+        public function get hasTonguePiercing(): Boolean {
             return this.owner.hasTonguePiercing();
         }
-        public function hasBellyPiercing(): Boolean {
+        public function get hasBellyPiercing(): Boolean {
             return this.owner.hasBellyPiercing();
         }
         public function hasNipplePiercing(idx: int = -1): Boolean {

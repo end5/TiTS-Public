@@ -28,36 +28,24 @@ package editor.Game.CodeMap {
         }
 
         // New Parsers
-        /**
-         * Wraps a HTML tag around text
-         * @param tag
-         * @param text
-         * @return
-         */
-        private function htmlTagText(tag: String, text: String): String {
-            return "<" + tag + ">" + text + "</" + tag + ">";
-        }
-
         public function i(identifier: String, args: Array, results: Array): String {
-            if (results.length > 0)
-                return '"' + htmlTagText('i', results[0].substring(1, results[0].length - 1)) + '"';
-            else
-                return '"' + htmlTagText('i', "") + '"';
+            return 'output("<i>");\n' + (args.length > 0 ? args[0] : '') + '\noutput("<\\i>");';
         }
 
         public function b(identifier: String, args: Array, results: Array): String {
-            if (results.length > 0)
-                return '"' + htmlTagText('b', results[0].substring(1, results[0].length - 1)) + '"';
-            else
-                return '"' + htmlTagText('b', "") + '"';
+            return 'output("<b>");\n' + (args.length > 0 ? args[0] : '') + '\noutput("<\\b>");';
         }
 
         public function cap(identifier: String, args: Array, results: Array): String {
-            return results[0].charAt(0).toLocaleUpperCase() + results[0].slice(1);
+            return results[0].charAt(0).toLocaleUpperCase() + args[0].slice(1);
         }
 
         public function rand(identifier: String, args: Array, results: Array): String {
-            return 'RandomInCollection(' + results.join(', ') + ')';
+            var code: String = 'switch(rand(' + args.length + ')) {';
+            for (var idx: int = 0; idx < args.length; idx++) {
+                code += ToCode.indentText('\ncase ' + idx + ': {\n' + args[idx] + '\n' + ToCode.INDENT + 'break;\n}');
+            }
+            return code + '\n}';
         }
 
         // From TiTS / Old Parsers
@@ -70,7 +58,7 @@ package editor.Game.CodeMap {
         }
 
         public function flagIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals('flags["' + args[0] + '"]', args.slice(1), results);
+            return ToCode.equals('flags[' + args[0] + ']', args.slice(1), results);
         }
 
         public function get target(): CreatureCodeMap {

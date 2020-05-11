@@ -48,23 +48,20 @@ package editor.Game.Wrapper {
             return "<" + tag + ">" + text + "</" + tag + ">";
         }
 
-        public function i(args: Array, results: Array): String {
-            return htmlTagText('i', results[0]);
+        public function i(str: String): String {
+            return htmlTagText('i', str);
         }
 
-        public function b(args: Array, results: Array): String {
-            return htmlTagText('b', results[0]);
+        public function b(str: String): String {
+            return htmlTagText('b', str);
         }
 
-        public function cap(args: Array, results: Array): String {
-            return results[0].charAt(0).toLocaleUpperCase() + results[0].slice(1);
+        public function cap(str: String): String {
+            return str.charAt(0).toLocaleUpperCase() + str.slice(1);
         }
 
-        public function rand(args: Array, results: Array): int {
-            if (args.length === 1 && 0 < args[0] && args[0] <= results.length)
-                return args[0] - 1;
-            else
-                return Math.floor(Math.random() * results.length);
+        public function rand(... strs): String {
+            return strs[Math.floor(Math.random() * strs.length)];
         }
 
         // From TiTS / Old Parsers
