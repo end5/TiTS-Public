@@ -1,6 +1,6 @@
 package editor.Game.CodeMap {
     import classes.TiTS;
-    import editor.Lang.Interpret.CodeNode;
+    import editor.Lang.Codify.CodeNode;
 
     /**
      * This is used to limit the interpreter's access

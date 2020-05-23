@@ -1,5 +1,5 @@
 package editor.Game.CodeMap {
-    import editor.Lang.Interpret.CodeNode;
+    import editor.Lang.Codify.CodeNode;
 
     public class ToCode {
         public static const INDENT: String = '    ';

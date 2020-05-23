@@ -1,5 +1,5 @@
 package editor.Game.CodeMap {
-    import editor.Lang.Interpret.CodeNode;
+    import editor.Lang.Codify.CodeNode;
 
     public class CreatureCodeMap {
         // Old parser are automatically converted
