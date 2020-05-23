@@ -1,5 +1,6 @@
 package editor.Game.CodeMap {
     import classes.TiTS;
+    import editor.Lang.Interpret.CodeNode;
 
     /**
      * This is used to limit the interpreter's access
@@ -28,39 +29,54 @@ package editor.Game.CodeMap {
         }
 
         // New Parsers
-        public function i(identifier: String, args: Array, results: Array): String {
-            return 'output("<i>");\n' + (args.length > 0 ? args[0] : '') + '\noutput("<\\i>");';
-        }
-
-        public function b(identifier: String, args: Array, results: Array): String {
-            return 'output("<b>");\n' + (args.length > 0 ? args[0] : '') + '\noutput("<\\b>");';
-        }
-
-        public function cap(identifier: String, args: Array, results: Array): String {
-            return results[0].charAt(0).toLocaleUpperCase() + args[0].slice(1);
-        }
-
-        public function rand(identifier: String, args: Array, results: Array): String {
-            var code: String = 'switch(rand(' + args.length + ')) {';
-            for (var idx: int = 0; idx < args.length; idx++) {
-                code += ToCode.indentText('\ncase ' + idx + ': {\n' + args[idx] + '\n' + ToCode.INDENT + 'break;\n}');
+        private function htmlTag(tag: String, args: Array): Array {
+            var code: Array = [new CodeNode(CodeNode.Text, '<' + tag + '>')];
+            for each (var child: * in args[0]) {
+                code.push(child);
             }
-            return code + '\n}';
+            code.push(new CodeNode(CodeNode.Text, '</' + tag + '>'));
+            return code;
         }
 
-        // From TiTS / Old Parsers
-        public function silly(identifier: String, args: Array, results: Array): String {
+        public function i(identifier: String, args: Array, results: Array): Array {
+            return htmlTag('i', args);
+        }
+
+        public function b(identifier: String, args: Array, results: Array): Array {
+            return htmlTag('b', args);
+        }
+
+        public function cap(identifier: String, args: Array, results: Array): Array {
+            return [];
+            // return results[0].charAt(0).toLocaleUpperCase() + args[0].slice(1);
+        }
+
+        public function rand(identifier: String, args: Array, results: Array): Array {
+            var code: CodeNode = new CodeNode(CodeNode.Code, 'switch(rand(' + args.length + '))', []);
+            for (var idx: int = 0; idx < args.length; idx++) {
+                var caseNode: CodeNode = new CodeNode(CodeNode.Code, 'case ' + idx + ':', []);
+                for each (var child: * in args[idx]) {
+                    caseNode.body.push(child);
+                }
+                caseNode.body.push(new CodeNode(CodeNode.Code, 'break;'));
+                code.body.push(caseNode);
+            }
+            return [code];
+        }
+
+        public function silly(identifier: String, args: Array, results: Array): Array {
             return ToCode.boolean('silly()', results);
         }
 
-        public function easy(identifier: String, args: Array, results: Array): String {
+        public function easy(identifier: String, args: Array, results: Array): Array {
             return ToCode.boolean('easy()', results);
         }
 
-        public function flagIs(identifier: String, args: Array, results: Array): String {
+        public function flagIs(identifier: String, args: Array, results: Array): Array {
             return ToCode.equals('flags[' + args[0] + ']', args.slice(1), results);
         }
 
+        // From TiTS / Old Parsers
         public function get target(): CreatureCodeMap {
             if (this.game.target == null) return null;
             return this.targetDesc;
@@ -180,27 +196,27 @@ package editor.Game.CodeMap {
         public function get synphia(): CreatureCodeMap { return this.charDesc["SYNPHIA"]; }
 
         // New Parsers
-        public function hourIs(identifier: String, args: Array, results: Array): String {
+        public function hourIs(identifier: String, args: Array, results: Array): Array {
             return ToCode.equals('hours', args, results);
         }
 
-        public function hourRange(identifier: String, args: Array, results: Array): String {
+        public function hourRange(identifier: String, args: Array, results: Array): Array {
             return ToCode.range('hours', args, results);
         }
 
-        public function dayIs(identifier: String, args: Array, results: Array): String {
+        public function dayIs(identifier: String, args: Array, results: Array): Array {
             return ToCode.equals('days', args, results);
         }
 
-        public function dayRange(identifier: String, args: Array, results: Array): String {
+        public function dayRange(identifier: String, args: Array, results: Array): Array {
             return ToCode.range('days', args, results);
         }
 
-        public function minuteIs(identifier: String, args: Array, results: Array): String {
+        public function minuteIs(identifier: String, args: Array, results: Array): Array {
             return ToCode.equals('minutes', args, results);
         }
 
-        public function minuteRange(identifier: String, args: Array, results: Array): String {
+        public function minuteRange(identifier: String, args: Array, results: Array): Array {
             return ToCode.range('minutes', args, results);
         }
     }

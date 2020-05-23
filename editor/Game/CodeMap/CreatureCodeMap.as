@@ -1,4 +1,6 @@
 package editor.Game.CodeMap {
+    import editor.Lang.Interpret.CodeNode;
+
     public class CreatureCodeMap {
         // Old parser are automatically converted
         // public const cockOrStrapon: Function = ToCode.oldParser;
@@ -681,603 +683,603 @@ package editor.Game.CodeMap {
 
         private function mapNameToIndex(key: String): Function {
             // Each item is surrounded by ""
-            return function (name: String, idx: int, arr: Array): String {
-                return nameToIndex(key, name.slice(1, name.length - 1));
+            return function (node: CodeNode, idx: int, arr: Array): CodeNode {
+                return new CodeNode(CodeNode.Code, nameToIndex(key, node.value.slice(1, node.value.length - 1)));
             }
         }
 
         // Physical Appearance
         //Femininity
-        public function femIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'femininity'), args, results);
+        public function femIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'femininity'), args, results);
         }
 
-        public function femRange(identifier: String, args: Array, results: Array): String {
-            return ToCode.range(ToCode.replaceIdentity(identifier, 1, 'femininity'), args, results);
+        public function femRange(identities: Array, args: Array, results: Array): Array {
+            return ToCode.range(ToCode.replaceIdentity(identities, 1, 'femininity'), args, results);
         }
 
         // Tallness
-        public function tallnessIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'tallness'), args, results);
+        public function tallnessIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'tallness'), args, results);
         }
 
-        public function tallnessRange(identifier: String, args: Array, results: Array): String {
-            return ToCode.range(ToCode.replaceIdentity(identifier, 1, 'tallness'), args, results);
+        public function tallnessRange(identities: Array, args: Array, results: Array): Array {
+            return ToCode.range(ToCode.replaceIdentity(identities, 1, 'tallness'), args, results);
         }
 
         // Thickness
-        public function thicknessIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'thickness'), args, results);
+        public function thicknessIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'thickness'), args, results);
         }
 
-        public function thicknessRange(identifier: String, args: Array, results: Array): String {
-            return ToCode.range(ToCode.replaceIdentity(identifier, 1, 'thickness'), args, results);
+        public function thicknessRange(identities: Array, args: Array, results: Array): Array {
+            return ToCode.range(ToCode.replaceIdentity(identities, 1, 'thickness'), args, results);
         }
 
         // Tone
-        public function toneIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'tone'), args, results);
+        public function toneIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'tone'), args, results);
         }
 
-        public function toneRange(identifier: String, args: Array, results: Array): String {
-            return ToCode.range(ToCode.replaceIdentity(identifier, 1, 'tone'), args, results);
+        public function toneRange(identities: Array, args: Array, results: Array): Array {
+            return ToCode.range(ToCode.replaceIdentity(identities, 1, 'tone'), args, results);
         }
 
         // Hip rating
-        public function hipRatingIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'hipRating()'), args, results);
+        public function hipRatingIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'hipRating()'), args, results);
         }
 
         // Butt rating
-        public function buttRatingIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'buttRating()'), args, results);
+        public function buttRatingIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'buttRating()'), args, results);
         }
 
         // Body Parts
         // Skin
-        public function skinTypeIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'skinType'), args.map(mapNameToIndex('SKIN_TYPE_NAMES')), results);
+        public function skinTypeIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'skinType'), args.map(mapNameToIndex('SKIN_TYPE_NAMES')), results);
         }
 
-        public function hasAccentMarkings(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'hasAccentMarkings()'), results);
+        public function hasAccentMarkings(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'hasAccentMarkings()'), results);
         }
 
         // Eyes
-        public function eyeTypeIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'eyeType'), args.map(mapNameToIndex('TYPE_NAMES')), results);
+        public function eyeTypeIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'eyeType'), args.map(mapNameToIndex('TYPE_NAMES')), results);
         }
 
         // Hair
-        public function hairTypeIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'hairType'), args.map(mapNameToIndex('HAIR_TYPE_NAMES')), results);
+        public function hairTypeIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'hairType'), args.map(mapNameToIndex('HAIR_TYPE_NAMES')), results);
         }
 
         // Beard
-        public function beardTypeIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'beardType'), args.map(mapNameToIndex('HAIR_TYPE_NAMES')), results);
+        public function beardTypeIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'beardType'), args.map(mapNameToIndex('HAIR_TYPE_NAMES')), results);
         }
 
         // Face
-        public function faceTypeIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'faceType'), args.map(mapNameToIndex('TYPE_NAMES')), results);
+        public function faceTypeIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'faceType'), args.map(mapNameToIndex('TYPE_NAMES')), results);
         }
 
-        public function hasFaceFlag(identifier: String, args: Array, results: Array): String {
-            return ToCode.callRange(ToCode.replaceIdentity(identifier, 1, 'hasFaceFlag'), args.map(mapNameToIndex('FLAG_NAMES')), results);
+        public function hasFaceFlag(identities: Array, args: Array, results: Array): Array {
+            return ToCode.callRange(ToCode.replaceIdentity(identities, 1, 'hasFaceFlag'), args.map(mapNameToIndex('FLAG_NAMES')), results);
         }
 
-        public function hasFaceFlags(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.funcCall(ToCode.replaceIdentity(identifier, 1, 'hasFaceFlag'), args.map(mapNameToIndex('FLAG_NAMES'))), results);
+        public function hasFaceFlags(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.funcCall(ToCode.replaceIdentity(identities, 1, 'hasFaceFlag'), args.map(mapNameToIndex('FLAG_NAMES'))), results);
         }
 
         // Tongue
-        public function tongueTypeIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'tongueType'), args.map(mapNameToIndex('TYPE_NAMES')), results);
+        public function tongueTypeIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'tongueType'), args.map(mapNameToIndex('TYPE_NAMES')), results);
         }
 
-        public function hasTongueFlag(identifier: String, args: Array, results: Array): String {
-            return ToCode.callRange(ToCode.replaceIdentity(identifier, 1, 'hasTongueFlag'), args.map(mapNameToIndex('FLAG_NAMES')), results);
+        public function hasTongueFlag(identities: Array, args: Array, results: Array): Array {
+            return ToCode.callRange(ToCode.replaceIdentity(identities, 1, 'hasTongueFlag'), args.map(mapNameToIndex('FLAG_NAMES')), results);
         }
 
-        public function hasTongueFlags(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.funcCall(ToCode.replaceIdentity(identifier, 1, 'hasTongueFlag'), args.map(mapNameToIndex('FLAG_NAMES'))), results);
+        public function hasTongueFlags(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.funcCall(ToCode.replaceIdentity(identities, 1, 'hasTongueFlag'), args.map(mapNameToIndex('FLAG_NAMES'))), results);
         }
 
         // Ear
-        public function earTypeIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'earType'), args.map(mapNameToIndex('TYPE_NAMES')), results);
+        public function earTypeIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'earType'), args.map(mapNameToIndex('TYPE_NAMES')), results);
         }
 
-        public function hasEarFlag(identifier: String, args: Array, results: Array): String {
-            return ToCode.callRange(ToCode.replaceIdentity(identifier, 1, 'hasEarFlag'), args.map(mapNameToIndex('FLAG_NAMES')), results);
+        public function hasEarFlag(identities: Array, args: Array, results: Array): Array {
+            return ToCode.callRange(ToCode.replaceIdentity(identities, 1, 'hasEarFlag'), args.map(mapNameToIndex('FLAG_NAMES')), results);
         }
 
-        public function hasEarFlags(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.funcCall(ToCode.replaceIdentity(identifier, 1, 'hasEarFlag'), args.map(mapNameToIndex('FLAG_NAMES'))), results);
+        public function hasEarFlags(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.funcCall(ToCode.replaceIdentity(identities, 1, 'hasEarFlag'), args.map(mapNameToIndex('FLAG_NAMES'))), results);
         }
 
         // Antennae
-        public function antennaeTypeIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'antennaeType'), args.map(mapNameToIndex('TYPE_NAMES')), results);
+        public function antennaeTypeIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'antennaeType'), args.map(mapNameToIndex('TYPE_NAMES')), results);
         }
 
         // Horn
-        public function hornTypeIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'hornType'), args.map(mapNameToIndex('TYPE_NAMES')), results);
+        public function hornTypeIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'hornType'), args.map(mapNameToIndex('TYPE_NAMES')), results);
         }
 
         // Arm
-        public function armTypeIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'armType'), args.map(mapNameToIndex('TYPE_NAMES')), results);
+        public function armTypeIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'armType'), args.map(mapNameToIndex('TYPE_NAMES')), results);
         }
 
-        public function hasArmFlag(identifier: String, args: Array, results: Array): String {
-            return ToCode.callRange(ToCode.replaceIdentity(identifier, 1, 'hasArmFlag'), args.map(mapNameToIndex('FLAG_NAMES')), results);
+        public function hasArmFlag(identities: Array, args: Array, results: Array): Array {
+            return ToCode.callRange(ToCode.replaceIdentity(identities, 1, 'hasArmFlag'), args.map(mapNameToIndex('FLAG_NAMES')), results);
         }
 
-        public function hasArmFlags(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.funcCall(ToCode.replaceIdentity(identifier, 1, 'hasArmFlag'), args.map(mapNameToIndex('FLAG_NAMES'))), results);
+        public function hasArmFlags(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.funcCall(ToCode.replaceIdentity(identities, 1, 'hasArmFlag'), args.map(mapNameToIndex('FLAG_NAMES'))), results);
         }
 
         // Wing
-        public function wingTypeIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'wingType'), args.map(mapNameToIndex('TYPE_NAMES')), results);
+        public function wingTypeIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'wingType'), args.map(mapNameToIndex('TYPE_NAMES')), results);
         }
 
         // Leg
-        public function legTypeIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'legType'), args.map(mapNameToIndex('TYPE_NAMES')), results);
+        public function legTypeIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'legType'), args.map(mapNameToIndex('TYPE_NAMES')), results);
         }
 
-        public function hasLegFlag(identifier: String, args: Array, results: Array): String {
-            return ToCode.callRange(ToCode.replaceIdentity(identifier, 1, 'hasLegFlag'), args.map(mapNameToIndex('FLAG_NAMES')), results);
+        public function hasLegFlag(identities: Array, args: Array, results: Array): Array {
+            return ToCode.callRange(ToCode.replaceIdentity(identities, 1, 'hasLegFlag'), args.map(mapNameToIndex('FLAG_NAMES')), results);
         }
 
-        public function hasLegFlags(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.funcCall(ToCode.replaceIdentity(identifier, 1, 'hasLegFlag'), args.map(mapNameToIndex('FLAG_NAMES'))), results);
+        public function hasLegFlags(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.funcCall(ToCode.replaceIdentity(identities, 1, 'hasLegFlag'), args.map(mapNameToIndex('FLAG_NAMES'))), results);
         }
 
         // Lowerbody
-        public function isBiped(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'isBiped()'), results);
+        public function isBiped(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'isBiped()'), results);
         }
 
-        public function isNaga(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'isNaga()'), results);
+        public function isNaga(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'isNaga()'), results);
         }
 
-        public function isTaur(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'isTaur()'), results);
+        public function isTaur(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'isTaur()'), results);
         }
 
-        public function isCentaur(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'isCentaur()'), results);
+        public function isCentaur(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'isCentaur()'), results);
         }
 
-        public function isDrider(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'isDrider()'), results);
+        public function isDrider(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'isDrider()'), results);
         }
 
-        public function isGoo(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'isGoo()'), results);
+        public function isGoo(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'isGoo()'), results);
         }
 
         // Tail
-        public function tailTypeIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'tailType'), args.map(mapNameToIndex('TYPE_NAMES')), results);
+        public function tailTypeIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'tailType'), args.map(mapNameToIndex('TYPE_NAMES')), results);
         }
 
-        public function tailCountIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'tailCount'), args, results);
+        public function tailCountIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'tailCount'), args, results);
         }
 
-        public function tailCountRange(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'tailCount'), args, results);
+        public function tailCountRange(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'tailCount'), args, results);
         }
 
-        public function hasTailFlag(identifier: String, args: Array, results: Array): String {
-            return ToCode.callRange(ToCode.replaceIdentity(identifier, 1, 'hasTailFlag'), args.map(mapNameToIndex('FLAG_NAMES')), results);
+        public function hasTailFlag(identities: Array, args: Array, results: Array): Array {
+            return ToCode.callRange(ToCode.replaceIdentity(identities, 1, 'hasTailFlag'), args.map(mapNameToIndex('FLAG_NAMES')), results);
         }
 
-        public function hasTailFlags(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.funcCall(ToCode.replaceIdentity(identifier, 1, 'hasTailFlag'), args.map(mapNameToIndex('FLAG_NAMES'))), results);
+        public function hasTailFlags(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.funcCall(ToCode.replaceIdentity(identities, 1, 'hasTailFlag'), args.map(mapNameToIndex('FLAG_NAMES'))), results);
         }
 
         // Cock
-        public function hasCock(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'hasCock()'), results);
+        public function hasCock(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'hasCock()'), results);
         }
 
-        public function hasCocks(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'hasCocks()'), results);
+        public function hasCocks(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'hasCocks()'), results);
         }
 
-        public function hasACockWithType(identifier: String, args: Array, results: Array): String {
-            return ToCode.callRange(ToCode.replaceIdentity(identifier, 1, 'hasCock'), args.map(mapNameToIndex(('TYPE_NAMES'))), results);
+        public function hasACockWithType(identities: Array, args: Array, results: Array): Array {
+            return ToCode.callRange(ToCode.replaceIdentity(identities, 1, 'hasCock'), args.map(mapNameToIndex(('TYPE_NAMES'))), results);
         }
 
-        public function cockCountIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'cocks.length'), args.map(mapNameToIndex(('TYPE_NAMES'))), results);
+        public function cockCountIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'cocks.length'), args.map(mapNameToIndex(('TYPE_NAMES'))), results);
         }
 
-        public function cockTypeIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'cocks[' + args[0] + '].type'), args.slice(1).map(mapNameToIndex(('TYPE_NAMES'))), results);
+        public function cockTypeIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'cocks[' + args[0] + '].type'), args.slice(1).map(mapNameToIndex(('TYPE_NAMES'))), results);
         }
 
-        public function cockThatFits(identifier: String, args: Array, results: Array): String {
-            return ToCode.funcCall(identifier, args);
+        public function cockThatFits(identities: Array, args: Array, results: Array): Array {
+            return [new CodeNode(CodeNode.Code, ToCode.funcCall(ToCode.combineIdentities(identities), args))];
         }
 
-        public function biggestCockIndex(identifier: String, args: Array, results: Array): String {
-            return identifier + '()';
+        public function biggestCockIndex(identities: Array, args: Array, results: Array): Array {
+            return [new CodeNode(CodeNode.Code, ToCode.combineIdentities(identities) + '()')];
         }
 
-        public function smallestCockIndex(identifier: String, args: Array, results: Array): String {
-            return identifier + '()';
+        public function smallestCockIndex(identities: Array, args: Array, results: Array): Array {
+            return [new CodeNode(CodeNode.Code, ToCode.combineIdentities(identities) + '()')];
         }
 
-        public function thickestCockIndex(identifier: String, args: Array, results: Array): String {
-            return identifier + '()';
+        public function thickestCockIndex(identities: Array, args: Array, results: Array): Array {
+            return [new CodeNode(CodeNode.Code, ToCode.combineIdentities(identities) + '()')];
         }
 
-        public function thinnestCockIndex(identifier: String, args: Array, results: Array): String {
-            return identifier + '()';
+        public function thinnestCockIndex(identities: Array, args: Array, results: Array): Array {
+            return [new CodeNode(CodeNode.Code, ToCode.combineIdentities(identities) + '()')];
         }
 
-        public function longestCockIndex(identifier: String, args: Array, results: Array): String {
-            return identifier + '()';
+        public function longestCockIndex(identities: Array, args: Array, results: Array): Array {
+            return [new CodeNode(CodeNode.Code, ToCode.combineIdentities(identities) + '()')];
         }
 
-        public function shortestCockIndex(identifier: String, args: Array, results: Array): String {
-            return identifier + '()';
+        public function shortestCockIndex(identities: Array, args: Array, results: Array): Array {
+            return [new CodeNode(CodeNode.Code, ToCode.combineIdentities(identities) + '()')];
         }
 
         // Balls
-        public function ballCountIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'balls'), args, results);
+        public function ballCountIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'balls'), args, results);
         }
 
-        public function ballSizeIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'ballSize()'), args, results);
+        public function ballSizeIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'ballSize()'), args, results);
         }
 
         // Breasts
-        public function hasBreasts(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(identifier + '()', results);
+        public function hasBreasts(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(identities + '()', results);
         }
 
-        public function breastCountIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'totalBreasts()'), args, results);
+        public function breastCountIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'totalBreasts()'), args, results);
         }
 
-        public function breastCupSizeIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'breastCup(' + args[0] + ')'), args.slice(1), results);
+        public function breastCupSizeIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'breastCup(' + args[0] + ')'), args.slice(1), results);
         }
 
         // Vagina
-        public function hasVagina(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(identifier + '()', results);
+        public function hasVagina(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(identities + '()', results);
         }
 
         // Fluids
         // Milk
-        public function milkTypeIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'milkType'), args, results);
+        public function milkTypeIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'milkType'), args, results);
         }
 
-        public function milkQRange(identifier: String, args: Array, results: Array): String {
-            return ToCode.range(ToCode.replaceIdentity(identifier, 1, 'milkQ()'), args, results);
+        public function milkQRange(identities: Array, args: Array, results: Array): Array {
+            return ToCode.range(ToCode.replaceIdentity(identities, 1, 'milkQ()'), args, results);
         }
 
         // Cum
-        public function cumTypeIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'cumType'), args.map(mapNameToIndex('FLUID_TYPE_NAMES')), results);
+        public function cumTypeIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'cumType'), args.map(mapNameToIndex('FLUID_TYPE_NAMES')), results);
         }
 
-        public function cumQIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'cumQ()'), args, results);
+        public function cumQIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'cumQ()'), args, results);
         }
 
-        public function cumQRange(identifier: String, args: Array, results: Array): String {
-            return ToCode.range(ToCode.replaceIdentity(identifier, 1, 'cumQ()'), args, results);
+        public function cumQRange(identities: Array, args: Array, results: Array): Array {
+            return ToCode.range(ToCode.replaceIdentity(identities, 1, 'cumQ()'), args, results);
         }
 
         // Girl Cum
-        public function girlCumTypeIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'girlCumType'), args.map(mapNameToIndex('FLUID_TYPE_NAMES')), results);
+        public function girlCumTypeIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'girlCumType'), args.map(mapNameToIndex('FLUID_TYPE_NAMES')), results);
         }
 
-        public function girlCumQIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'girlCumQ()'), args, results);
+        public function girlCumQIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'girlCumQ()'), args, results);
         }
 
-        public function girlCumQRange(identifier: String, args: Array, results: Array): String {
-            return ToCode.range(ToCode.replaceIdentity(identifier, 1, 'girlCumQ()'), args, results);
+        public function girlCumQRange(identities: Array, args: Array, results: Array): Array {
+            return ToCode.range(ToCode.replaceIdentity(identities, 1, 'girlCumQ()'), args, results);
         }
 
         // Personality
-        public function isNice(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'isNice()'), results);
+        public function isNice(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'isNice()'), results);
         }
 
-        public function isMisch(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'isMisch()'), results);
+        public function isMisch(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'isMisch()'), results);
         }
 
-        public function isAss(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'isAss()'), results);
+        public function isAss(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'isAss()'), results);
         }
 
         // Exposure
-        public function isExposed(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'isExposed()'), results);
+        public function isExposed(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'isExposed()'), results);
         }
 
-        public function isChestExposed(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'isChestExposed()'), results);
+        public function isChestExposed(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'isChestExposed()'), results);
         }
 
-        public function isCrotchExposed(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'isCrotchExposed()'), results);
+        public function isCrotchExposed(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'isCrotchExposed()'), results);
         }
 
-        public function isAssExposed(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'isAssExposed()'), results);
+        public function isAssExposed(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'isAssExposed()'), results);
         }
 
         // Sex
-        public function isSexless(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'isSexless()'), results);
+        public function isSexless(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'isSexless()'), results);
         }
 
-        public function isMale(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'isMale()'), results);
+        public function isMale(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'isMale()'), results);
         }
 
-        public function isFemale(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'isFemale()'), results);
+        public function isFemale(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'isFemale()'), results);
         }
 
         // Sex Appearance
-        public function isMasculine(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'isMasculine()'), results);
+        public function isMasculine(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'isMasculine()'), results);
         }
 
-        public function isFeminine(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'isFeminine()'), results);
+        public function isFeminine(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'isFeminine()'), results);
         }
 
-        public function isMan(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'isMan()'), results);
+        public function isMan(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'isMan()'), results);
         }
 
-        public function isWoman(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'isWoman()'), results);
+        public function isWoman(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'isWoman()'), results);
         }
 
-        public function isFemboy(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'isFemboy()'), results);
+        public function isFemboy(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'isFemboy()'), results);
         }
 
-        public function isShemale(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'isShemale()'), results);
+        public function isShemale(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'isShemale()'), results);
         }
 
-        public function isCuntboy(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'isCuntboy()'), results);
+        public function isCuntboy(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'isCuntboy()'), results);
         }
 
-        public function isFemmyMale(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'isFemmyMale()'), results);
+        public function isFemmyMale(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'isFemmyMale()'), results);
         }
 
-        public function isManlyFemale(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'isManlyFemale()'), results);
+        public function isManlyFemale(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'isManlyFemale()'), results);
         }
 
-        public function isFemHerm(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'isFemHerm()'), results);
+        public function isFemHerm(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'isFemHerm()'), results);
         }
 
-        public function isManHerm(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'isManHerm()'), results);
+        public function isManHerm(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'isManHerm()'), results);
         }
 
         // Stats
-        public function lustIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'lust()'), args, results);
+        public function lustIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'lust()'), args, results);
         }
 
-        public function lustRange(identifier: String, args: Array, results: Array): String {
-            return ToCode.range(ToCode.replaceIdentity(identifier, 1, 'lust()'), args, results);
+        public function lustRange(identities: Array, args: Array, results: Array): Array {
+            return ToCode.range(ToCode.replaceIdentity(identities, 1, 'lust()'), args, results);
         }
 
-        public function physiqueIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'physique()'), args, results);
+        public function physiqueIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'physique()'), args, results);
         }
 
-        public function physiqueRange(identifier: String, args: Array, results: Array): String {
-            return ToCode.range(ToCode.replaceIdentity(identifier, 1, 'physique()'), args, results);
+        public function physiqueRange(identities: Array, args: Array, results: Array): Array {
+            return ToCode.range(ToCode.replaceIdentity(identities, 1, 'physique()'), args, results);
         }
 
-        public function reflexesIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'reflexes()'), args, results);
+        public function reflexesIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'reflexes()'), args, results);
         }
 
-        public function reflexesRange(identifier: String, args: Array, results: Array): String {
-            return ToCode.range(ToCode.replaceIdentity(identifier, 1, 'reflexes()'), args, results);
+        public function reflexesRange(identities: Array, args: Array, results: Array): Array {
+            return ToCode.range(ToCode.replaceIdentity(identities, 1, 'reflexes()'), args, results);
         }
 
-        public function aimIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'aim()'), args, results);
+        public function aimIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'aim()'), args, results);
         }
 
-        public function aimRange(identifier: String, args: Array, results: Array): String {
-            return ToCode.range(ToCode.replaceIdentity(identifier, 1, 'aim()'), args, results);
+        public function aimRange(identities: Array, args: Array, results: Array): Array {
+            return ToCode.range(ToCode.replaceIdentity(identities, 1, 'aim()'), args, results);
         }
 
-        public function intelligenceIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'intelligence()'), args, results);
+        public function intelligenceIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'intelligence()'), args, results);
         }
 
-        public function intelligenceRange(identifier: String, args: Array, results: Array): String {
-            return ToCode.range(ToCode.replaceIdentity(identifier, 1, 'intelligence()'), args, results);
+        public function intelligenceRange(identities: Array, args: Array, results: Array): Array {
+            return ToCode.range(ToCode.replaceIdentity(identities, 1, 'intelligence()'), args, results);
         }
 
-        public function willpowerIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'willpower()'), args, results);
+        public function willpowerIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'willpower()'), args, results);
         }
 
-        public function willpowerRange(identifier: String, args: Array, results: Array): String {
-            return ToCode.range(ToCode.replaceIdentity(identifier, 1, 'willpower()'), args, results);
+        public function willpowerRange(identities: Array, args: Array, results: Array): Array {
+            return ToCode.range(ToCode.replaceIdentity(identities, 1, 'willpower()'), args, results);
         }
 
-        public function libidoIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'libido()'), args, results);
+        public function libidoIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'libido()'), args, results);
         }
 
-        public function libidoRange(identifier: String, args: Array, results: Array): String {
-            return ToCode.range(ToCode.replaceIdentity(identifier, 1, 'libido()'), args, results);
+        public function libidoRange(identities: Array, args: Array, results: Array): Array {
+            return ToCode.range(ToCode.replaceIdentity(identities, 1, 'libido()'), args, results);
         }
 
-        public function taintIs(identifier: String, args: Array, results: Array): String {
-            return ToCode.equals(ToCode.replaceIdentity(identifier, 1, 'taint()'), args, results);
+        public function taintIs(identities: Array, args: Array, results: Array): Array {
+            return ToCode.equals(ToCode.replaceIdentity(identities, 1, 'taint()'), args, results);
         }
 
-        public function taintRange(identifier: String, args: Array, results: Array): String {
-            return ToCode.range(ToCode.replaceIdentity(identifier, 1, 'taint()'), args, results);
+        public function taintRange(identities: Array, args: Array, results: Array): Array {
+            return ToCode.range(ToCode.replaceIdentity(identities, 1, 'taint()'), args, results);
         }
 
         // Effects
         // Heat
-        public function inHeat(identifier: String, args: Array, results: Array): String {
-            return ToCode.range(ToCode.replaceIdentity(identifier, 1, 'inHeat()'), args, results);
+        public function inHeat(identities: Array, args: Array, results: Array): Array {
+            return ToCode.range(ToCode.replaceIdentity(identities, 1, 'inHeat()'), args, results);
         }
 
-        public function inDeepHeat(identifier: String, args: Array, results: Array): String {
-            return ToCode.range(ToCode.replaceIdentity(identifier, 1, 'inDeepHeat()'), args, results);
+        public function inDeepHeat(identities: Array, args: Array, results: Array): Array {
+            return ToCode.range(ToCode.replaceIdentity(identities, 1, 'inDeepHeat()'), args, results);
         }
 
         // Rut
-        public function inRut(identifier: String, args: Array, results: Array): String {
-            return ToCode.range(ToCode.replaceIdentity(identifier, 1, 'inRut()'), args, results);
+        public function inRut(identities: Array, args: Array, results: Array): Array {
+            return ToCode.range(ToCode.replaceIdentity(identities, 1, 'inRut()'), args, results);
         }
 
         // Bimbo
-        public function isBimbo(identifier: String, args: Array, results: Array): String {
-            return ToCode.range(ToCode.replaceIdentity(identifier, 1, 'isBimbo()'), args, results);
+        public function isBimbo(identities: Array, args: Array, results: Array): Array {
+            return ToCode.range(ToCode.replaceIdentity(identities, 1, 'isBimbo()'), args, results);
         }
 
-        public function isBro(identifier: String, args: Array, results: Array): String {
-            return ToCode.range(ToCode.replaceIdentity(identifier, 1, 'isBro()'), args, results);
+        public function isBro(identities: Array, args: Array, results: Array): Array {
+            return ToCode.range(ToCode.replaceIdentity(identities, 1, 'isBro()'), args, results);
         }
 
         // Treated
-        public function isTreated(identifier: String, args: Array, results: Array): String {
-            return ToCode.range(ToCode.replaceIdentity(identifier, 1, 'isTreated()'), args, results);
+        public function isTreated(identities: Array, args: Array, results: Array): Array {
+            return ToCode.range(ToCode.replaceIdentity(identities, 1, 'isTreated()'), args, results);
         }
 
-        public function isTreatedFemale(identifier: String, args: Array, results: Array): String {
-            return ToCode.range(ToCode.replaceIdentity(identifier, 1, 'isTreatedFemale()'), args, results);
+        public function isTreatedFemale(identities: Array, args: Array, results: Array): Array {
+            return ToCode.range(ToCode.replaceIdentity(identities, 1, 'isTreatedFemale()'), args, results);
         }
 
-        public function isTreatedMale(identifier: String, args: Array, results: Array): String {
-            return ToCode.range(ToCode.replaceIdentity(identifier, 1, 'isTreatedMale()'), args, results);
+        public function isTreatedMale(identities: Array, args: Array, results: Array): Array {
+            return ToCode.range(ToCode.replaceIdentity(identities, 1, 'isTreatedMale()'), args, results);
         }
 
-        public function isTreatedCow(identifier: String, args: Array, results: Array): String {
-            return ToCode.range(ToCode.replaceIdentity(identifier, 1, 'isTreatedCow()'), args, results);
+        public function isTreatedCow(identities: Array, args: Array, results: Array): Array {
+            return ToCode.range(ToCode.replaceIdentity(identities, 1, 'isTreatedCow()'), args, results);
         }
 
-        public function isTreatedBull(identifier: String, args: Array, results: Array): String {
-            return ToCode.range(ToCode.replaceIdentity(identifier, 1, 'isTreatedBull()'), args, results);
+        public function isTreatedBull(identities: Array, args: Array, results: Array): Array {
+            return ToCode.range(ToCode.replaceIdentity(identities, 1, 'isTreatedBull()'), args, results);
         }
 
-        public function isAmazon(identifier: String, args: Array, results: Array): String {
-            return ToCode.range(ToCode.replaceIdentity(identifier, 1, 'isAmazon()'), args, results);
+        public function isAmazon(identities: Array, args: Array, results: Array): Array {
+            return ToCode.range(ToCode.replaceIdentity(identities, 1, 'isAmazon()'), args, results);
         }
 
-        public function isCumCow(identifier: String, args: Array, results: Array): String {
-            return ToCode.range(ToCode.replaceIdentity(identifier, 1, 'isCumCow()'), args, results);
+        public function isCumCow(identities: Array, args: Array, results: Array): Array {
+            return ToCode.range(ToCode.replaceIdentity(identities, 1, 'isCumCow()'), args, results);
         }
 
-        public function isCumSlut(identifier: String, args: Array, results: Array): String {
-            return ToCode.range(ToCode.replaceIdentity(identifier, 1, 'isCumSlut()'), args, results);
+        public function isCumSlut(identities: Array, args: Array, results: Array): Array {
+            return ToCode.range(ToCode.replaceIdentity(identities, 1, 'isCumSlut()'), args, results);
         }
 
-        public function isFauxCow(identifier: String, args: Array, results: Array): String {
-            return ToCode.range(ToCode.replaceIdentity(identifier, 1, 'isFauxCow()'), args, results);
+        public function isFauxCow(identities: Array, args: Array, results: Array): Array {
+            return ToCode.range(ToCode.replaceIdentity(identities, 1, 'isFauxCow()'), args, results);
         }
 
         // Pheromones
-        public function hasPheromones(identifier: String, args: Array, results: Array): String {
-            return ToCode.range(ToCode.replaceIdentity(identifier, 1, 'hasPheromones()'), args, results);
+        public function hasPheromones(identities: Array, args: Array, results: Array): Array {
+            return ToCode.range(ToCode.replaceIdentity(identities, 1, 'hasPheromones()'), args, results);
         }
 
         // Perk
-        public function hasPerk(identifier: String, args: Array, results: Array): String {
-            return ToCode.callRange(ToCode.replaceIdentity(identifier, 1, 'hasPerk'), args, results);
+        public function hasPerk(identities: Array, args: Array, results: Array): Array {
+            return ToCode.callRange(ToCode.replaceIdentity(identities, 1, 'hasPerk'), args, results);
         }
 
         // StatusEffect
-        public function hasStatusEffect(identifier: String, args: Array, results: Array): String {
-            return ToCode.callRange(ToCode.replaceIdentity(identifier, 1, 'hasStatusEffect'), args, results);
+        public function hasStatusEffect(identities: Array, args: Array, results: Array): Array {
+            return ToCode.callRange(ToCode.replaceIdentity(identities, 1, 'hasStatusEffect'), args, results);
         }
 
         // Items
         // Piercing
-        public function hasPiercing(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'hasPiercing()'), results);;
+        public function hasPiercing(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'hasPiercing()'), results);;
         }
 
-        public function hasEarPiercing(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'hasEarPiercing()'), results);;
+        public function hasEarPiercing(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'hasEarPiercing()'), results);;
         }
 
-        public function hasEyebrowPiercing(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'hasEyebrowPiercing()'), results);;
+        public function hasEyebrowPiercing(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'hasEyebrowPiercing()'), results);;
         }
 
-        public function hasNosePiercing(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'hasNosePiercing()'), results);;
+        public function hasNosePiercing(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'hasNosePiercing()'), results);;
         }
 
-        public function hasLipPiercing(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'hasLipPiercing()'), results);;
+        public function hasLipPiercing(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'hasLipPiercing()'), results);;
         }
 
-        public function hasTonguePiercing(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'hasTonguePiercing()'), results);;
+        public function hasTonguePiercing(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'hasTonguePiercing()'), results);;
         }
 
-        public function hasBellyPiercing(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.replaceIdentity(identifier, 1, 'hasBellyPiercing()'), results);;
+        public function hasBellyPiercing(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.replaceIdentity(identities, 1, 'hasBellyPiercing()'), results);;
         }
 
-        public function hasNipplePiercing(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.funcCall(ToCode.replaceIdentity(identifier, 1, 'hasPiercedNipples'), args), results);
+        public function hasNipplePiercing(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.funcCall(ToCode.replaceIdentity(identities, 1, 'hasPiercedNipples'), args), results);
         }
 
-        public function hasCockPiercing(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.funcCall(ToCode.replaceIdentity(identifier, 1, 'hasPiercedCocks'), args), results);
+        public function hasCockPiercing(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.funcCall(ToCode.replaceIdentity(identities, 1, 'hasPiercedCocks'), args), results);
         }
 
-        public function hasPiercedVaginas(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.funcCall(ToCode.replaceIdentity(identifier, 1, 'hasPiercedVaginas'), args), results);
+        public function hasPiercedVaginas(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.funcCall(ToCode.replaceIdentity(identities, 1, 'hasPiercedVaginas'), args), results);
         }
 
-        public function hasClitPiercing(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.funcCall(ToCode.replaceIdentity(identifier, 1, 'hasPiercedClits'), args), results);
+        public function hasClitPiercing(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.funcCall(ToCode.replaceIdentity(identities, 1, 'hasPiercedClits'), args), results);
         }
 
-        public function hasCocksock(identifier: String, args: Array, results: Array): String {
-            return ToCode.boolean(ToCode.funcCall(ToCode.replaceIdentity(identifier, 1, 'hasSockedCocks'), args), results);
+        public function hasCocksock(identities: Array, args: Array, results: Array): Array {
+            return ToCode.boolean(ToCode.funcCall(ToCode.replaceIdentity(identities, 1, 'hasSockedCocks'), args), results);
         }
 
         // Keyitem
-        public function hasKeyItem(identifier: String, args: Array, results: Array): String {
-            return ToCode.callRange(ToCode.replaceIdentity(identifier, 1, 'hasKeyItem'), args, results);
+        public function hasKeyItem(identities: Array, args: Array, results: Array): Array {
+            return ToCode.callRange(ToCode.replaceIdentity(identities, 1, 'hasKeyItem'), args, results);
         }
     }
 }

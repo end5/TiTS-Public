@@ -1,4 +1,6 @@
 package editor.Game.CodeMap {
+    import editor.Lang.Interpret.CodeNode;
+
     public class ToCode {
         public static const INDENT: String = '    ';
 
@@ -14,12 +16,12 @@ package editor.Game.CodeMap {
             return newText + text.substring(start);
         }
 
-        public static function oldParser(identifier: String, args: Array, results: Array): String {
-            var text: String = 'output("[' + identifier;
+        public static function oldParser(identities: Array, args: Array, results: Array): Array {
+            var text: String = '[' + combineIdentities(identities);
             if (args.length > 0)
                 text += ' ' + args.join(' ')
-            text += ']");';
-            return text;
+            text += ']';
+            return [new CodeNode(CodeNode.Text, text)];
         }
 
         private static function rangeCondition(idx: int, identifier: String, args: Array, results: Array): String {
@@ -34,24 +36,26 @@ package editor.Game.CodeMap {
             return identifier + '( ' + args[idx] + ')';
         }
 
-        public static function range(identifier: String, args: Array, results: Array): String {
+        public static function range(identifier: String, args: Array, results: Array): Array {
             return chain(rangeCondition, identifier, args, results);
         }
 
-        public static function equals(identifier: String, args: Array, results: Array): String {
+        public static function equals(identifier: String, args: Array, results: Array): Array {
             return chain(equalsCondition, identifier, args, results);
         }
 
-        public static function callRange(identifier: String, args: Array, results: Array): String {
+        public static function callRange(identifier: String, args: Array, results: Array): Array {
             return chain(callCondition, identifier, args, results);
         }
 
-        private static function chain(conditionFunc: Function, identifier: String, args: Array, results: Array): String {
-            var code: String = "";
+        private static function chain(conditionFunc: Function, identifier: String, args: Array, results: Array): Array {
+            // var code: String = "";
             var argsLen: int = args.length;
             var counter: int = 0;
             var stored: String = '';
             var condition: String;
+            var node: CodeNode;
+            var body: Array = [];
 
             for (var idx: int = 0; idx < results.length; idx++) {
                 condition = conditionFunc(idx, identifier, args, results);
@@ -65,42 +69,58 @@ package editor.Game.CodeMap {
 
                 // Every condition after the first
                 if (counter > 0) {
-                    code += '\nelse ';
+                    node = new CodeNode(CodeNode.Code, 'else');
+                    body.push(node);
+                    // code += '\nelse ';
                 }
 
                 // Arg with result
                 if (idx < argsLen) {
-                    code += 'if (' + condition + ') ';
+                    node = new CodeNode(CodeNode.Code, 'if (' + condition + ')');
+                    body.push(node);
+                    // code += 'if (' + condition + ') ';
                 }
                 // No args with results, not ! args with else-result
                 else if (counter === 0 || stored) {
-                    code += 'if (!(' + stored + ')) ';
+                    node = new CodeNode(CodeNode.Code, 'if (!(' + stored + '))');
+                    body.push(node);
+                    // code += 'if (!(' + stored + ')) ';
                 }
 
-                code += '{\n' +  results[idx] +'\n}';
+                node.body = results[idx];
+                // code += '{\n' +  results[idx] +'\n}';
                 counter++;
             }
-            return code;
+            return body;
         }
 
-        public static function boolean(identifier: String, results: Array): String {
+        public static function boolean(identifier: String, results: Array): Array {
             if ((results.length === 1 && results[0]) || (results.length > 1 && !results[1]))
-                return 'if (' + identifier + ') {\n' +  results[0] +'\n}';
+                return [new CodeNode(CodeNode.Code, 'if (' + identifier + ')', results[0])];
             else if (results.length > 1)
                 if (!results[0])
-                    return 'if (!' + identifier + ') {\n' +  results[1] +'\n}';
+                    return [new CodeNode(CodeNode.Code, 'if (!' + identifier + ')', results[1])];
                 else if (results[1])
-                    return 'if (' + identifier + ') {\n' +  results[0] +'\n}\nelse {\n' +  results[1] +'\n}';
-            return '';
+                    return [new CodeNode(CodeNode.Code, 'if (' + identifier + ')', results[0]), new CodeNode(CodeNode.Code, 'else', results[1])];
+            return [];
         }
 
         public static function funcCall(identifier: String, args: Array): String {
-            return identifier + '(' + args.join(', ') +  ')';
+            return identifier + '(' + args.map(getValue).join(', ') +  ')';
         }
 
-        public static function replaceIdentity(oldIdent: String, amount: int, ... newIdent): String {
-            var arr: Array = oldIdent.split('.');
-            return arr.slice(0, arr.length - amount).concat(newIdent).join('.');
+        public static function replaceIdentity(identities: Array, amount: int, ... newIdent): String {
+            // var arr: Array = oldIdent.split('.');
+            // return arr.slice(0, arr.length - amount).concat(newIdent).join('.');
+            return identities.map(getValue).slice(0, identities.length - amount).concat(newIdent).join('.');
+        }
+
+        public static function getValue(node: CodeNode, idx: int, arr: Array): String {
+            return node.value;
+        }
+
+        public static function combineIdentities(list: Array): String {
+            return list.map(getValue).join('.');
         }
     }
 }
