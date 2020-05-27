@@ -175,7 +175,7 @@ package editor.Lang.Parse {
                             isNumber ? NodeType.Number : NodeType.String,
                             new TextRange(
                                 new TextPosition(argLineStart, argColStart, argOffsetStart),
-                                new TextPosition(this.tokenizer.lineStart, this.tokenizer.colStart, this.tokenizer.offsetStart)
+                                new TextPosition(this.tokenizer.lineEnd, this.tokenizer.colEnd, this.tokenizer.offsetEnd)
                             ),
                             null,
                             isNumber ? maybeNum : text
@@ -223,7 +223,7 @@ package editor.Lang.Parse {
                 }
             }
 
-            if (token !== TokenType.ResultsStart && token !== TokenType.Pipe && token !== TokenType.RightBracket) {
+            if (token !== TokenType.ResultsStart && token !== TokenType.RightBracket) {
                 this.errors.push(new LangError(
                     new TextRange(
                         new TextPosition(codeLineStart, codeColStart, codeOffsetStart),
