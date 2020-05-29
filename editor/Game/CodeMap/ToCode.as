@@ -19,7 +19,7 @@ package editor.Game.CodeMap {
         public static function oldParser(identities: Array, args: Array, results: Array): Array {
             var text: String = '[' + combineIdentities(identities);
             if (args.length > 0)
-                text += ' ' + args.join(' ')
+                text += ' ' + args.map(getFirstArgValue).join(' ');
             text += ']';
             return [new CodeNode(CodeNode.Text, text)];
         }
@@ -58,7 +58,7 @@ package editor.Game.CodeMap {
             var body: Array = [];
 
             for (var idx: int = 0; idx < results.length; idx++) {
-                condition = conditionFunc(idx, identifier, args, results);
+                condition = conditionFunc(idx, identifier, args.map(getFirstArgValue), results);
 
                 // Skip empty results
                 if (!results[idx]) {
@@ -106,7 +106,7 @@ package editor.Game.CodeMap {
         }
 
         public static function funcCall(identifier: String, args: Array): String {
-            return identifier + '(' + args.map(getValue).join(', ') +  ')';
+            return identifier + '(' + args.map(getFirstArgValue).join(', ') +  ')';
         }
 
         public static function replaceIdentity(identities: Array, amount: int, ... newIdent): String {
@@ -121,6 +121,10 @@ package editor.Game.CodeMap {
 
         public static function combineIdentities(list: Array): String {
             return list.map(getValue).join('.');
+        }
+
+        public static function getFirstArgValue(nodes: *, idx: int, arr: Array): String {
+            return nodes[0].value;
         }
     }
 }

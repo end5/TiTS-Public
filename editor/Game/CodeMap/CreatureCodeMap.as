@@ -683,8 +683,8 @@ package editor.Game.CodeMap {
 
         private function mapNameToIndex(key: String): Function {
             // Each item is surrounded by ""
-            return function (node: CodeNode, idx: int, arr: Array): CodeNode {
-                return new CodeNode(CodeNode.Code, nameToIndex(key, node.value.slice(1, node.value.length - 1)));
+            return function (node: Array, idx: int, arr: Array): Array {
+                return [new CodeNode(CodeNode.Code, nameToIndex(key, node[0].value))];
             }
         }
 
