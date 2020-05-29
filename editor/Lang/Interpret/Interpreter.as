@@ -51,257 +51,229 @@ package editor.Lang.Interpret {
          * @param node Node
          * @return
          */
-        private function processNode(root: *): Product {
-            const search: Vector.<Node> = new Vector.<Node>();
-            search.push(root);
+        private function processNode(node: Node): Product {
+            // If performance becomes a problem here, rewrite this to be an iterative post-order depth first search.
+            // Do not forget to handle selecting and evaluating the correct result while ignoring others.
 
-            const discovered: Vector.<Node> = new Vector.<Node>();
-            const products: Vector.<Vector.<Product>> = new Vector.<Vector.<Product>>();
-            products.push(new Vector.<Product>());
-            products.push(new Vector.<Product>());
+            var childProducts: Array = [];
+            if (node.children && node.children.length > 0) {
+                // Do not evaluate results. 
+                if (node.type === NodeType.Eval) {
+                    childProducts.push(this.processNode(node.children[0])); // Retrieve
+                    childProducts.push(this.processNode(node.children[1])); // Args
+                }
+                else
+                    for each (var child: Node in node.children) {
+                        childProducts.push(this.processNode(child));
+                    }
+            }
 
-            var node: Node;
-            var discoverNode: Node;
-            var parent: Vector.<Product>;
-            var childProducts: Vector.<Product>;
+            switch (node.type) {
+                default: throw new Error('NodeType ' + node.type + ' does not exist');
 
-            while (search.length > 0) {
-
-                node = search[search.length - 1];
-                discoverNode = (discovered.length > 0 ? discovered[discovered.length - 1] : null);
-
-                if (node !== discoverNode) {
-                    if (node.children && node.children.length > 0) {
-                        discovered.push(node);
-                        products.push(new Vector.<Product>());
-
-                        if (node.type === NodeType.Eval)
-                            search.push(node.children[1], node.children[0]);
+                case NodeType.Identity:
+                case NodeType.String:
+                case NodeType.Number:
+                case NodeType.Text: {
+                    // node.value: String, int
+                    // childProducts: []
+                    // product.value: String, int
+                    return new Product(
+                        node.range,
+                        node.value
+                    );
+                }
+                case NodeType.Concat: {
+                    // node.value: null
+                    // childProducts: Product<String, int>[]
+                    // product.value: String
+                    var ranges: Array = [];
+                    var valueStr: String = '';
+                    for each (var product: Product in childProducts) {
+                        // Squashes ranges
+                        if (product.range is Array)
+                            for each (var childRange: * in product.range)
+                                ranges.push(childRange);
                         else
-                            for (var idx: int = node.children.length - 1; idx >= 0; --idx) {
-                                search.push(node.children[idx]);
+                            ranges.push(product.range);
+
+                        valueStr += product.value;
+                    }
+
+                    return new Product(
+                        ranges,
+                        valueStr
+                    );
+                }
+                case NodeType.Retrieve: {
+                    // node.value: Boolean
+                    // childProducts: Product<String>[]
+                    // product.value: VariableInfo
+                    var obj: * = !node.value ? this.oldWrapper : this.newWrapper;
+                    var infoFunc: * = !node.value ? this.oldInfo : this.newInfo;
+                    var name: String = '';
+
+                    var identity: String;
+                    var parentObj: *;
+                    var caps: Boolean = false;
+                    var lowerCaseIdentity: String;
+
+                    for (var idx: int = 0; idx < childProducts.length; idx++) {
+                        identity = childProducts[idx].value;
+
+                        // Determine if capitalization is needed
+                        if (idx === childProducts.length - 1) {
+                            lowerCaseIdentity = identity.charAt(0).toLocaleLowerCase() + identity.substring(1);
+                            if (obj != null && !(identity in obj) && lowerCaseIdentity in obj) {
+                                caps = true;
+                                identity = lowerCaseIdentity;
                             }
-
-                        continue;
-                    }
-                    else {
-                        childProducts = new Vector.<Product>();
-                    }
-                }
-                else {
-                    discovered.pop();
-                    childProducts = products.pop();
-                }
-
-                search.pop();
-                parent = products[products.length - 1];
-                switch (node.type) {
-                    case NodeType.Identity:
-                    case NodeType.String:
-                    case NodeType.Number:
-                    case NodeType.Text: {
-                        parent.push(new Product(
-                            node.range,
-                            node.value
-                        ));
-                        break;
-                    }
-                    case NodeType.Concat: {
-                        var ranges: Array = [];
-                        var valueStr: String = '';
-                        for each (var product: * in childProducts) {
-                            // Squashes ranges
-                            if (product.range is Array)
-                                for each (var childRange: * in product.range)
-                                    ranges.push(childRange);
-                            else
-                                ranges.push(product.range);
-
-                            valueStr += product.value;
                         }
 
-                        parent.push(new Product(
-                            ranges,
-                            valueStr
-                        ));
-
-                        break;
-                    }
-                    case NodeType.Retrieve: {
-                        var obj: * = !node.value ? this.oldWrapper : this.newWrapper;
-                        var infoFunc: * = !node.value ? this.oldInfo : this.newInfo;
-                        var name: String = '';
-
-                        var identity: String;
-                        var parentObj: *;
-                        var caps: Boolean = false;
-                        var lowerCaseIdentity: String;
-                        var errorBreak: Boolean = false;
-
-                        for (idx = 0; idx < childProducts.length; idx++) {
-                            identity = childProducts[idx].value;
-
-                            // Determine if capitalization is needed
-                            if (idx === childProducts.length - 1) {
-                                lowerCaseIdentity = identity.charAt(0).toLocaleLowerCase() + identity.substring(1);
-                                if (obj != null && !(identity in obj) && lowerCaseIdentity in obj) {
-                                    caps = true;
-                                    identity = lowerCaseIdentity;
-                                }
-                            }
-
-                            // Error check
-                            if (obj == null || typeof obj !== 'object' || !(identity in obj)) {
-                                errors.push(new LangError(
-                                    node.range,
-                                    '"' + identity + '" does not exist' + (name ? ' in "' + name + '"' : '')
-                                ));
-                                parent.push(new Product(
-                                    node.range,
-                                    null
-                                ));
-                                errorBreak = true;
-                                break;
-                            }
-
-                            // Get info
-                            if (typeof infoFunc === 'object' && identity in infoFunc) {
-                                infoFunc = infoFunc[identity];
-                            }
-
-                            parentObj = obj;
-                            obj = obj[identity];
-                            if (name.length > 0) {
-                                name += '.';
-                            }
-                            name += identity;
-                        }
-
-                        if (!errorBreak)
-                            parent.push(new Product(
+                        // Error check
+                        if (obj == null || typeof obj !== 'object' || !(identity in obj)) {
+                            errors.push(new LangError(
                                 node.range,
-                                new VariableInfo(name, obj, parentObj, caps, infoFunc)
+                                '"' + identity + '" does not exist' + (name ? ' in "' + name + '"' : '')
                             ));
-                        break;
-                    }
-                    case NodeType.Args:
-                    case NodeType.Results: {
-                        parent.push(new Product(
-                            node.range,
-                            childProducts
-                        ));
-                        break;
-                    }
-                    case NodeType.Eval: {
+                            return new Product(
+                                node.range,
+                                null
+                            );
+                        }
 
-                        const retrieve: Product = childProducts[0];
-                        const args: Product = childProducts[1];
-                        const info: VariableInfo = retrieve.value;
+                        // Get info
+                        if (typeof infoFunc === 'object' && identity in infoFunc) {
+                            infoFunc = infoFunc[identity];
+                        }
 
-                        if (!info) {
-                            parent.push(new Product(new TextRange(node.range.start, node.range.start), ''));
+                        parentObj = obj;
+                        obj = obj[identity];
+                        if (name.length > 0) {
+                            name += '.';
+                        }
+                        name += identity;
+                    }
+
+                    return new Product(
+                        node.range,
+                        new VariableInfo(name, obj, parentObj, caps, infoFunc)
+                    );
+                }
+                case NodeType.Args:
+                case NodeType.Results: {
+                    // node.value: null
+                    // childProducts: Product<any>[]
+                    // product.value: Product<any>[]
+                    return new Product(
+                        node.range,
+                        childProducts
+                    );
+                }
+                case NodeType.Eval: {
+                    // node.value: null
+                    // childProducts: [Product<VariableInfo>, Product<Product<String, int>[]>]
+                    // product.value: String
+
+                    const retrieve: Product = childProducts[0]; // Product<VariableInfo>
+                    const args: Product = childProducts[1]; // Product<Product<String, int>[]>
+                    const info: VariableInfo = retrieve.value;
+
+                    if (!info) {
+                        return new Product(new TextRange(node.range.start, node.range.start), '');
+                    }
+
+                    const identifier: String = info.name;
+                    var resultValue: * = info.value;
+
+                    const argsValueArr: Array = [];
+                    for each (var argChild: * in args.value) {
+                        argsValueArr.push(argChild.value);
+                    }
+
+                    const results: Array = node.children[2].children; // Eval -> Results.children
+                    const resultCount: int = results.length;
+
+                    if (typeof resultValue === 'function') {
+                        // Check for info function
+                        if (info.func && typeof info.func === 'function') {
+                            // Validate arguments and result count
+                            // return: String or null
+                            const validResult: * = info.func(argsValueArr, resultCount);
+                            if (validResult != null) {
+                                errors.push(new LangError(node.range, '"' + identifier + '" ' + validResult));
+                                return new Product(new TextRange(node.range.start, node.range.start), '');
+                            }
+                        }
+
+                        // Evaluate
+                        // Can reuse resultValue
+                        resultValue = resultValue.apply(info.parent, argsValueArr);
+
+                        if (resultValue == null) {
+                            errors.push(new LangError(node.range, '"' + identifier + '" is ' + resultValue));
+                            return new Product(new TextRange(node.range.start, node.range.start), '');
+                        }
+                    }
+
+                    // Captialize result
+                    if (info.caps && typeof resultValue === 'string' && resultValue.length > 0) {
+                        resultValue = resultValue.charAt(0).toLocaleUpperCase() + resultValue.substring(1);
+                    }
+
+                    // Error checking
+                    var errorStart: int = errors.length;
+                    switch (typeof resultValue) {
+                        case 'boolean': {
+                            if (resultCount === 0) {
+                                errors.push(new LangError(node.range, '"' + identifier + '" needs at least 1 result'));
+                            }
+                            else if (resultCount > 2) {
+                                errors.push(new LangError(node.range, '"' + identifier + '" has ' + (resultCount - 2) + ' results than needed'));
+                            }
                             break;
                         }
-
-                        const identifier: String = info.name;
-                        var resultValue: * = info.value;
-
-                        const argsValueArr: Array = [];
-                        for each (var child: * in args.value) {
-                            argsValueArr.push(child.value);
-                        }
-
-                        const results: Array = node.children[2].children;
-
-                        // TODO: Args check needs to happen here if not a function
-                        // Maybe force info function for everything
-
-                        if (typeof resultValue === 'function') {
-                            // Validate args and results
-                            if (info.func && typeof info.func === 'function') {
-                                const validResult: * = info.func(argsValueArr, results.length);
-                                if (validResult != null) {
-                                    errors.push(new LangError(node.range, '"' + identifier + '" ' + validResult));
-                                    parent.push(new Product(new TextRange(node.range.start, node.range.start), ''));
-                                    break;
-                                }
-                            }
-
-                            // Evaluate
-                            resultValue = resultValue.apply(info.parent, argsValueArr);
-
-                            if (resultValue == null) {
-                                errors.push(new LangError(node.range, '"' + identifier + '" is ' + resultValue));
-                                parent.push(new Product(new TextRange(node.range.start, node.range.start), ''));
-                                break;
-                            }
-                        }
-
-                        if (info.caps && typeof resultValue === 'string' && resultValue.length > 0) {
-                            resultValue = resultValue.charAt(0).toLocaleUpperCase() + resultValue.substring(1);
-                        }
-
-                        // Error checking
-                        var errorStart: int = errors.length;
-                        switch (typeof resultValue) {
-                            case 'boolean': {
-                                if (results.length === 0) {
-                                    errors.push(new LangError(node.range, '"' + identifier + '" needs at least 1 result'));
-                                }
-                                else if (results.length > 2) {
-                                    errors.push(new LangError(node.range, '"' + identifier + '" has ' + (results.length - 2) + ' results than needed'));
-                                }
-                                break;
-                            }
-                            case 'xml':
-                            case 'object': {
-                                errors.push(new LangError(node.range, '"' + identifier + '" cannot be displayed'));
-                                break;
-                            }
-                        }
-                        if (errorStart !== errors.length) {
-                            parent.push(new Product(new TextRange(node.range.start, node.range.start), ''));
+                        case 'xml':
+                        case 'object': {
+                            errors.push(new LangError(node.range, '"' + identifier + '" cannot be displayed'));
                             break;
                         }
+                    }
+                    if (errorStart !== errors.length) {
+                        return new Product(new TextRange(node.range.start, node.range.start), '');
+                    }
 
-                        var selectedNode: Node;
-                        if (typeof resultValue === 'number') {
-                            // Evaluate
-                            if (results.length > resultValue) {
-                                selectedNode = results[resultValue];
-                            }
-                            else {
-                                selectedNode = new Node(NodeType.Text, new TextRange(node.range.end, node.range.end), null, '');
-                            }
-                        }
-                        else if (typeof resultValue === 'boolean') {
-                            // Evaluate
-                            // condition ? [result1] : result2
-                            if (resultValue && results.length > 0) {
-                                selectedNode = results[0];
-                            }
-                            // condition ? result1 : [result2]
-                            else if (!resultValue && results.length > 1) {
-                                selectedNode = results[1];
-                            }
-                            // condition ? result1 : []
-                            // condition ? [] : result2
-                            else {
-                                selectedNode = new Node(NodeType.Text, new TextRange(node.range.end, node.range.end), null, '');
-                            }
+                    var selectedNode: Node;
+                    if (typeof resultValue === 'number') {
+                        // Select and evaluate the correct result
+                        if (resultCount > resultValue) {
+                            return this.processNode(results[resultValue]);
                         }
                         else {
-                            parent.push(new Product(node.range, resultValue));
-                            break;
+                            return new Product(new TextRange(node.range.end, node.range.end), '');
                         }
-
-                        search.push(selectedNode);
-                        break;
                     }
-                    default: throw new Error('NodeType ' + root.type + ' does not exist');
+                    else if (typeof resultValue === 'boolean') {
+                        // Evaluate
+                        // condition ? [result1] : result2
+                        if (resultValue && resultCount > 0) {
+                            return this.processNode(results[0]);
+                        }
+                        // condition ? result1 : [result2]
+                        else if (!resultValue && resultCount > 1) {
+                            return this.processNode(results[1]);
+                        }
+                        // condition ? result1 : []
+                        // condition ? [] : result2
+                        else {
+                            return new Product(new TextRange(node.range.end, node.range.end), '');
+                        }
+                    }
+                    else {
+                        return new Product(node.range, resultValue);
+                    }
                 }
             }
-            return parent[0];
         }
     }
 }

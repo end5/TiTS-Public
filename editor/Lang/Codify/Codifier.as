@@ -39,154 +39,124 @@ package editor.Lang.Codify {
             this.result = output;
         }
 
-        private function processNode(root: Node): Array {
-            const search: Vector.<Node> = new Vector.<Node>();
-            search.push(root);
+        private function processNode(node: Node): Array {
+            // If performance becomes a problem here, rewrite this to be an iterative post-order depth first search.
 
-            const discovered: Vector.<Node> = new Vector.<Node>();
-            const stack: Array = []; // CodeNode[][][]
-            stack.push([]); // root result
-            stack.push([]); // root children result
-
-            var node: Node;
-            var discoverNode: Node;
-            var curScope: Array; // CodeNode[][]
-            var childProducts: Array; // CodeNode[] | CodeNode[][] | CodeNode[][][]
-
-            // This is iterative post order dfs
-            while (search.length > 0) {
-
-                node = search[search.length - 1];
-                discoverNode = (discovered.length > 0 ? discovered[discovered.length - 1] : null);
-
-                if (node !== discoverNode) {
-                    if (node.children && node.children.length > 0) {
-                        discovered.push(node);
-                        stack.push([]);
-
-                        for (var idx: int = node.children.length - 1; idx >= 0; --idx) {
-                            search.push(node.children[idx]);
-                        }
-
-                        continue;
-                    }
-                    else {
-                        childProducts = [];
-                    }
-                }
-                else {
-                    discovered.pop();
-                    childProducts = stack.pop();
-                }
-
-                search.pop();
-                curScope = stack[stack.length - 1];
-
-                switch (node.type) {
-                    case NodeType.Identity:
-                    case NodeType.Number: {
-                        curScope.push([new CodeNode(CodeNode.Text, node.value + '')]);
-                        break;
-                    }
-                    case NodeType.String: {
-                        curScope.push([new CodeNode(CodeNode.Text, this.escape(node.value))]);
-                        break;
-                    }
-                    case NodeType.Text: {
-                        if (node.value)
-                            curScope.push([new CodeNode(CodeNode.Text, this.escape(node.value))]);
-                        else
-                            curScope.push([new CodeNode(CodeNode.Text, '')]);
-                        break;
-                    }
-                    case NodeType.Concat: {
-                        // Flatten
-                        var concat: Array = [];
-                        // childProducts: CodeNode[] | CodeNode[][] | CodeNode[][][]
-                        for each (var lvl0: * in childProducts) {
-                            if (!(lvl0 is Array))
-                                concat.push(lvl0);
-                            else
-                                for each (var lvl1: * in lvl0) {
-                                    if (!(lvl1 is Array))
-                                        concat.push(lvl1);
-                                    else
-                                        for each (var lvl2: * in lvl1) {
-                                            concat.push(lvl2);
-                                        }
-                                }
-                        }
-                        curScope.push(concat);
-                        break;
-                    }
-                    case NodeType.Retrieve: {
-                        // Flatten
-                        var identities: Array = [];
-                        // childProducts: CodeNode[][]
-                        for each (var product: * in childProducts) {
-                            identities.push(product[0]);
-                        }
-                        curScope.push(identities);
-                        break;
-                    }
-                    case NodeType.Args:
-                    case NodeType.Results: {
-                        // childProducts: CodeNode[]
-                        curScope.push(childProducts);
-                        break;
-                    }
-                    case NodeType.Eval: {
-                        // childProducts: [CodeNode[], CodeNode[][], CodeNode[][]]
-                        const retrieve: Array = childProducts[0];
-                        const args: Array = childProducts[1];
-                        const results: Array = childProducts[2];
-
-                        var obj: * = !node.value ? this.oldCodeMap : this.newCodeMap;
-
-                        var identity: String;
-                        var lowerCaseIdentity: String;
-
-                        for (idx = 0; idx < retrieve.length; idx++) {
-                            identity = retrieve[idx].value;
-
-                            // Determine if capitalization is needed
-                            if (idx === retrieve.length - 1) {
-                                lowerCaseIdentity = identity.charAt(0).toLocaleLowerCase() + identity.substring(1);
-                                if (obj != null && !(identity in obj) && lowerCaseIdentity in obj) {
-                                    identity = lowerCaseIdentity;
-                                }
-                            }
-
-                            // Error check
-                            if (obj == null || typeof obj !== 'object' || !(identity in obj)) {
-                                // This check exists in the Interpreter
-                                // No need to report it again for now
-                                // this.errors.push(new LangError(
-                                //     node.range,
-                                //     'cannot find "' + identity + '"'
-                                // ));
-                                curScope.push([]);
-                                break;
-                            }
-
-                            obj = obj[identity];
-                        }
-
-                        if (typeof obj !== 'function') {
-                            this.errors.push(new LangError(
-                                node.range,
-                                'Cannot generate code for "' + identity + '"'
-                            ));
-                            curScope.push([]);
-                            break;
-                        }
-
-                        curScope.push(obj(retrieve, args, results));
-                        break;
-                    }
+            var childProducts: Array = [];
+            if (node.children && node.children.length > 0) {
+                for each (var child: Node in node.children) {
+                    childProducts.push(this.processNode(child));
                 }
             }
-            return curScope[0];
+
+            switch (node.type) {
+                default: throw new Error('NodeType ' + node.type + ' does not exist');
+
+                case NodeType.Identity:
+                case NodeType.Number: {
+                    // return: [CodeNode]
+
+                    return [new CodeNode(CodeNode.Text, node.value + '')];
+                }
+                case NodeType.String: {
+                    // return: [CodeNode]
+
+                    return [new CodeNode(CodeNode.Text, this.escape(node.value))];
+                }
+                case NodeType.Text: {
+                    // return: [CodeNode]
+
+                    if (node.value)
+                        return [new CodeNode(CodeNode.Text, this.escape(node.value))];
+                    else
+                        return [new CodeNode(CodeNode.Text, '')];
+                }
+                case NodeType.Concat: {
+                    // childProducts: CodeNode[] or CodeNode[][]
+                    // return: CodeNode[]
+
+                    // Flatten
+                    var concat: Array = [];
+
+                    for each (var lvl0: * in childProducts) {
+                        if (!(lvl0 is Array))
+                            concat.push(lvl0);
+                        else {
+                            for each (var lvl1: * in lvl0) {
+                                concat.push(lvl1);
+                            }
+                        }
+                    }
+                    return concat;
+                }
+                case NodeType.Retrieve: {
+                    // childProducts: [CodeNode][]
+                    // return: CodeNode[]
+
+                    // Flatten
+                    var identities: Array = [];
+
+                    for each (var product: * in childProducts) {
+                        identities.push(product[0]);
+                    }
+                    return identities;
+                }
+                case NodeType.Args:
+                case NodeType.Results: {
+                    // childProducts: CodeNode[] or CodeNode[][]
+                    // return: CodeNode[] or CodeNode[][]
+
+                    return childProducts;
+                }
+                case NodeType.Eval: {
+                    // childProducts: [CodeNode[], CodeNode[][], CodeNode[][]]
+                    // return: CodeNode[]
+
+                    const retrieve: Array = childProducts[0];
+                    const args: Array = childProducts[1];
+                    const results: Array = childProducts[2];
+
+                    var obj: * = !node.value ? this.oldCodeMap : this.newCodeMap;
+
+                    var identity: String;
+                    var lowerCaseIdentity: String;
+
+                    for (var idx: int = 0; idx < retrieve.length; idx++) {
+                        identity = retrieve[idx].value;
+
+                        // Determine if capitalization is needed
+                        if (idx === retrieve.length - 1) {
+                            lowerCaseIdentity = identity.charAt(0).toLocaleLowerCase() + identity.substring(1);
+                            if (obj != null && !(identity in obj) && lowerCaseIdentity in obj) {
+                                identity = lowerCaseIdentity;
+                            }
+                        }
+
+                        // Error check
+                        if (obj == null || typeof obj !== 'object' || !(identity in obj)) {
+                            // This check exists in the Interpreter
+                            // No need to report it again for now
+                            // this.errors.push(new LangError(
+                            //     node.range,
+                            //     'cannot find "' + identity + '"'
+                            // ));
+                            return [];
+                        }
+
+                        obj = obj[identity];
+                    }
+
+                    if (typeof obj !== 'function') {
+                        this.errors.push(new LangError(
+                            node.range,
+                            'Cannot generate code for "' + identity + '"'
+                        ));
+                        return [];
+                    }
+
+                    return obj(retrieve, args, results);
+                }
+            }
         }
     }
 }
