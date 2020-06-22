@@ -1,9 +1,14 @@
 package editor.Lang.Codify {
-    public class CodeFormater {
+    public class CodeFormatter {
         private static const INDENT: String = '    ';
 
         public var result: String;
         private var indentAmt: int = 0;
+        private var outFuncName: String;
+
+        public function CodeFormatter(outputFuncName: String): void {
+            this.outFuncName = outputFuncName;
+        }
 
         public function interpret(body: Array): void {
             this.indentAmt = 0;
@@ -32,7 +37,7 @@ package editor.Lang.Codify {
                 // To Text from Code, Invalid
                 // >>output("
                 if (node.type === CodeNode.Text && lastType !== node.type) {
-                    text += this.indent() + 'output("' + node.value;
+                    text += this.indent() + this.outFuncName + '("' + node.value;
                 }
                 // To Code from Text
                 // ");\n>>
