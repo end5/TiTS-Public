@@ -17,8 +17,6 @@ package editor.Lang.Tokenize {
         public var colEnd: int = 0;
         public var offsetEnd: int = 0;
 
-        private var ignoreNextWhitespace: Boolean = false;
-
         private var token: int; // or null
         private var text: String;
         private var tokenText: String;
@@ -107,17 +105,6 @@ package editor.Lang.Tokenize {
         }
 
         public function advance(): int {
-            if (this.ignoreNextWhitespace) {
-                this.ignoreNextWhitespace = false;
-                // Advance while the next character is " " or "\n"
-                while (this.pos < this.text.length && this.text.indexOf(Symbols.Newline, this.pos) == this.pos) {
-                    this.lineNum++;
-                    this.offset = ++this.pos;
-                    while (this.pos < this.text.length && this.text.indexOf(Symbols.Space, this.pos) == this.pos)
-                        ++this.pos;
-                }
-            }
-
             this.lineStart = this.lineNum;
             this.colStart = this.pos - this.offset;
             this.offsetStart = this.pos;
@@ -140,11 +127,6 @@ package editor.Lang.Tokenize {
             }
         }
 
-
-        // Rewrite to switch tokenization between old and new parser
-        // because dealing with spaces as a delimiter is such a pain.
-
-
         private function textMode(): int {
             this.tokenText = this.text.charAt(this.pos);
             switch (this.tokenText) {
@@ -156,14 +138,20 @@ package editor.Lang.Tokenize {
                     this.colEnd = this.pos - this.offset;
                     this.offsetEnd = this.pos;
 
-                    this.ignoreNextWhitespace = true;
+                    // Advance while the next sequence of characters is newline followed by space
+                    while (this.pos < this.text.length && this.text.indexOf(Symbols.Newline, this.pos) == this.pos) {
+                        this.lineNum++;
+                        this.offset = ++this.pos;
+                        while (this.pos < this.text.length && this.text.indexOf(Symbols.Space, this.pos) == this.pos)
+                            ++this.pos;
+                    }
 
                     return TokenType.LeftBracket;
                 }
                 default: {
                     this.tokenText = '';
                     while (this.pos < this.text.length) {
-                        var subStrStart: int = this.pos;
+                        var tokenTextStart: int = this.pos;
 
                         this.pos = this.eatWhileNot(
                             this.pos,
@@ -172,12 +160,13 @@ package editor.Lang.Tokenize {
                             Symbols.LeftBracket
                         );
 
-                        this.tokenText += this.text.substring(subStrStart, this.pos);
+                        this.tokenText += this.text.substring(tokenTextStart, this.pos);
 
                         var char: String = this.text.charAt(this.pos);
                         if (char === Symbols.Backslash) {
-                            this.tokenText += this.text.charAt(this.pos + 1);
-                            this.pos += 2;
+                            // Add escaped character
+                            this.tokenText += this.text.charAt(++this.pos);
+                            ++this.pos;
                         }
                         else if (char === Symbols.Newline) {
                             this.lineNum++;
@@ -204,7 +193,14 @@ package editor.Lang.Tokenize {
             switch (this.tokenText) {
                 case Symbols.QuestionMark: {
                     ++this.pos;
-                    this.ignoreNextWhitespace = true;
+
+                    // Advance while the next sequence of characters is newline followed by space
+                    while (this.pos < this.text.length && this.text.indexOf(Symbols.Newline, this.pos) == this.pos) {
+                        this.lineNum++;
+                        this.offset = ++this.pos;
+                        while (this.pos < this.text.length && this.text.indexOf(Symbols.Space, this.pos) == this.pos)
+                            ++this.pos;
+                    }
 
                     token = TokenType.QuestionMark;
                     break;
@@ -213,7 +209,14 @@ package editor.Lang.Tokenize {
                     this.mode.push(STATE_RESULTS); // Enter results
 
                     ++this.pos;
-                    this.ignoreNextWhitespace = true;
+
+                    // Advance while the next sequence of characters is newline followed by space
+                    while (this.pos < this.text.length && this.text.indexOf(Symbols.Newline, this.pos) == this.pos) {
+                        this.lineNum++;
+                        this.offset = ++this.pos;
+                        while (this.pos < this.text.length && this.text.indexOf(Symbols.Space, this.pos) == this.pos)
+                            ++this.pos;
+                    }
 
                     token = TokenType.ResultsStart;
                     break;
@@ -251,7 +254,7 @@ package editor.Lang.Tokenize {
                     break;
                 }
                 default: {
-                    var startPos: int = this.pos;
+                    var tokenTextStart: int = this.pos;
 
                     this.pos = this.eatWhileNot(
                         this.pos,
@@ -262,7 +265,7 @@ package editor.Lang.Tokenize {
                         Symbols.RightBracket
                     );
 
-                    this.tokenText = this.text.substring(startPos, this.pos);
+                    this.tokenText = this.text.substring(tokenTextStart, this.pos);
 
                     token = TokenType.Text;
                     break;
@@ -304,7 +307,16 @@ package editor.Lang.Tokenize {
                     this.lineEnd = this.lineNum;
                     this.colEnd = this.pos - this.offset;
                     this.offsetEnd = this.pos;
-                    this.ignoreNextWhitespace = this.tokenText !== Symbols.RightBracket;
+
+                    if (this.tokenText !== Symbols.RightBracket) {
+                        // Advance while the next sequence of characters is newline followed by space
+                        while (this.pos < this.text.length && this.text.indexOf(Symbols.Newline, this.pos) == this.pos) {
+                            this.lineNum++;
+                            this.offset = ++this.pos;
+                            while (this.pos < this.text.length && this.text.indexOf(Symbols.Space, this.pos) == this.pos)
+                                ++this.pos;
+                        }
+                    }
 
                     switch (this.tokenText) {
                         case Symbols.LeftBracket: return TokenType.LeftBracket;
@@ -317,7 +329,7 @@ package editor.Lang.Tokenize {
                     this.tokenText = '';
                     var whitespace: String = '';
                     while (this.pos < this.text.length) {
-                        var subStrStart: int = this.pos;
+                        var tokenTextStart: int = this.pos;
 
                         this.pos = this.eatWhileNot(
                             this.pos,
@@ -329,22 +341,24 @@ package editor.Lang.Tokenize {
                             Symbols.Backslash
                         );
 
-                        if (subStrStart < this.pos) {
+                        if (tokenTextStart < this.pos) {
                             if (whitespace.length > 0) {
-                                this.tokenText += whitespace + this.text.substring(subStrStart, this.pos);
+                                this.tokenText += whitespace + this.text.substring(tokenTextStart, this.pos);
                                 whitespace = '';
                             }
                             else {
-                                this.tokenText += this.text.substring(subStrStart, this.pos);
+                                this.tokenText += this.text.substring(tokenTextStart, this.pos);
                             }
-                        }
 
-                        this.lineEnd = this.lineNum;
-                        this.colEnd = this.pos - this.offset;
-                        this.offsetEnd = this.pos;
+                            // Only update position information when adding to token text
+                            this.lineEnd = this.lineNum;
+                            this.colEnd = this.pos - this.offset;
+                            this.offsetEnd = this.pos;
+                        }
 
                         var char: String = this.text.charAt(this.pos);
                         if (char === Symbols.Backslash) {
+                            // Add escaped character
                             this.tokenText += this.text.charAt(++this.pos);
                             ++this.pos;
                         }
@@ -388,7 +402,16 @@ package editor.Lang.Tokenize {
                     this.lineEnd = this.lineNum;
                     this.colEnd = this.pos - this.offset;
                     this.offsetEnd = this.pos;
-                    this.ignoreNextWhitespace = this.tokenText !== Symbols.RightBracket;
+
+                    if (this.tokenText !== Symbols.RightBracket) {
+                        // Advance while the next sequence of characters is newline followed by space
+                        while (this.pos < this.text.length && this.text.indexOf(Symbols.Newline, this.pos) == this.pos) {
+                            this.lineNum++;
+                            this.offset = ++this.pos;
+                            while (this.pos < this.text.length && this.text.indexOf(Symbols.Space, this.pos) == this.pos)
+                                ++this.pos;
+                        }
+                    }
 
                     switch (this.tokenText) {
                         case Symbols.LeftBracket: return TokenType.LeftBracket;
@@ -400,7 +423,7 @@ package editor.Lang.Tokenize {
                     this.tokenText = '';
                     var whitespace: String = '';
                     while (this.pos < this.text.length) {
-                        var subStrStart: int = this.pos;
+                        var tokenTextStart: int = this.pos;
 
                         this.pos = this.eatWhileNot(
                             this.pos,
@@ -411,25 +434,26 @@ package editor.Lang.Tokenize {
                             Symbols.Backslash
                         );
 
-                        if (subStrStart < this.pos) {
+                        if (tokenTextStart < this.pos) {
                             if (whitespace.length > 0) {
-                                this.tokenText += whitespace + this.text.substring(subStrStart, this.pos);
+                                this.tokenText += whitespace + this.text.substring(tokenTextStart, this.pos);
                                 whitespace = '';
                             }
                             else {
-                                this.tokenText += this.text.substring(subStrStart, this.pos);
+                                this.tokenText += this.text.substring(tokenTextStart, this.pos);
                             }
-                        }
 
-                        this.lineEnd = this.lineNum;
-                        this.colEnd = this.pos - this.offset;
-                        this.offsetEnd = this.pos;
+                            // Only update position information when adding to token text
+                            this.lineEnd = this.lineNum;
+                            this.colEnd = this.pos - this.offset;
+                            this.offsetEnd = this.pos;
+                        }
 
                         var char: String = this.text.charAt(this.pos);
                         if (char === Symbols.Backslash) {
-                            this.tokenText += this.text.charAt(this.pos + 1);
-                            this.pos += 2;
-                            this.offset = this.pos;
+                            // Add escaped character
+                            this.tokenText += this.text.charAt(++this.pos);
+                            ++this.pos;
                         }
                         else if (char === Symbols.Newline) {
                             this.lineNum++;
