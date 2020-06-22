@@ -168,8 +168,12 @@ package editor.Lang.Parse {
                 while (token !== TokenType.EOS) {
                     if (token === TokenType.Text) {
                         var text: String = this.tokenizer.getText();
+                        var firstChar: int = text.charCodeAt(0);
+                        var hasLeadingWhitespace: Boolean = (firstChar >= 9 && firstChar <= 13) || firstChar === 32;
+                        var lastChar: int = text.charCodeAt(text.length - 1);
+                        var hasTrailingWhitespace: Boolean = (lastChar >= 9 && lastChar <= 13) || lastChar === 32;
                         var maybeNum: Number = Number(text);
-                        var isNumber: Boolean = text.length > 0 && !isNaN(maybeNum);
+                        var isNumber: Boolean = text.length > 0 && !hasLeadingWhitespace && !hasTrailingWhitespace && !isNaN(maybeNum);
 
                         concat.push(new Node(
                             isNumber ? NodeType.Number : NodeType.String,
