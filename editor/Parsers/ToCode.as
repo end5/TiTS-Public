@@ -1,4 +1,4 @@
-package editor.Game.CodeMap {
+package editor.Parsers {
     import editor.Lang.Codify.CodeNode;
 
     public class ToCode {

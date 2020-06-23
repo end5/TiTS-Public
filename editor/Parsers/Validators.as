@@ -1,4 +1,4 @@
-package editor.Game.Info {
+package editor.Parsers {
     public class Validators {
         public static const ARGS: String = 'argument';
         public static const RESS: String = 'result';

@@ -1,4 +1,6 @@
-package editor.Game.Wrapper {
+package editor.Parsers.Functional.Wrapper {
+    import editor.Game.Wrapper.ObjectAccessor;
+
     /**
      * This is used to limit the interpreter's access
      * AraKei creature has a getDesc override

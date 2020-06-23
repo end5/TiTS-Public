@@ -1,5 +1,6 @@
-package editor.Game.Info {
+package editor.Parsers.Functional.Info {
     import classes.TiTS;
+    import editor.Game.Info.Validators;
 
     /**
      * This is used to limit the interpreter's access
@@ -47,12 +48,6 @@ package editor.Game.Info {
         }
 
         public const rand: Function = hasAtLeastOneArg;
-
-        public function flagIs(args: Array, results: int): String {
-            var err: String = Validators.minLength(args.length, 1, Validators.ARGS);
-            if (!err) err = Validators.checkRange(args.length - 1, results);
-            return err;
-        }
 
         public function get target(): CreatureInfo {
             if (this.game.target == null) return null;
@@ -171,12 +166,5 @@ package editor.Game.Info {
         public function get vahn(): CreatureInfo { return this.charDesc["VAHN"]; }
         public function get bianca(): CreatureInfo { return this.charDesc["BIANCA"]; }
         public function get synphia(): CreatureInfo { return this.charDesc["SYNPHIA"]; }
-
-        public const hourIs: Function = Validators.range;
-        public const hourRange: Function = Validators.range;
-        public const dayIs: Function = Validators.range;
-        public const dayRange: Function = Validators.range;
-        public const minuteIs: Function = Validators.range;
-        public const minuteRange: Function = Validators.range;
     }
 }

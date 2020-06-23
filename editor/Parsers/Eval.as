@@ -1,4 +1,4 @@
-package editor.Game.Wrapper {
+package editor.Parsers {
     public class Eval {
         public static function range(value: Number, args: Array): Number {
             for (var idx: int = 0; idx < args.length; idx++) {

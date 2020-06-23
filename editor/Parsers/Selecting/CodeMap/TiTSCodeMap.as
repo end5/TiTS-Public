@@ -1,6 +1,6 @@
-package editor.Game.CodeMap {
+package editor.Parsers.Selecting.CodeMap {
     import classes.TiTS;
-    import editor.Lang.Codify.CodeNode;
+    import editor.Parsers.ToCode;
 
     /**
      * This is used to limit the interpreter's access
@@ -28,40 +28,28 @@ package editor.Game.CodeMap {
                     this.charDesc[charKey] = new CreatureCodeMap();
         }
 
-        // New Parsers
-        private function htmlTag(tag: String, args: Array): Array {
-            var code: Array = [new CodeNode(CodeNode.Text, '<' + tag + '>')];
-            for each (var child: * in args[0]) {
-                code.push(child);
-            }
-            code.push(new CodeNode(CodeNode.Text, '</' + tag + '>'));
-            return code;
+        public function hourIs(identifier: String, args: Array, results: Array): Array {
+            return ToCode.equals('hours', args, results);
         }
 
-        public function i(identifier: String, args: Array, results: Array): Array {
-            return htmlTag('i', args);
+        public function hourRange(identifier: String, args: Array, results: Array): Array {
+            return ToCode.range('hours', args, results);
         }
 
-        public function b(identifier: String, args: Array, results: Array): Array {
-            return htmlTag('b', args);
+        public function dayIs(identifier: String, args: Array, results: Array): Array {
+            return ToCode.equals('days', args, results);
         }
 
-        public function cap(identifier: String, args: Array, results: Array): Array {
-            return [];
-            // return results[0].charAt(0).toLocaleUpperCase() + args[0].slice(1);
+        public function dayRange(identifier: String, args: Array, results: Array): Array {
+            return ToCode.range('days', args, results);
         }
 
-        public function rand(identifier: String, args: Array, results: Array): Array {
-            var code: CodeNode = new CodeNode(CodeNode.Code, 'switch(rand(' + args.length + '))', []);
-            for (var idx: int = 0; idx < args.length; idx++) {
-                var caseNode: CodeNode = new CodeNode(CodeNode.Code, 'case ' + idx + ':', []);
-                for each (var child: * in args[idx]) {
-                    caseNode.body.push(child);
-                }
-                caseNode.body.push(new CodeNode(CodeNode.Code, 'break;'));
-                code.body.push(caseNode);
-            }
-            return [code];
+        public function minuteIs(identifier: String, args: Array, results: Array): Array {
+            return ToCode.equals('minutes', args, results);
+        }
+
+        public function minuteRange(identifier: String, args: Array, results: Array): Array {
+            return ToCode.range('minutes', args, results);
         }
 
         public function silly(identifier: String, args: Array, results: Array): Array {
@@ -76,7 +64,6 @@ package editor.Game.CodeMap {
             return ToCode.equals('flags[' + args[0] + ']', args.slice(1), results);
         }
 
-        // From TiTS / Old Parsers
         public function get target(): CreatureCodeMap {
             if (this.game.target == null) return null;
             return this.targetDesc;
@@ -195,29 +182,5 @@ package editor.Game.CodeMap {
         public function get bianca(): CreatureCodeMap { return this.charDesc["BIANCA"]; }
         public function get synphia(): CreatureCodeMap { return this.charDesc["SYNPHIA"]; }
 
-        // New Parsers
-        public function hourIs(identifier: String, args: Array, results: Array): Array {
-            return ToCode.equals('hours', args, results);
-        }
-
-        public function hourRange(identifier: String, args: Array, results: Array): Array {
-            return ToCode.range('hours', args, results);
-        }
-
-        public function dayIs(identifier: String, args: Array, results: Array): Array {
-            return ToCode.equals('days', args, results);
-        }
-
-        public function dayRange(identifier: String, args: Array, results: Array): Array {
-            return ToCode.range('days', args, results);
-        }
-
-        public function minuteIs(identifier: String, args: Array, results: Array): Array {
-            return ToCode.equals('minutes', args, results);
-        }
-
-        public function minuteRange(identifier: String, args: Array, results: Array): Array {
-            return ToCode.range('minutes', args, results);
-        }
     }
 }

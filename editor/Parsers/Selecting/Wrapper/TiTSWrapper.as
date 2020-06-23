@@ -1,5 +1,7 @@
-package editor.Game.Wrapper {
+package editor.Parsers.Selecting.Wrapper {
     import classes.TiTS;
+    import editor.Parsers.ObjectAccessor;
+    import editor.Parsers.Eval;
 
     /**
      * This is used to limit the interpreter's access
@@ -24,47 +26,36 @@ package editor.Game.Wrapper {
             var descConstructor: *;
             for (var charKey: String in this.game.chars) {
                 if (this.game.chars[charKey]) {
-                    switch (charKey) {
-                        case "ARAKEI":
-                            descConstructor = AraKeiWrapper;
-                            break;
-
-                        default:
-                            descConstructor = CreatureWrapper;
-                    }
-                    this.charDesc[charKey] = new descConstructor(new ObjectAccessor(this.game, "chars", charKey));
+                    this.charDesc[charKey] = new CreatureWrapper(new ObjectAccessor(this.game, "chars", charKey));
                 }
             }
         }
 
         // New Parsers
-        /**
-         * Wraps a HTML tag around text
-         * @param tag
-         * @param text
-         * @return
-         */
-        private function htmlTagText(tag: String, text: String): String {
-            return "<" + tag + ">" + text + "</" + tag + ">";
+        public function hourIs(... args): Number {
+            return Eval.equals(this.game.hours, args);
         }
 
-        public function i(str: String): String {
-            return htmlTagText('i', str);
+        public function hourRange(... args): Number {
+            return Eval.range(this.game.hours, args);
         }
 
-        public function b(str: String): String {
-            return htmlTagText('b', str);
+        public function dayIs(... args): Number {
+            return Eval.equals(this.game.days, args);
         }
 
-        public function cap(str: String): String {
-            return str.charAt(0).toLocaleUpperCase() + str.slice(1);
+        public function dayRange(... args): Number {
+            return Eval.range(this.game.days, args);
         }
 
-        public function rand(... strs): String {
-            return strs[Math.floor(Math.random() * strs.length)];
+        public function minuteIs(... args): Number {
+            return Eval.equals(this.game.minutes, args);
         }
 
-        // From TiTS / Old Parsers
+        public function minuteRange(... args): Number {
+            return Eval.range(this.game.minutes, args);
+        }
+
         public function get silly(): Boolean {
             if (this.game.gameOptions)
                 return !!this.game.gameOptions.sillyMode;
@@ -151,7 +142,7 @@ package editor.Game.Wrapper {
         public function get busky(): CreatureWrapper { return this.charDesc["BUSKY"]; }
         public function get kally(): CreatureWrapper { return this.charDesc["KALLY"]; }
         public function get pexiga(): CreatureWrapper { return this.charDesc["PEXIGA"]; }
-        public function get ara(): AraKeiWrapper { return this.charDesc["ARAKEI"]; }
+        public function get ara(): CreatureWrapper { return this.charDesc["ARAKEI"]; }
         public function get gwen(): CreatureWrapper { return this.charDesc["GWEN"]; }
         public function get bea(): CreatureWrapper { return this.charDesc["BEA"]; }
         public function get kazra(): CreatureWrapper { return this.charDesc["KAZRA"]; }
@@ -199,29 +190,5 @@ package editor.Game.Wrapper {
         public function get bianca(): CreatureWrapper { return this.charDesc["BIANCA"]; }
         public function get synphia(): CreatureWrapper { return this.charDesc["SYNPHIA"]; }
 
-        // New Parsers
-        public function hourIs(... args): Number {
-            return Eval.equals(this.game.hours, args);
-        }
-
-        public function hourRange(... args): Number {
-            return Eval.range(this.game.hours, args);
-        }
-
-        public function dayIs(... args): Number {
-            return Eval.equals(this.game.days, args);
-        }
-
-        public function dayRange(... args): Number {
-            return Eval.range(this.game.days, args);
-        }
-
-        public function minuteIs(... args): Number {
-            return Eval.equals(this.game.minutes, args);
-        }
-
-        public function minuteRange(... args): Number {
-            return Eval.range(this.game.minutes, args);
-        }
     }
 }

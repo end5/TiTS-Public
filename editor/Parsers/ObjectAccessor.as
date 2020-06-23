@@ -1,4 +1,4 @@
-package editor.Game.Wrapper {
+package editor.Parsers {
     /**
      * Stores Object and key in case Object[key] gets changed
      */
