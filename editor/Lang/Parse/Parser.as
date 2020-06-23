@@ -87,12 +87,6 @@ package editor.Lang.Parse {
             // Token is "["
             var token: int = this.tokenizer.advance();
 
-            var query: Boolean = false;
-            if (token === TokenType.QuestionMark) {
-                token = this.tokenizer.advance();
-                query = true;
-            }
-
             const identityArr: Array = [];
 
             // This section reads alternating Text and "."
@@ -146,7 +140,7 @@ package editor.Lang.Parse {
                     identityArr[identityArr.length - 1].range.end
                 ),
                 identityArr,
-                query
+                false
             );
 
             const argsArr: Array = [];
@@ -255,6 +249,9 @@ package editor.Lang.Parse {
 
             if (token === TokenType.ResultsStart) {
                 token = this.tokenizer.advance();
+
+                // Set retrieve to check in 2nd object
+                retrieve.value = true;
 
                 concat = [];
 

@@ -176,7 +176,7 @@ package editor.Testing {
                             [
                                 new Node(NodeType.Identity, offsetRange(1, 2), null, 'a')
                             ],
-                            false
+                            true
                         ),
                         new Node(NodeType.Args, offsetRange(2, 2), [], null),
                         new Node(NodeType.Results, offsetRange(2, 6),
@@ -199,7 +199,7 @@ package editor.Testing {
                             [
                                 new Node(NodeType.Identity, offsetRange(1, 2), null, 'a')
                             ],
-                            false
+                            true
                         ),
                         new Node(NodeType.Args, offsetRange(2, 2), [], null),
                         new Node(NodeType.Results, offsetRange(2, 9),
@@ -263,7 +263,7 @@ package editor.Testing {
                             [
                                 new Node(NodeType.Identity, offsetRange(1, 2), null, 'a')
                             ],
-                            false
+                            true
                         ),
                         new Node(NodeType.Args, offsetRange(2, 5),
                             [
@@ -290,7 +290,7 @@ package editor.Testing {
                             [
                                 new Node(NodeType.Identity, range(1,0,2, 1,1,3), null, 'a')
                             ],
-                            false
+                            true
                         ),
                         new Node(NodeType.Args, range(1,1,3, 3,0,6),
                             [
