@@ -44,8 +44,8 @@ package editor.Testing {
             text += new TokenizerTests().run();
             text += new ParserTests().run();
             text += new InterpreterTests().run();
-            text += new CodifierTests().run();
-            text += new CodeFormatterTests().run();
+            text += new CodeTranslatorTests().run();
+            text += new CodePrinterTests().run();
 
             outputBox.text = text;
         }

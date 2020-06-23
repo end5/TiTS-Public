@@ -1,15 +1,13 @@
 package editor.Testing {
     import editor.Lang.Codify.CodeNode;
-    import editor.Lang.Codify.CodeFormatter;
+    import editor.Lang.Codify.CodePrinter;
 
-    public class CodeFormatterTests implements ITests {
+    public class CodePrinterTests implements ITests {
 
         private function match(body: Array, testText: String): String {
-            var formatter: CodeFormatter = new CodeFormatter('outputText');
+            var printer: CodePrinter = new CodePrinter('outputText');
 
-            formatter.interpret(body);
-
-            var compResult: String = formatter.result;
+            var compResult: String = printer.print(body);
 
             if (testText !== compResult) return TestUtils.failed('text', testText, compResult);
 
@@ -22,7 +20,7 @@ package editor.Testing {
 
         private var out: String = '';
         public function run(): String {
-            out = 'Codifier\n';
+            out = 'CodeTranslator\n';
 
             test('Text - "asdf"', 
                 [

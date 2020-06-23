@@ -1,5 +1,5 @@
 package editor.Testing {
-    import editor.Lang.Codify.Codifier;
+    import editor.Lang.Codify.CodeTranslator;
     import editor.Lang.Parse.Node;
     import editor.Lang.Errors.LangError;
     import editor.Lang.Codify.CodeNode;
@@ -7,7 +7,7 @@ package editor.Testing {
     import editor.Lang.TextRange;
     import editor.Lang.TextPosition;
 
-    public class CodifierTests implements ITests {
+    public class CodeTranslatorTests implements ITests {
         private function compareNodes(node1: CodeNode, node2: CodeNode): Array {
             var out: Array = [];
     
@@ -27,12 +27,10 @@ package editor.Testing {
         }
 
         private function match(root: Node, global: Object, testCodeNodes: Array, testErrors: Array): String {
-            var codifier: Codifier = new Codifier(global, global);
-
-            codifier.interpret(root);
+            var codifier: CodeTranslator = new CodeTranslator(global, global);
 
             const testSearch: Array = testCodeNodes.concat();
-            const compSearch: Array = codifier.result.concat();
+            const compSearch: Array = codifier.translate(root);
 
             var testNode: CodeNode;
             var compNode: CodeNode;
@@ -100,7 +98,7 @@ package editor.Testing {
 
         private var out: String = '';
         public function run(): String {
-            out = 'Codifier\n';
+            out = 'CodeTranslator\n';
 
             test('Text - "asdf"', new Node(NodeType.Text, offsetRange(0, 4), null, 'asdf'), {}, [new CodeNode(CodeNode.Text, 'asdf')], []);
             

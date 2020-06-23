@@ -4,14 +4,14 @@ package editor.Lang.Codify {
     import editor.Lang.Parse.Node;
     import editor.Lang.Parse.NodeType;
 
-    public class Codifier {
+    public class CodeTranslator {
         private const escapePairs: Array = [[/\n/g, '\\n'], [/'/g, '\\\''], [/"/g, '\\"']];
         public var errors: Vector.<LangError>;
         public var result: Array;
         private var oldCodeMap: Object;
         private var newCodeMap: Object;
 
-        public function Codifier(oldCodeMap: Object, newCodeMap: Object) {
+        public function CodeTranslator(oldCodeMap: Object, newCodeMap: Object) {
             this.oldCodeMap = oldCodeMap;
             this.newCodeMap = newCodeMap;
         }
@@ -24,7 +24,7 @@ package editor.Lang.Codify {
             return escapedText;
         }
 
-        public function interpret(node: Node): void {
+        public function translate(node: Node): Array {
             this.errors = new Vector.<LangError>();
             var output: Array;
             try {
@@ -32,11 +32,10 @@ package editor.Lang.Codify {
             }
             catch (err: Error) {
                 errors.push(new LangError(node.range, err + '\n' + err.getStackTrace()));
-                this.result = [new CodeNode(CodeNode.Text, '')];
-                return;
+                return [new CodeNode(CodeNode.Text, '')];
             }
 
-            this.result = output;
+            return output;
         }
 
         private function processNode(node: Node): Array {

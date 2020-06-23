@@ -1,18 +1,17 @@
 package editor.Lang.Codify {
-    public class CodeFormatter {
+    public class CodePrinter {
         private static const INDENT: String = '    ';
 
-        public var result: String;
         private var indentAmt: int = 0;
         private var outFuncName: String;
 
-        public function CodeFormatter(outputFuncName: String): void {
+        public function CodePrinter(outputFuncName: String): void {
             this.outFuncName = outputFuncName;
         }
 
-        public function interpret(body: Array): void {
+        public function print(body: Array): String {
             this.indentAmt = 0;
-            this.result = this.processBody(body);
+            return this.processBody(body);
         }
 
         private function indent(): String {
