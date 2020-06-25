@@ -1,98 +1,105 @@
 package editor {
     import classes.TiTS;
+    import editor.Lang.Codify.CodePrinter;
+    import editor.Lang.Codify.CodeNode;
+    import editor.Lang.Codify.CodeTranslator;
     import editor.Lang.Errors.LangError;
-    import editor.Lang.Interpret.Codifier;
     import editor.Lang.Interpret.Interpreter;
     import editor.Lang.Parse.Node;
     import editor.Lang.Parse.NodeType;
     import editor.Lang.Parse.Parser;
     import editor.Lang.Tokenize.Tokenizer;
     import editor.Lang.Tokenize.TokenType;
-    // import editor.Parsers.Normal.CodeMap.TiTSCodeMap;
-    // import editor.Parsers.Normal.Info.TiTSInfo;
-    // import editor.Parsers.Normal.Wrapper.TiTSWrapper;
-    // import editor.Parsers.Query.CodeMap.TiTSCodeMap;
-    // import editor.Parsers.Query.Info.TiTSInfo;
-    // import editor.Parsers.Query.Wrapper.TiTSWrapper;
-    import editor.Game.Wrapper.TiTSWrapper;
-    import editor.Game.Info.TiTSInfo;
-    import editor.Game.CodeMap.TiTSCodeMap;
+    import editor.Parsers.Functional.CodeMap.TiTSCodeMap;
+    import editor.Parsers.Functional.Info.TiTSInfo;
+    import editor.Parsers.Functional.Wrapper.TiTSWrapper;
+    import editor.Parsers.Selecting.CodeMap.TiTSCodeMap;
+    import editor.Parsers.Selecting.Info.TiTSInfo;
+    import editor.Parsers.Selecting.Wrapper.TiTSWrapper;
 
     public class Evaluator {
         private const parser: Parser = new Parser();
         private var interpreter: Interpreter;
-        private var codifier: Codifier;
+        private var codeTranslator: CodeTranslator;
+        private var codePrinter: CodePrinter;
 
         private var errors: Vector.<LangError>;
 
         private var root: Node;
         private var result: String;
         private var ranges: Array;
+        private var codeBody: Array;
         private var code: String;
 
         public var debugActive: Boolean = false;
         private var debugStr: String;
         private var parserDuration: Number;
         private var interpreterDuration: Number;
-        private var codifierDuration: Number;
+        private var codeTranslatorDuration: Number;
+        private var codePrinterDuration: Number;
 
         private var tits: TiTS;
 
-        private var oldParsersWrapper: Object;
-        private var oldParsersInfo: Object;
-        private var oldParsersCodeMap: Object;
+        private var functionalParsersWrapper: Object;
+        private var functionalParsersInfo: Object;
+        private var functionalParsersCodeMap: Object;
 
-        private var newParsersWrapper: Object;
-        private var newParsersInfo: Object;
-        private var newParsersCodeMap: Object;
+        private var selectionParsersWrapper: Object;
+        private var selectionParsersInfo: Object;
+        private var selectionParsersCodeMap: Object;
 
         public function Evaluator(globalObj: Object, infoObj: Object, codeMapObj: Object, tits: TiTS) {
             this.tits = tits;
 
-            // this.oldParsersWrapper = new editor.Parsers.Normal.Wrapper.TiTSWrapper(tits);
-            // this.oldParsersInfo = new editor.Parsers.Normal.Info.TiTSInfo(tits);
-            // this.oldParsersCodeMap = new editor.Parsers.Normal.CodeMap.TiTSCodeMap(tits);
+            this.functionalParsersWrapper = new editor.Parsers.Functional.Wrapper.TiTSWrapper(tits);
+            this.functionalParsersInfo = new editor.Parsers.Functional.Info.TiTSInfo(tits);
+            this.functionalParsersCodeMap = new editor.Parsers.Functional.CodeMap.TiTSCodeMap(tits);
 
-            // this.newParsersWrapper = new editor.Parsers.Query.Wrapper.TiTSWrapper(tits);
-            // this.newParsersInfo = new editor.Parsers.Query.Info.TiTSInfo(tits);
-            // this.newParsersCodeMap = new editor.Parsers.Query.CodeMap.TiTSCodeMap(tits);
+            this.selectionParsersWrapper = new editor.Parsers.Selecting.Wrapper.TiTSWrapper(tits);
+            this.selectionParsersInfo = new editor.Parsers.Selecting.Info.TiTSInfo(tits);
+            this.selectionParsersCodeMap = new editor.Parsers.Selecting.CodeMap.TiTSCodeMap(tits);
 
-            this.oldParsersWrapper = new editor.Game.Wrapper.TiTSWrapper(tits);
-            this.oldParsersInfo = new editor.Game.Info.TiTSInfo(tits);
-            this.oldParsersCodeMap = new editor.Game.CodeMap.TiTSCodeMap(tits);
-
-            this.newParsersWrapper = this.oldParsersWrapper;
-            this.newParsersInfo = this.oldParsersInfo;
-            this.newParsersCodeMap = this.oldParsersCodeMap;
-
-            interpreter = new Interpreter(oldParsersWrapper, oldParsersInfo, newParsersWrapper, newParsersInfo);
-            codifier = new Codifier(oldParsersCodeMap, newParsersCodeMap);
+            interpreter = new Interpreter(functionalParsersWrapper, functionalParsersInfo, selectionParsersWrapper, selectionParsersInfo);
+            codeTranslator = new CodeTranslator(functionalParsersCodeMap, selectionParsersCodeMap);
+            codePrinter = new CodePrinter('outputText');
         }
 
         public function eval(text: String): void {
-            this.parserDuration = new Date().time;
+            // Parse input text to Lang AST
+            if (this.debugActive) this.parserDuration = new Date().time;
             this.parser.parse(text);
-            this.parserDuration = new Date().time - this.parserDuration;
+            if (this.debugActive) this.parserDuration = new Date().time - this.parserDuration;
 
             this.root = this.parser.root;
             this.errors = this.parser.errors;
 
-            this.interpreterDuration = new Date().time;
+            // Interpret Lang AST to output text and ranges
+            if (this.debugActive) this.interpreterDuration = new Date().time;
             this.interpreter.interpret(this.root);
-            this.interpreterDuration = new Date().time - this.interpreterDuration;
+            if (this.debugActive) this.interpreterDuration = new Date().time - this.interpreterDuration;
 
-            this.codifierDuration = new Date().time;
-            this.codifier.interpret(this.root);
-            this.codifierDuration = new Date().time - this.codifierDuration;
-
-            // Results
             this.result = this.interpreter.result;
             this.ranges = this.interpreter.ranges;
-            this.code = this.codifier.result;
 
-            this.errors = this.errors.concat(this.interpreter.errors, this.codifier.errors);
+            // Convert Lang AST to Code AST
+            if (this.debugActive) this.codeTranslatorDuration = new Date().time;
+            const codeBody: Array = this.codeTranslator.translate(this.root);
+            if (this.debugActive) this.codeTranslatorDuration = new Date().time - this.codeTranslatorDuration;
 
-            this.debugStr = (!this.debugActive ? 'Debug is not active' : (timing(text) + debugLexer(text) + debugParser() + debugRanges()));
+            this.codeBody = codeBody;
+
+            // Interpret Code AST to code 
+            if (this.debugActive) this.codePrinterDuration = new Date().time;
+            const code: String = this.codePrinter.print(this.codeBody);
+            if (this.debugActive) this.codePrinterDuration = new Date().time - this.codePrinterDuration;
+
+            this.code = code;
+
+            // Combine errors
+            this.errors = this.errors.concat(this.interpreter.errors, this.codeTranslator.errors);
+
+            // Debug text
+            this.debugStr = (!this.debugActive ? 'Debug is not active' : (timing(text) + resultInfo(text)));
         }
 
         public function outputText(): String {
@@ -128,9 +135,11 @@ package editor {
             outText += '\n|   Tokenizer: ' + (end - start) + 'ms';
             outText += '\n|   Parser: ' + this.parserDuration + 'ms';
             outText += '\n|   Interpret: ' + this.interpreterDuration + 'ms';
-            outText += '\n|   Codifier: ' + this.codifierDuration + 'ms';
+            outText += '\n|   Code Translator: ' + this.codeTranslatorDuration + 'ms';
+            outText += '\n|   Code Printer: ' + this.codePrinterDuration + 'ms';
             outText += '\n|   ------------------';
-            outText += '\n|   Total: ' + (this.parserDuration + this.interpreterDuration) + 'ms';
+            outText += '\n|   Parser + Interpreter: ' + (this.parserDuration + this.interpreterDuration) + 'ms';
+            outText += '\n|   Code Translator + Printer: ' + (this.codeTranslatorDuration + this.codePrinterDuration) + 'ms';
 
             start = new Date().time;
 
@@ -143,7 +152,7 @@ package editor {
             return outText + '\n';
         }
 
-        private function debugLexer(text: String): String {
+        private function resultInfo(text: String): String {
             const tokenizer: Tokenizer = new Tokenizer(text);
 
             var log: String = '| -- Tokenizer';
@@ -157,15 +166,11 @@ package editor {
                 token = tokenizer.advance();
             }
 
+            log += '\n| -- Parser' + printNode(this.root);
+            log += '\n| -- Ranges' + '\n| ' + this.ranges;
+            log += '\n| -- Code Body' + '\n| ' + this.printCodeNode(this.codeBody);
+
             return log;
-        }
-
-        private function debugParser(): String {
-            return '\n| -- Parser' + printNode(this.root);
-        }
-
-        private function debugRanges(): String {
-            return '\n| -- Ranges' + '\n| ' + this.ranges;
         }
 
         public function debugText(): String {
@@ -199,6 +204,36 @@ package editor {
                 if (node.children != null)
                     for (var idx: int = node.children.length - 1; idx >= 0; idx--) {
                         nodeStack.push(node.children[idx]);
+                        indentStack.push(indent + 1);
+                    }
+            }
+            return outText;
+        }
+
+        private function printCodeNode(root: Array): String {
+            var nodeStack: Array = root.concat().reverse();
+            var indentStack: Array = [0];
+
+            var outText: String = '';
+
+            var indent: int;
+            var node: CodeNode;
+            while (nodeStack.length > 0) {
+                node = nodeStack.pop();
+                indent = indentStack.pop();
+
+                outText += '\n| ';
+                for (var count: int = 0; count < indent; count++)
+                    outText += '  ';
+
+                outText += CodeNode.Names[node.type];
+
+                if (node.value != null)
+                    outText += ' "' + node.value + '"';
+
+                if (node.body != null)
+                    for (var idx: int = node.body.length - 1; idx >= 0; idx--) {
+                        nodeStack.push(node.body[idx]);
                         indentStack.push(indent + 1);
                     }
             }
