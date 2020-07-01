@@ -32,7 +32,7 @@ package editor.Parsers.Selecting.Wrapper {
         }
 
         // New Parsers
-        public function hourIs(... args): Number {
+        public function hour(... args): Number {
             return Eval.equals(this.game.hours, args);
         }
 
@@ -40,7 +40,7 @@ package editor.Parsers.Selecting.Wrapper {
             return Eval.range(this.game.hours, args);
         }
 
-        public function dayIs(... args): Number {
+        public function day(... args): Number {
             return Eval.equals(this.game.days, args);
         }
 
@@ -48,7 +48,7 @@ package editor.Parsers.Selecting.Wrapper {
             return Eval.range(this.game.days, args);
         }
 
-        public function minuteIs(... args): Number {
+        public function minute(... args): Number {
             return Eval.equals(this.game.minutes, args);
         }
 
@@ -68,7 +68,7 @@ package editor.Parsers.Selecting.Wrapper {
             return false;
         }
 
-        public function flagIs(name: String, ... args): Number {
+        public function flag(name: String, ... args): Number {
             return Eval.equals(this.game.flags[name], args);
         }
 

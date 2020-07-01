@@ -28,40 +28,41 @@ package editor.Parsers.Selecting.CodeMap {
                     this.charDesc[charKey] = new CreatureCodeMap();
         }
 
-        public function hourIs(identifier: String, args: Array, results: Array): Array {
-            return ToCode.equals('hours', args, results);
+        public function hour(identities: Array, args: Array, results: Array): Array {
+            return ToCode.ifElseChain(ToCode.equalsConditions('hours', ToCode.getArgValues(args)), results);
         }
 
-        public function hourRange(identifier: String, args: Array, results: Array): Array {
-            return ToCode.range('hours', args, results);
+        public function hourRange(identities: Array, args: Array, results: Array): Array {
+            return ToCode.ifElseChain(ToCode.rangeConditions('hours', ToCode.getArgValues(args)), results);
         }
 
-        public function dayIs(identifier: String, args: Array, results: Array): Array {
-            return ToCode.equals('days', args, results);
+        public function day(identities: Array, args: Array, results: Array): Array {
+            return ToCode.ifElseChain(ToCode.equalsConditions('days', ToCode.getArgValues(args)), results);
         }
 
-        public function dayRange(identifier: String, args: Array, results: Array): Array {
-            return ToCode.range('days', args, results);
+        public function dayRange(identities: Array, args: Array, results: Array): Array {
+            return ToCode.ifElseChain(ToCode.rangeConditions('days', ToCode.getArgValues(args)), results);
         }
 
-        public function minuteIs(identifier: String, args: Array, results: Array): Array {
-            return ToCode.equals('minutes', args, results);
+        public function minute(identities: Array, args: Array, results: Array): Array {
+            return ToCode.ifElseChain(ToCode.equalsConditions('minutes', ToCode.getArgValues(args)), results);
         }
 
-        public function minuteRange(identifier: String, args: Array, results: Array): Array {
-            return ToCode.range('minutes', args, results);
+        public function minuteRange(identities: Array, args: Array, results: Array): Array {
+            return ToCode.ifElseChain(ToCode.rangeConditions('minutes', ToCode.getArgValues(args)), results);
         }
 
-        public function silly(identifier: String, args: Array, results: Array): Array {
-            return ToCode.boolean('silly()', results);
+        public function silly(identities: Array, args: Array, results: Array): Array {
+            return ToCode.ifElseChain(['silly()'], results);
         }
 
-        public function easy(identifier: String, args: Array, results: Array): Array {
-            return ToCode.boolean('easy()', results);
+        public function easy(identities: Array, args: Array, results: Array): Array {
+            return ToCode.ifElseChain(['easy()'], results);
         }
 
-        public function flagIs(identifier: String, args: Array, results: Array): Array {
-            return ToCode.equals('flags[' + args[0] + ']', args.slice(1), results);
+        public function flag(identities: Array, args: Array, results: Array): Array {
+            const argValues: Array = ToCode.getArgValues(args);
+            return ToCode.ifElseChain(ToCode.equalsConditions('flags[' + argValues[0] + ']', argValues.slice(1)), results);
         }
 
         public function get target(): CreatureCodeMap {

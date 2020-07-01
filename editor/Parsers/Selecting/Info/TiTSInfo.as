@@ -30,14 +30,14 @@ package editor.Parsers.Selecting.Info {
             }
         }
 
-        public const hourIs: Function = Validators.range;
+        public const hour: Function = Validators.range;
         public const hourRange: Function = Validators.range;
-        public const dayIs: Function = Validators.range;
+        public const day: Function = Validators.range;
         public const dayRange: Function = Validators.range;
-        public const minuteIs: Function = Validators.range;
+        public const minute: Function = Validators.range;
         public const minuteRange: Function = Validators.range;
 
-        public function flagIs(args: Array, results: int): String {
+        public function flag(args: Array, results: int): String {
             var err: String = Validators.minLength(args.length, 1, Validators.ARGS);
             if (!err) err = Validators.checkRange(args.length - 1, results);
             return err;

@@ -16,6 +16,18 @@ package editor.Parsers {
             return newText + text.substring(start);
         }
 
+        public static function combineIdentities(list: Array): String {
+            return list.map(getValue).join('.');
+        }
+
+        public static function getFirstArgValue(nodes: *, idx: int, arr: Array): String {
+            return nodes[0].value;
+        }
+
+        public static function getArgValues(args: Array): Array {
+            return args.map(getFirstArgValue);
+        }
+
         public static function oldParser(identities: Array, args: Array, results: Array): Array {
             var text: String = '[' + combineIdentities(identities);
             if (args.length > 0)
@@ -24,107 +36,130 @@ package editor.Parsers {
             return [new CodeNode(CodeNode.Text, text)];
         }
 
-        private static function rangeCondition(idx: int, identifier: String, args: Array, results: Array): String {
-            return args[idx] + ' <= ' + identifier + (idx < args.length - 1 ? ' && ' + identifier + ' < ' + args[idx + 1] : '');
-        }
-
-        private static function equalsCondition(idx: int, identifier: String, args: Array, results: Array): String {
-            return identifier + ' == ' + args[idx];
-        }
-
-        private static function callCondition(idx: int, identifier: String, args: Array, results: Array): String {
-            return identifier + '( ' + args[idx] + ')';
-        }
-
-        public static function range(identifier: String, args: Array, results: Array): Array {
-            return chain(rangeCondition, identifier, args, results);
-        }
-
-        public static function equals(identifier: String, args: Array, results: Array): Array {
-            return chain(equalsCondition, identifier, args, results);
-        }
-
-        public static function callRange(identifier: String, args: Array, results: Array): Array {
-            return chain(callCondition, identifier, args, results);
-        }
-
-        private static function chain(conditionFunc: Function, identifier: String, args: Array, results: Array): Array {
-            // var code: String = "";
-            var argsLen: int = args.length;
-            var counter: int = 0;
-            var stored: String = '';
-            var condition: String;
-            var node: CodeNode;
-            var body: Array = [];
-
-            for (var idx: int = 0; idx < results.length; idx++) {
-                condition = conditionFunc(idx, identifier, args.map(getFirstArgValue), results);
-
-                // Skip empty results
-                if (!results[idx]) {
-                    if (stored) stored += ' || ';
-                    stored += condition;
-                    continue;
-                }
-
-                // Every condition after the first
-                if (counter > 0) {
-                    node = new CodeNode(CodeNode.Code, 'else');
-                    body.push(node);
-                    // code += '\nelse ';
-                }
-
-                // Arg with result
-                if (idx < argsLen) {
-                    node = new CodeNode(CodeNode.Code, 'if (' + condition + ')');
-                    body.push(node);
-                    // code += 'if (' + condition + ') ';
-                }
-                // No args with results, not ! args with else-result
-                else if (counter === 0 || stored) {
-                    node = new CodeNode(CodeNode.Code, 'if (!(' + stored + '))');
-                    body.push(node);
-                    // code += 'if (!(' + stored + ')) ';
-                }
-
-                node.body = results[idx];
-                // code += '{\n' +  results[idx] +'\n}';
-                counter++;
-            }
-            return body;
-        }
-
-        public static function boolean(identifier: String, results: Array): Array {
-            if ((results.length === 1 && results[0]) || (results.length > 1 && !results[1]))
-                return [new CodeNode(CodeNode.Code, 'if (' + identifier + ')', results[0])];
-            else if (results.length > 1)
-                if (!results[0])
-                    return [new CodeNode(CodeNode.Code, 'if (!' + identifier + ')', results[1])];
-                else if (results[1])
-                    return [new CodeNode(CodeNode.Code, 'if (' + identifier + ')', results[0]), new CodeNode(CodeNode.Code, 'else', results[1])];
-            return [];
-        }
-
         public static function funcCall(identifier: String, args: Array): String {
             return identifier + '(' + args.map(getFirstArgValue).join(', ') +  ')';
         }
 
-        public static function replaceIdentity(identities: Array, amount: int, ... newIdent): String {
-            // var arr: Array = oldIdent.split('.');
-            // return arr.slice(0, arr.length - amount).concat(newIdent).join('.');
-            return identities.map(getValue).slice(0, identities.length - amount).concat(newIdent).join('.');
+        public static function rangeConditions(identifier: String, args: Array): Array {
+            const conds: Array = [];
+            for (var idx: int = 0; idx < args.length; idx++) {
+                conds.push(args[idx] + ' <= ' + identifier + (idx < args.length - 1 ? ' && ' + identifier + ' < ' + args[idx + 1] : ''));
+            }
+            return conds;
+        }
+
+        public static function equalsConditions(identifier: String, args: Array): Array {
+            const conds: Array = [];
+            for (var idx: int = 0; idx < args.length; idx++) {
+                conds.push(identifier + ' == ' + args[idx]);
+            }
+            return conds;
+        }
+
+        public static function callConditions(identifier: String, args: Array): Array {
+            const conds: Array = [];
+            for (var idx: int = 0; idx < args.length; idx++) {
+                conds.push(identifier + '( ' + args[idx] + ')');
+            }
+            return conds;
+        }
+
+        /**
+         * Creates If-Else chain not or-ing conditions of empty results.
+         * [thing a|b|c|d:1|||2]
+         *   if (thing(a)) { output(1) }
+         *   else if (!(thing(b) || thing(c))) { output(2) }
+         */
+        public static function ifElseChain(conditions: Array, results: Array): Array {
+            var condLen: int = conditions.length;
+            var ifCounter: int = 0;
+            var notConditions: String = '';
+            var condition: String;
+            var node: CodeNode;
+            var body: Array = [];
+            var codeText: String;
+
+            for (var idx: int = 0; idx < results.length; idx++) {
+                condition = idx < condLen ? conditions[idx] : null;
+
+                // Check the current result to see if it is empty.
+                // If previous condition already exists, or ("||") with current condition.
+                // Continue to next condition.
+                if (results[idx].length === 0) {
+                    if (notConditions) notConditions += ' || ';
+                    notConditions += condition;
+                    continue;
+                }
+
+                codeText = '';
+
+                // If an "if" statement has already been added, so add "else " to the code text.
+                if (ifCounter > 0) codeText += 'else ';
+
+                // The current result has an condition at the same index, so add "if" statement using the current condition.
+                if (condition) {
+                    codeText += 'if (' + condition + ')';
+                }
+                // The current result has no argument, so add a "if not" statement using the previous condition(s).
+                else if (ifCounter === 0 || notConditions) {
+                    codeText += 'if (!(' + notConditions + '))';
+                }
+                // The current result has no argument, there are previous "if" statements, and no previous conditions,
+                // so add an "else" statement.
+                else {
+                    codeText = 'else';
+                }
+
+                if (codeText) {
+                    node = new CodeNode(CodeNode.Code, codeText);
+                    body.push(node);
+                }
+
+                node.body = results[idx];
+                ifCounter++;
+            }
+            return body;
+        }
+
+        /**
+         * Creates If-Else chain skipping over conditions of empty results.
+         * Conditions must be the same length as results or they will be ignored.
+         * [thing a|b|c|d:1|||2]
+         *   if (thing(a)) { output(1) }
+         *   else if (thing(d)) { output(2) }
+         */
+        public static function skippingIfElseChain(conditions: Array, results: Array): Array {
+            var condLen: int = conditions.length;
+            var ifCounter: int = 0;
+            var node: CodeNode;
+            var body: Array = [];
+            var codeText: String;
+
+            for (var idx: int = 0; idx < results.length && idx < condLen; idx++) {
+                // Skip current condition, if no result.
+                if (results[idx].length === 0) {
+                    continue;
+                }
+
+                codeText = (ifCounter > 0 ? 'else ' : '') + 'if (' + conditions[idx] + ')';
+
+                if (codeText) {
+                    node = new CodeNode(CodeNode.Code, codeText);
+                    body.push(node);
+                }
+
+                node.body = results[idx];
+                ifCounter++;
+            }
+            return body;
         }
 
         public static function getValue(node: CodeNode, idx: int, arr: Array): String {
             return node.value;
         }
 
-        public static function combineIdentities(list: Array): String {
-            return list.map(getValue).join('.');
-        }
-
-        public static function getFirstArgValue(nodes: *, idx: int, arr: Array): String {
-            return nodes[0].value;
+        public static function getAccessPath(identities: Array): String {
+            return identities.map(getValue).slice(0, identities.length - 1).join('.');
         }
     }
 }

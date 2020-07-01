@@ -45,212 +45,203 @@ package editor.Parsers.Selecting.Wrapper {
 
         // Physical Appearance
         // Femininity
-        public function femIs(... args): int {
-            return Eval.equals(this.owner.femininity, args);
-        }
-
-        public function femRange(... args): int {
+        public function fem(... args): int {
             return Eval.range(this.owner.femininity, args);
         }
 
         // Tallness
-        public function tallnessIs(... args): int {
-            return Eval.equals(this.owner.tallness, args);
-        }
-
-        public function tallnessRange(... args): int {
+        public function tallness(... args): int {
             return Eval.range(this.owner.tallness, args);
         }
 
         // Thickness
-        public function thicknessIs(... args): int {
-            return Eval.equals(this.owner.thickness, args);
-        }
-
-        public function thicknessRange(... args): int {
+        public function thickness(... args): int {
             return Eval.range(this.owner.thickness, args);
         }
 
         // Tone
-        public function toneIs(... args): int {
-            return Eval.equals(this.owner.tone, args);
-        }
-
-        public function toneRange(... args): int {
+        public function tone(... args): int {
             return Eval.range(this.owner.tone, args);
         }
 
         // Hip rating
-        public function hipRatingIs(... args): int {
+        public function hipRating(... args): int {
             return Eval.equals(this.owner.hipRating(), args);
         }
 
         // Butt rating
-        public function buttRatingIs(... args): int {
+        public function buttRating(... args): int {
             return Eval.equals(this.owner.buttRating(), args);
         }
 
         // Body Parts
         // Skin
-        public function skinTypeIs(... args): int {
+        public function skinType(... args): int {
             return Eval.equals(this.owner.skinType, args.map(mapNameToIndex('SKIN_TYPE_NAMES')));
         }
 
-        public function get hasAccentMarkings(): Boolean {
+        public function get accentMarkings(): Boolean {
             return this.owner.hasAccentMarkings();
         }
 
         // Eyes
-        public function eyeTypeIs(... args): int {
+        public function eyeType(... args): int {
             return Eval.equals(this.owner.eyeType, args.map(mapNameToIndex('TYPE_NAMES')));
         }
 
         // Hair
-        public function hairTypeIs(... args): Number {
+        public function hairType(... args): Number {
             return Eval.equals(this.owner.hairType, args.map(mapNameToIndex('HAIR_TYPE_NAMES')));
         }
 
         // Beard
-        public function beardTypeIs(... args): int {
+        public function beardType(... args): int {
             return Eval.equals(this.owner.beardType, args.map(mapNameToIndex('HAIR_TYPE_NAMES')));
         }
 
         // Face
-        public function faceTypeIs(... args): int {
+        public function faceType(... args): int {
             return Eval.equals(this.owner.faceType, args.map(mapNameToIndex('TYPE_NAMES')));
         }
 
-        public function hasFaceFlag(... args): int {
+        public function faceFlag(... args): int {
             return hasFlag(this.owner.faceFlags, args.map(mapNameToIndex('FLAG_NAMES')));
         }
 
-        public function hasFaceFlags(... args): int {
+        public function faceFlags(... args): int {
             return hasFlags(this.owner.faceFlags, args.map(mapNameToIndex('FLAG_NAMES')));
         }
 
         // Tongue
-        public function tongueTypeIs(... args): int {
+        public function tongueType(... args): int {
             return Eval.equals(this.owner.tongueType, args.map(mapNameToIndex('TYPE_NAMES')));
         }
 
-        public function hasTongueFlag(... args): int {
+        public function tongueFlag(... args): int {
             return hasFlag(this.owner.tongueFlags, args.map(mapNameToIndex('FLAG_NAMES')));
         }
 
-        public function hasTongueFlags(... args): int {
+        public function tongueFlags(... args): int {
             return hasFlags(this.owner.tongueFlags, args.map(mapNameToIndex('FLAG_NAMES')));
         }
 
         // Ear
-        public function earTypeIs(... args): int {
+        public function earType(... args): int {
             return Eval.equals(this.owner.earType, args.map(mapNameToIndex('TYPE_NAMES')));
         }
 
-        public function hasEarFlag(... args): int {
+        public function earFlag(... args): int {
             return hasFlag(this.owner.earFlags, args.map(mapNameToIndex('FLAG_NAMES')));
         }
 
-        public function hasEarFlags(... args): int {
+        public function earFlags(... args): int {
             return hasFlags(this.owner.earFlags, args.map(mapNameToIndex('FLAG_NAMES')));
         }
 
         // Antennae
-        public function antennaeTypeIs(... args): int {
+        public function antennaeType(... args): int {
             return Eval.equals(this.owner.antennaeType, args.map(mapNameToIndex('TYPE_NAMES')));
         }
 
         // Horn
-        public function hornTypeIs(... args): int {
+        public function hornType(... args): int {
             return Eval.equals(this.owner.hornType, args.map(mapNameToIndex('TYPE_NAMES')));
         }
 
+        public function get horns(): Boolean {
+            return this.owner.hasHorns();
+        }
+
         // Arm
-        public function armTypeIs(... args): int {
+        public function armType(... args): int {
             return Eval.equals(this.owner.armType, args.map(mapNameToIndex('TYPE_NAMES')));
         }
 
-        public function hasArmFlag(... args): int {
+        public function armFlag(... args): int {
             return hasFlag(this.owner.armFlags, args.map(mapNameToIndex('FLAG_NAMES')));
         }
 
-        public function hasArmFlags(... args): int {
+        public function armFlags(... args): int {
             return hasFlags(this.owner.armFlags, args.map(mapNameToIndex('FLAG_NAMES')));
         }
 
         // Wing
-        public function wingTypeIs(... args): int {
+        public function wingType(... args): int {
             return Eval.equals(this.owner.wingType, args.map(mapNameToIndex('TYPE_NAMES')));
         }
 
         // Leg
-        public function legTypeIs(... args): int {
+        public function legType(... args): int {
             return Eval.equals(this.owner.legType, args.map(mapNameToIndex('TYPE_NAMES')));
         }
 
-        public function hasLegFlag(... args): int {
+        public function legFlag(... args): int {
             return hasFlag(this.owner.legFlags, args.map(mapNameToIndex('FLAG_NAMES')));
         }
 
-        public function hasLegFlags(... args): int {
+        public function legFlags(... args): int {
             return hasFlags(this.owner.legFlags, args.map(mapNameToIndex('FLAG_NAMES')));
         }
 
         // Lowerbody
-        public function get isBiped(): Boolean {
-            return this.owner.isBiped();
-        }
-
-        public function get isNaga(): Boolean {
-            return this.owner.isNaga();
-        }
-
-        public function get isTaur(): Boolean {
-            return this.owner.isTaur();
-        }
-
-        public function get isCentaur(): Boolean {
-            return this.owner.isCentaur();
-        }
-
-        public function get isDrider(): Boolean {
-            return this.owner.isDrider();
-        }
-
-        public function get isGoo(): Boolean {
-            return this.owner.isGoo();
+        public function lowerbody(... args): int {
+            for (var idx: int = 0; idx < args.length; idx++) {
+                // Checks to make sure this exists in Creature
+                switch (args[idx]) {
+                    case 'biped':
+                        if (this.owner.isBiped())
+                            return idx;
+                    case 'naga':
+                        if (this.owner.isNaga())
+                            return idx;
+                    case 'taur':
+                        if (this.owner.isTaur())
+                            return idx;
+                    case 'centaur':
+                        if (this.owner.isCentaur())
+                            return idx;
+                    case 'drider':
+                        if (this.owner.isDrider())
+                            return idx;
+                    case 'goo':
+                        if (this.owner.isGoo())
+                            return idx;
+                }
+            }
+            return idx;
         }
 
         // Tail
-        public function tailTypeIs(... args): int {
+        public function tailType(... args): int {
             return Eval.equals(this.owner.tailType, args.map(mapNameToIndex('TYPE_NAMES')));
         }
 
-        public function tailCountIs(... args): int {
-            return Eval.equals(this.owner.tailCount, args);
-        }
-
-        public function tailCountRange(... args): int {
+        public function tails(... args): int {
             return Eval.range(this.owner.tailCount, args);
         }
 
-        public function hasTailFlag(... args): int {
+        public function tailFlag(... args): int {
             return hasFlag(this.owner.tailFlags, args.map(mapNameToIndex('FLAG_NAMES')));
         }
 
-        public function hasTailFlags(... args): int {
+        public function tailFlags(... args): int {
             return hasFlags(this.owner.tailFlags, args.map(mapNameToIndex('FLAG_NAMES')));
         }
 
         // Cock
-        public function get hasCock(): Boolean {
-            return this.owner.hasCock();
+        public function cocknom(... args): int {
+            switch (this.owner.cocks.length) {
+                case 0: return 0;
+                case 1: return 1;
+                default: return 2;
+            }
         }
 
-        public function get hasCocks(): Boolean {
-            return this.owner.hasCocks();
+        public function cockCount(... args): int {
+            return Eval.equals(this.owner.cocks.length, args);
         }
 
-        public function hasACockWithType(... args): int {
+        public function cockWType(... args): int {
             for (var idx: int = 0; idx < args.length; idx++) {
                 if (this.owner.hasCock(nameToIndex('TYPE_NAMES', args[idx])))
                     return idx;
@@ -258,11 +249,7 @@ package editor.Parsers.Selecting.Wrapper {
             return args.length;
         }
 
-        public function cockCountIs(... args): int {
-            return Eval.equals(this.owner.cocks.length, args);
-        }
-
-        public function cockTypeIs(cockIdx: int, ... args): int {
+        public function cockType(cockIdx: int, ... args): int {
             if (cockIdx >= 0 && cockIdx < this.owner.cocks.length)
                 for (var idx: int = 0; idx < args.length; idx++) {
                     if (this.owner.cocks[cockIdx].cType === nameToIndex('TYPE_NAMES', args[idx]))
@@ -271,310 +258,255 @@ package editor.Parsers.Selecting.Wrapper {
             return args.length;
         }
 
-        public function cockThatFits(fits:Number = 0): int {
-            return this.owner.cockThatFits(fits);
+        public function cockFits(... args): int {
+            for (var idx: int = 0; idx < args.length; idx++) {
+                if (this.owner.cockThatFits(args[idx]))
+                    return idx;
+            }
+            return args.length;
         }
 
-        public function biggestCockIndex(): int {
-            return this.owner.biggestCockIndex();
-        }
-
-        public function smallestCockIndex(): int {
-            return this.owner.smallestCockIndex();
-        }
-
-        public function thickestCockIndex(): int {
-            return this.owner.thinnestCockIndex();
-        }
-
-        public function thinnestCockIndex(): int {
-            return this.owner.thinnestCockIndex();
-        }
-
-        public function longestCockIndex(): int {
-            return this.owner.longestCockIndex();
-        }
-
-        public function shortestCockIndex(): int {
-            return this.owner.shortestCockIndex();
+        public function get cockfks(): int {
+            if (this.owner.hasACockFlag(GLOBAL.FLAG_FLARED)) return 0;
+            else if (this.owner.hasACockFlag(GLOBAL.FLAG_KNOTTED)) return 1;
+            else if (this.owner.hasACockFlag(GLOBAL.FLAG_SHEATHED)) return 2;
+            else return 3;
         }
 
         // Balls
-        public function ballCountIs(... args): int {
+        public function balls(): Boolean {
+            return this.owner.balls > 0;
+        }
+
+        public function ballsCount(... args): int {
             return Eval.equals(this.owner.balls, args);
         }
 
-        public function ballSizeIs(... args): int {
-            return Eval.equals(this.owner.ballSize(), args);
+        public function ballSize(... args): int {
+            return Eval.range(this.owner.ballSize(), args);
         }
 
         // Breasts
-        public function hasBreasts(): Boolean {
+        public function breasts(): Boolean {
             return this.owner.hasBreasts();
         }
 
-        public function breastCountIs(... args): int {
+        public function breastCount(... args): int {
             return Eval.equals(this.owner.totalBreasts(), args);
         }
 
-        public function breastCupSizeIs(idx: int, ... args): int {
+        public function breastCupSize(idx: int, ... args): int {
             return Eval.equals(this.owner.breastCup(idx), args);
         }
 
-        // Vagina
-        public function get hasVagina(): Boolean {
-            return this.owner.hasVagina();
+        // Cock / Vag
+        public function cockVag(... args): int {
+            if (this.owner.hasCock()) return 0;
+            else if (this.owner.hasVagina()) return 1;
+            else return 2;
         }
+
+        // Vagina
+        public function vagnom(... args): int {
+            switch (this.owner.vaginas.length) {
+                case 0: return 0;
+                case 1: return 1;
+                default: return 2;
+            }
+        }
+
+        public function vagLoose(... args): int {
+            return Eval.range(this.owner.looseness(), args);
+        }
+
+        public function vagWet(... args): int {
+            return Eval.range(this.owner.wetness(), args);
+        }
+
+        public function vagCap(... args): int {
+            return Eval.range(this.owner.vaginalCapacity(), args);
+        }
+
+        public function get squirt(): Boolean {
+            return this.owner.isSquirter();
+        }
+
+        // Butt
+        public function analLoose(... args): int {
+            return Eval.range(this.owner.ass.looseness(), args);
+        }
+
+        public function analWet(... args): int {
+            return Eval.range(this.owner.ass.wetness(), args);
+        }
+
+        public function analCap(... args): int {
+            return Eval.range(this.owner.analCapacity(), args);
+        }
+
 
         // Fluids
         // Milk
-        public function milkTypeIs(... args): int {
+        public function milkType(... args): int {
             return Eval.equals(this.owner.milkType, args);
         }
 
-        public function milkQRange(... args): int {
+        public function milkVol(... args): int { return this.milkQ(args); }
+        public function milkQ(... args): int {
             return Eval.range(this.owner.milkQ(), args);
         }
 
         // Cum
-        public function cumTypeIs(... args): int {
+        public function cumType(... args): int {
             return Eval.equals(this.owner.cumType, args.map(mapNameToIndex('FLUID_TYPE_NAMES')));
         }
 
-        public function cumQRange(... args): int {
+        public function cumVol(... args): int { return this.cumQ(args); }
+        public function cumQ(... args): int {
             return Eval.range(this.owner.cumQ(), args);
         }
 
         // Girl Cum
-        public function girlCumTypeIs(... args): int {
+        public function girlCumType(... args): int {
             return Eval.equals(this.owner.girlCumType, args.map(mapNameToIndex('FLUID_TYPE_NAMES')));
         }
 
-        public function girlCumQRange(... args): int {
+        public function girlCumVol(... args): int { return this.girlCumQ(args); }
+        public function girlCumQ(... args): int {
             return Eval.range(this.owner.girlCumQ(), args);
         }
 
         // Personality
-        public function get isNice(): Boolean {
-            return this.owner.isNice();
-        }
-
-        public function get isMisch(): Boolean {
-            return this.owner.isMisch();
-        }
-
-        public function get isAss(): Boolean {
-            return this.owner.isAss();
+        // Nice / Misch / Ass
+        public function get nma(): int {
+            if (this.owner.isNice()) return 0;
+            else if (this.owner.isMisch()) return 1;
+            else return 2;
         }
 
         // Exposure
-        public function get isExposed(): Boolean {
-            return this.owner.isExposed();
-        }
-
-        public function get isChestExposed(): Boolean {
-            return this.owner.isChestExposed();
-        }
-
-        public function get isCrotchExposed(): Boolean {
-            return this.owner.isCrotchExposed();
-        }
-
-        public function get isAssExposed(): Boolean {
-            return this.owner.isAssExposed();
-        }
-
-        // Sex
-        public function get isSexless(): Boolean {
-            return this.owner.isSexless();
-        }
-
-        public function get isMale(): Boolean {
-            return this.owner.isMale();
-        }
-
-        public function get isFemale(): Boolean {
-            return this.owner.isFemale();
+        // Exposed body parts [all, chest, crotch, ass]
+        public function exposed(... args): int {
+            for (var idx: int = 0; idx < args.length; idx++) {
+                switch (args[idx]) {
+                    case 'all':
+                        if (this.owner.isExposed())
+                            return idx;
+                    case 'chest':
+                        if (this.owner.isChestExposed())
+                            return idx;
+                    case 'crotch':
+                        if (this.owner.isCrotchExposed())
+                            return idx;
+                    case 'ass':
+                        if (this.owner.isAssExposed())
+                            return idx;
+                }
+            }
+            return idx;
         }
 
         // Sex Appearance
-        public function get isMasculine(): Boolean {
+        // Male / Female / Herm / None
+        public function mfhn(): int {
+            if (this.owner.isMale()) return 0;
+            else if (this.owner.isFemale()) return 1;
+            else if (this.owner.isHerm()) return 2;
+            else return 3;
+        }
+
+        // Male / Female With Pref
+        public function mf(): Boolean {
             return this.owner.isMasculine();
         }
 
-        public function get isFeminine(): Boolean {
-            return this.owner.isFeminine();
-        }
-
-        public function get isMan(): Boolean {
-            return this.owner.isMan();
-        }
-
-        public function get isWoman(): Boolean {
-            return this.owner.isWoman();
-        }
-
-        public function get isFemboy(): Boolean {
-            return this.owner.isFemboy();
-        }
-
-        public function get isShemale(): Boolean {
-            return this.owner.isShemale();
-        }
-
-        public function get isCuntboy(): Boolean {
-            return this.owner.isCuntboy();
-        }
-
-        public function get isFemmyMale(): Boolean {
-            return this.owner.isFemmyMale();
-        }
-
-        public function get isManlyFemale(): Boolean {
-            return this.owner.isManlyFemale();
-        }
-
-        public function isFemHerm(): Boolean {
-            return this.owner.isFemHerm();
-        }
-
-        public function isManHerm(): Boolean {
-            return this.owner.isManHerm();
-        }
-
         // Stats
-        public function lustIs(... args): int {
-            return Eval.equals(this.owner.lust(), args);
-        }
-
-        public function lustRange(... args): int {
+        public function lust(... args): int {
             return Eval.range(this.owner.lust(), args);
         }
 
-        public function physiqueIs(... args): int {
-            return Eval.equals(this.owner.physique(), args);
-        }
-
-        public function physiqueRange(... args): int {
+        public function physique(... args): int {
             return Eval.range(this.owner.physique(), args);
         }
 
-        public function reflexesIs(... args): int {
-            return Eval.equals(this.owner.reflexes(), args);
-        }
-
-        public function reflexesRange(... args): int {
+        public function reflex(... args): int {
             return Eval.range(this.owner.reflexes(), args);
         }
 
-        public function aimIs(... args): int {
-            return Eval.equals(this.owner.aim(), args);
-        }
-
-        public function aimRange(... args): int {
+        public function aim(... args): int {
             return Eval.range(this.owner.aim(), args);
         }
 
-        public function intelligenceIs(... args): int {
-            return Eval.equals(this.owner.intelligence(), args);
-        }
-
-        public function intelligenceRange(... args): int {
+        public function inte(... args): int {
             return Eval.range(this.owner.intelligence(), args);
         }
 
-        public function willpowerIs(... args): int {
-            return Eval.equals(this.owner.willpower(), args);
-        }
-
-        public function willpowerRange(... args): int {
+        public function will(... args): int {
             return Eval.range(this.owner.willpower(), args);
         }
 
-        public function libidoIs(... args): int {
-            return Eval.equals(this.owner.libido(), args);
-        }
-
-        public function libidoRange(... args): int {
+        public function libido(... args): int {
             return Eval.range(this.owner.libido(), args);
         }
 
-        public function taintIs(... args): int {
-            return Eval.equals(this.owner.taint(), args);
-        }
-
-        public function taintRange(... args): int {
+        public function taint(... args): int {
             return Eval.range(this.owner.taint(), args);
         }
 
         // Effects
         // Heat
-        public function get inHeat(): Boolean {
-            return this.owner.inHeat();
-        }
-
-        public function get inDeepHeat(): Boolean {
-            return this.owner.inDeepHeat();
-        }
-
         // Rut
-        public function get inRut(): Boolean {
-            return this.owner.inRut();
+        public function get heatDeepRut(): int {
+            if (this.owner.inHeat()) return 0;
+            else if (this.owner.inDeepHeat()) return 1;
+            else if (this.owner.inRut()) return 2;
+            else return 3;
         }
 
         // Bimbo
-        public function isBimbo(): Boolean {
-            return this.owner.isBimbo();
-        }
-
-        public function isBro(): Boolean {
-            return this.owner.isBro();
+        public function bimBro(): int {
+            if (this.owner.isBimbo()) return 0;
+            else if (this.owner.isBro()) return 1
+            else return 2;
         }
 
         // Treated
-        public function get isTreated(): Boolean {
-            return this.owner.isTreated();
-        }
-
-        public function get isTreatedFemale(): Boolean {
-            return this.owner.isTreatedFemale();
-        }
-
-        public function get isTreatedMale(): Boolean {
-            return this.owner.isTreatedMale();
-        }
-
-        public function get isTreatedCow(): Boolean {
-            return this.owner.isTreatedCow();
-        }
-
-        public function get isTreatedBull(): Boolean {
-            return this.owner.isTreatedBull();
-        }
-
-        public function get isAmazon(): Boolean {
-            return this.owner.isAmazon();
-        }
-
-        public function get isCumCow(): Boolean {
-            return this.owner.isCumCow();
-        }
-
-        public function get isCumSlut(): Boolean {
-            return this.owner.isCumSlut();
-        }
-
-        public function get isFauxCow(): Boolean {
-            return this.owner.isFauxCow();
+        public function treated(... args): int {
+            for (var idx: int = 0; idx < args.length; idx++) {
+                switch (args[idx]) {
+                    case 'any':
+                        if (this.owner.isTreated())
+                            return idx;
+                    case 'cow':
+                        if (this.owner.isTreatedCow())
+                            return idx;
+                    case 'bull':
+                        if (this.owner.isTreatedBull())
+                            return idx;
+                    case 'amazon':
+                        if (this.owner.isAmazon(true))
+                            return idx;
+                    case 'cumcow':
+                        if (this.owner.isCumCow())
+                            return idx;
+                    case 'cumslut':
+                        if (this.owner.isCumSlut())
+                            return idx;
+                    case 'faux':
+                        if (this.owner.isFauxCow())
+                            return idx;
+                }
+            }
+            return idx;
         }
 
         // Pheromones
-        public function get hasPheromones(): Boolean {
+        public function get pheromones(): Boolean {
             return this.owner.hasPheromones();
         }
 
         // Perk
-        public function hasPerk(... args): int {
+        public function perk(... args): int {
             for (var idx: int = 0; idx < args.length; idx++)
                 if (this.owner.hasPerk(args[idx]))
                     return idx;
@@ -582,7 +514,7 @@ package editor.Parsers.Selecting.Wrapper {
         }
 
         // StatusEffect
-        public function hasStatusEffect(... args): int {
+        public function seffect(... args): int {
             for (var idx: int = 0; idx < args.length; idx++)
                 if (this.owner.hasStatusEffect(args[idx]))
                     return idx;
@@ -591,45 +523,52 @@ package editor.Parsers.Selecting.Wrapper {
 
         // Items
         // Piercing
-        public function get hasPiercing(): Boolean {
-            return this.owner.hasPiercing();
+        public function pierced(... args): int {
+            for (var idx: int = 0; idx < args.length; idx++) {
+                switch (args[idx]) {
+                    case 'any':
+                        if (this.owner.hasPiercing())
+                            return idx;
+                    case 'ear':
+                        if (this.owner.hasEarPiercing())
+                            return idx;
+                    case 'eyebrow':
+                        if (this.owner.hasEyebrowPiercing())
+                            return idx;
+                    case 'nose':
+                        if (this.owner.hasNosePiercing())
+                            return idx;
+                    case 'lip':
+                        if (this.owner.hasLipPiercing())
+                            return idx;
+                    case 'tongue':
+                        if (this.owner.hasTonguePiercing())
+                            return idx;
+                    case 'belly':
+                        if (this.owner.hasBellyPiercing())
+                            return idx;
+                }
+            }
+            return idx;
         }
-        public function get hasEarPiercing(): Boolean {
-            return this.owner.hasEarPiercing();
-        }
-        public function get hasEyebrowPiercing(): Boolean {
-            return this.owner.hasEyebrowPiercing();
-        }
-        public function get hasNosePiercing(): Boolean {
-            return this.owner.hasNosePiercing();
-        }
-        public function get hasLipPiercing(): Boolean {
-            return this.owner.hasLipPiercing();
-        }
-        public function get hasTonguePiercing(): Boolean {
-            return this.owner.hasTonguePiercing();
-        }
-        public function get hasBellyPiercing(): Boolean {
-            return this.owner.hasBellyPiercing();
-        }
-        public function hasNipplePiercing(idx: int = -1): Boolean {
+        public function nipplePierced(idx: int = -1): Boolean {
             return this.owner.hasPiercedNipples(idx);
         }
-        public function hasCockPiercing(idx: int = -1): Boolean {
+        public function cockPierced(idx: int = -1): Boolean {
             return this.owner.hasPiercedCocks(idx);
         }
-        public function hasPiercedVaginas(idx: int = -1): Boolean {
+        public function vaginaPierced(idx: int = -1): Boolean {
             return this.owner.hasPiercedVaginas(idx);
         }
-        public function hasClitPiercing(idx: int = -1): Boolean {
+        public function clitPierced(idx: int = -1): Boolean {
             return this.owner.hasPiercedClits(idx);
         }
-        public function hasCocksock(idx: int = -1): Boolean {
+        public function sockOnCock(idx: int = -1): Boolean {
             return this.owner.hasSockedCocks(idx);
         }
 
         // Keyitem
-        public function hasKeyItem(... args): int {
+        public function keyItem(... args): int {
             for (var idx: int = 0; idx < args.length; idx++)
                 if (this.owner.hasKeyItem(args[idx]))
                     return idx;
