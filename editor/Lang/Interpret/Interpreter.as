@@ -9,17 +9,17 @@ package editor.Lang.Interpret {
         public var errors: Vector.<LangError>;
         public var result: *;
         public var ranges: *;
-        private var oldWrapper: Object;
-        private var oldInfo: Object;
-        private var newWrapper: Object;
-        private var newInfo: Object;
+        private var functionalParsers: Object;
+        private var functionalParsersInfo: Object;
+        private var selectionParsers: Object;
+        private var selectionParsersInfo: Object;
 
-        public function Interpreter(oldWrapper: Object, oldInfo: Object, newWrapper: Object, newInfo: Object) {
-            this.oldWrapper = oldWrapper;
-            this.oldInfo = oldInfo;
+        public function Interpreter(functionalParsers: Object, functionalParsersInfo: Object, selectionParsers: Object, selectionParsersInfo: Object) {
+            this.functionalParsers = functionalParsers;
+            this.functionalParsersInfo = functionalParsersInfo;
 
-            this.newWrapper = newWrapper;
-            this.newInfo = newInfo;
+            this.selectionParsers = selectionParsers;
+            this.selectionParsersInfo = selectionParsersInfo;
         }
 
         /**
@@ -109,8 +109,8 @@ package editor.Lang.Interpret {
                     // node.value: Boolean
                     // childProducts: Product<String>[]
                     // product.value: VariableInfo
-                    var obj: * = !node.value ? this.oldWrapper : this.newWrapper;
-                    var infoFunc: * = !node.value ? this.oldInfo : this.newInfo;
+                    var obj: * = !node.value ? this.functionalParsers : this.selectionParsers;
+                    var infoFunc: * = !node.value ? this.functionalParsersInfo : this.selectionParsersInfo;
                     var name: String = '';
 
                     var identity: String;

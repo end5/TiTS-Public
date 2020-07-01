@@ -12,6 +12,5 @@ package editor.Lang.Tokenize {
         public static const ForwardSlash: String = '/';
         public static const Backslash: String = '\\';
         public static const Colon: String = ':';
-        public static const QuestionMark: String = '?';
     }
 }

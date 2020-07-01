@@ -8,7 +8,6 @@ package editor.Lang.Tokenize {
         public static const Pipe: int = 5;
         public static const ArgsStart: int = 6;
         public static const ResultsStart: int = 7;
-        public static const QuestionMark: int = 8;
         
         public static const Names: Array = [
             'EOS',
@@ -19,7 +18,6 @@ package editor.Lang.Tokenize {
             'Pipe',
             'ArgsStart',
             'ResultsStart',
-            'QuestionMark'
         ];
     }
 }

@@ -191,20 +191,6 @@ package editor.Lang.Tokenize {
             var token: int;
             this.tokenText = this.text.charAt(this.pos);
             switch (this.tokenText) {
-                case Symbols.QuestionMark: {
-                    ++this.pos;
-
-                    // Advance while the next sequence of characters is newline followed by space
-                    while (this.pos < this.text.length && this.text.indexOf(Symbols.Newline, this.pos) == this.pos) {
-                        this.lineNum++;
-                        this.offset = ++this.pos;
-                        while (this.pos < this.text.length && this.text.indexOf(Symbols.Space, this.pos) == this.pos)
-                            ++this.pos;
-                    }
-
-                    token = TokenType.QuestionMark;
-                    break;
-                }
                 case Symbols.Colon: {
                     this.mode.push(STATE_RESULTS); // Enter results
 

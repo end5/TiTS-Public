@@ -8,12 +8,12 @@ package editor.Lang.Codify {
         private const escapePairs: Array = [[/\n/g, '\\n'], [/'/g, '\\\''], [/"/g, '\\"']];
         public var errors: Vector.<LangError>;
         public var result: Array;
-        private var oldCodeMap: Object;
-        private var newCodeMap: Object;
+        private var functionalParsersCodeMap: Object;
+        private var selectionParsersCodeMap: Object;
 
-        public function CodeTranslator(oldCodeMap: Object, newCodeMap: Object) {
-            this.oldCodeMap = oldCodeMap;
-            this.newCodeMap = newCodeMap;
+        public function CodeTranslator(functionalParsersCodeMap: Object, selectionParsersCodeMap: Object) {
+            this.functionalParsersCodeMap = functionalParsersCodeMap;
+            this.selectionParsersCodeMap = selectionParsersCodeMap;
         }
 
         private function escape(text: String): String {
@@ -68,7 +68,7 @@ package editor.Lang.Codify {
                     if (node.value)
                         return [new CodeNode(CodeNode.Text, this.escape(node.value))];
                     else
-                        return [new CodeNode(CodeNode.Text, '')];
+                        return [];
                 }
                 case NodeType.Concat: {
                     // childProducts: CodeNode[] or CodeNode[][]
@@ -115,7 +115,8 @@ package editor.Lang.Codify {
                     const args: Array = childProducts[1];
                     const results: Array = childProducts[2];
 
-                    var obj: * = !node.value ? this.oldCodeMap : this.newCodeMap;
+                    // Get Retrieve node's value
+                    var obj: * = !node.children[0].value ? this.functionalParsersCodeMap : this.selectionParsersCodeMap;
 
                     var identity: String;
                     var lowerCaseIdentity: String;
